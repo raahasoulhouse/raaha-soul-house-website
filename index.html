@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAAHA Soul House</title>
+    <!-- Basic SEO -->
+    <meta name="description" content="RAAHA Soul House is a Houston third-space café built for coffee, chai, matcha, light bites, creativity, conversation, and belonging.">
+    <!-- Favicon Placeholder Path -->
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <style>
+        /* PREMIUM BRAND SYSTEM */
+        :root {
+            --bg-warm-ivory: #FAF6F0;    /* Premium warm ivory background */
+            --accent-clay-red: #8C3A27;  /* Refined, deep clay red */
+            --accent-gold: #C4A47C;      /* Muted sand gold accent */
+            --text-espresso: #26211F;    /* Rich espresso charcoal text */
+            --text-muted: #6E6562;       /* Soft charcoal for fine print */
+            --white: #FFFFFF;
+            --border-light: #EBE2D7;     /* Elegant tonal border */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            letter-spacing: -0.01em; /* Premium tight text spacing */
+        }
+
+        body {
+            background-color: var(--bg-warm-ivory);
+            color: var(--text-espresso);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.625;
+            padding-bottom: 90px; /* Enhanced clearance for mobile nav */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TYPOGRAPHY HIERARCHY */
+        h1, h2, h3 {
+            font-family: Georgia, Garamond, "Times New Roman", serif;
+            font-weight: 400;
+            color: var(--text-espresso);
+            line-height: 1.25;
+        }
+
+        p {
+            font-size: 1.05rem;
+            color: var(--text-espresso);
+            margin-bottom: 20px;
+            font-weight: 300; /* Lighter body weight for clean editorial feel */
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* HEADER FRAME */
+        header {
+            background-color: var(--white);
+            text-align: center;
+            padding: 40px 20px 32px 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        header h1 {
+            font-size: 2.4rem;
+            letter-spacing: 6px;
+            color: var(--accent-clay-red);
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-family: -apple-system, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+
+        /* CONTAINER & SPACING */
+        .page-container {
+            max-width: 540px; /* Narrower layout creates a premium, readable column */
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-section {
+            margin-bottom: 48px;
+        }
+
+        h2 {
+            font-size: 1.65rem;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        /* RESPONSIVE PREMIUM IMAGE SYSTEM */
+        .responsive-hero-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px; /* Premium rounded-corner look */
+            margin-bottom: 32px;
+            border: 1px solid var(--border-light);
+            display: block;
+        }
+
+        /* PREMIUM HERO CONTAINER STYLE */
+        .premium-hero-container {
+            text-align: center;
+            background: var(--white);
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px; /* Premium rounded-corner look */
+            box-shadow: 0 4px 20px rgba(38, 33, 31, 0.02);
+            margin-bottom: 40px;
+        }
+
+        .premium-hero-container .responsive-hero-img {
+            margin-bottom: 24px;
+            height: 320px;
+        }
+
+        .hero-tagline {
+            font-family: -apple-system, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+
+        .hero-text {
+            font-size: 2.4rem;
+            color: var(--text-espresso);
+            margin: 0 0 12px 0;
+            line-height: 1.2;
+            font-style: italic;
+        }
+
+        .hero-subtext {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            max-width: 400px;
+            margin: 0 auto 8px auto;
+            letter-spacing: 0.3px;
+        }
+
+        /* PREMIUM CARDS & LISTS */
+        .premium-card {
+            background: var(--white);
+            padding: 28px;
+            border-radius: 2px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-light);
+            border-top: 3px solid var(--accent-clay-red);
+        }
+
+        .premium-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+        }
+
+        /* MENU PRESENTATION */
+        .menu-category-title {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            margin-top: 36px;
+            font-weight: 700;
+        }
+
+        .menu-list {
+            background: var(--white);
+            border-radius: 2px;
+            padding: 4px 24px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 24px;
+        }
+
+        .menu-row {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--bg-warm-ivory);
+        }
+
+        .menu-row:last-child {
+            border-bottom: none;
+        }
+
+        .menu-row h4 {
+            font-family: Georgia, serif;
+            font-weight: 400;
+            font-size: 1.15rem;
+            color: var(--text-espresso);
+        }
+
+        /* HOME OFFERINGS TAGS */
+        .offerings-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .offering-tag {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-espresso);
+        }
+
+        .cta-link {
+            display: inline-block;
+            color: var(--accent-clay-red);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 12px;
+            border-bottom: 1px solid var(--accent-clay-red);
+            padding-bottom: 2px;
+        }
+
+        /* PREMIUM INPUTS & BUTTONS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 2px;
+            background-color: var(--white);
+            font-size: 1rem;
+            color: var(--text-espresso);
+            outline: none;
+            font-weight: 300;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--accent-gold);
+        }
+
+        button {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            padding: 18px;
+            border: none;
+            border-radius: 2px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            width: 100%;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.95;
+        }
+
+        /* BOTTOM DOCK NAVIGATION */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            display: flex;
+            border-top: 1px solid var(--border-light);
+            z-index: 1000;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        nav a {
+            flex: 1;
+            min-width: 90px;
+            text-align: center;
+            padding: 22px 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        nav a.active {
+            color: var(--accent-clay-red);
+            font-weight: 700;
+            border-top: 3px solid var(--accent-clay-red);
+            padding-top: 19px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>RAAHA</h1>
+        <p>Soul House</p>
+    </header>
+
+    <main class="page-container">
+
+        <!-- 1. HOME PAGE -->
+        <section id="home" class="page">
+            <div class="premium-hero-container">
+                <img src="assets/images/hero-cafe-warm-daylight-latte.png" alt="RAAHA Soul House Sanctuary Space" class="responsive-hero-img">
+                <div class="hero-tagline">A Houston Third Space</div>
+                <h2 class="hero-text">Pause. Connect. Belong.</h2>
+                <div class="hero-subtext">A physical sanctuary framing architectural stillness, intentional community, and collective care.</div>
+            </div>
+
+            <div class="page-section">
+                <h2>A Modern Third Space</h2>
+                <p>Rooted in Houston, RAAHA Soul House serves as a modern third space built for transition, stillness, and integration. It is a sanctuary intentionally framed outside of home and work, designed to anchor you back to yourself and the local community.</p>
+            </div>
+
+            <div class="page-section">
+                <h2>The Offerings</h2>
+                <p>Nourishment crafted with slow, deliberate intention:</p>
+                <div class="offerings-container">
+                    <span class="offering-tag">Coffee</span>
+                    <span class="offering-tag">Chai</span>
+                    <span class="offering-tag">Matcha</span>
+                    <span class="offering-tag">Light Bites</span>
+                    <span class="offering-tag">Community</span>
+                </div>
+            </div>
+
+            <div class="page-section">
+                <h2>Our Community</h2>
+                <img src="assets/images/community-diverse-guests-connection.png" alt="RAAHA Soul House Diverse Community Guests Connection" class="responsive-hero-img">
+                <p>We believe in collective grounding. RAAHA is shaped by those who step through our doors—creatives, thinkers, and neighbors looking for genuine connection over ritualistic sips and meaningful pauses.</p>
+            </div>
+
+            <div class="page-section">
+                <div class="premium-card">
+                    <h3>Gatherings & Rituals</h3>
+                    <p style="margin-top: 8px; margin-bottom: 12px; color: var(--text-muted);">From seasonal workshops to intimate community soundscapes, explore our thoughtfully structured monthly programming.</p>
+                    <a href="#events" class="cta-link" onclick="navigateTo('events')">View Upcoming Events &rarr;</a>
+                </div>
+            </div>
+
+            <div class="page-section">
+                <div class="premium-card">
+                    <h3>Grow With Us</h3>
+                    <p style="margin-top: 8px; margin-bottom: 12px; color: var(--text-muted);">We are building a team aligned with mindful hospitality and collective care. Explore active roles in our space.</p>
+                    <a href="#careers" class="cta-link" onclick="navigateTo('careers')">View Career Opportunities &rarr;</a>
+                </div>
+            </div>
+
+            <div class="page-section" style="margin-bottom: 20px;">
+                <div class="premium-card">
+                    <h3>Find the Soul House</h3>
+                    <p style="margin-top: 8px; margin-bottom: 12px; color: var(--text-muted);">Have an inquiry, feedback, or a partnership space proposal? Reach out directly to our team.</p>
+                    <a href="#contact" class="cta-link" onclick="navigateTo('contact')">Get In Touch &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ABOUT PAGE -->
+        <section id="about" class="page" style="display:none;">
+            <img src="assets/images/about-interior.jpg" alt="Inside RAAHA Soul House Sanctuary" class="responsive-hero-img">
+            <div class="page-section">
+                <h2>Our Intent</h2>
+                <p>RAAHA is built as a calm third space for coffee, chai, creativity, conversation, and belonging. We lean away from the urgency of everyday routines, allowing you to settle into a premium café framework designed for intentional reflection and shared experiences.</p>
+            </div>
+        </section>
+
+        <!-- 3. MENU PAGE -->
+        <section id="menu" class="page" style="display:none;">
+            <div class="page-section">
+                <h2>The Menu</h2>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Mindfully selected and curated components. Prices will be added soon.</p>
+                
+                <div class="menu-category-title">Espresso</div>
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Espresso</h4></div>
+                    <div class="menu-row"><h4>Americano</h4></div>
+                    <div class="menu-row"><h4>Cortado</h4></div>
+                    <div class="menu-row"><h4>Cappuccino</h4></div>
+                    <div class="menu-row"><h4>Latte</h4></div>
+                </div>
+
+                <div class="menu-category-title">Specialty Coffee</div>
+                <img src="assets/images/specialty-coffee-ceramic-latte-art.png" alt="Specialty Coffee Ceramic Latte Art" class="responsive-hero-img" style="margin-top: 12px; margin-bottom: 12px;">
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Pour Over Selection</h4></div>
+                    <div class="menu-row"><h4>Signature Soul Brew</h4></div>
+                    <div class="menu-row"><h4>House Cold Brew</h4></div>
+                </div>
+
+                <div class="menu-category-title">Chai</div>
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Classic House Chai</h4></div>
+                    <div class="menu-row"><h4>Spiced Masala Chai</h4></div>
+                </div>
+
+                <div class="menu-category-title">Matcha</div>
+                <img src="assets/images/matcha-chai-artisanal-ceramics.png" alt="Matcha and Chai in Artisanal Ceramics" class="responsive-hero-img" style="margin-top: 12px; margin-bottom: 12px;">
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Ceremonial Matcha Latte</h4></div>
+                    <div class="menu-row"><h4>Signature Sweetened Matcha</h4></div>
+                </div>
+
+                <div class="menu-category-title">Tea</div>
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Loose Leaf Herbal Blend</h4></div>
+                    <div class="menu-row"><h4>Artisanal Green Tea</h4></div>
+                    <div class="menu-row"><h4>Classic Black Tea</h4></div>
+                </div>
+
+                <div class="menu-category-title">Pastries</div>
+                <img src="assets/images/pastry-display-boutique-cafe.png" alt="Pastry Display Boutique Cafe" class="responsive-hero-img" style="margin-top: 12px; margin-bottom: 12px;">
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Seasonal Croissant</h4></div>
+                    <div class="menu-row"><h4>House Artisanal Loaf Slice</h4></div>
+                </div>
+
+                <div class="menu-category-title">Light Bites</div>
+                <div class="menu-list">
+                    <div class="menu-row"><h4>Curated Toast Selection</h4></div>
+                    <div class="menu-row"><h4>Nourish Bowl</h4></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. EVENTS & EXPERIENCES PAGE -->
+        <section id="events" class="page" style="display:none;">
+            <div class="page-section">
+                <h2>Gatherings & Experiences</h2>
+                <p>Curated spaces intended for shared moments, collective movement, and intentional pauses.</p>
+                
+                <div class="premium-card">
+                    <h3>Book Launches</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 0;">Gathering regional wordsmiths, creatives, and readers for intimate storytelling, community interviews, and celebratory releases.</p>
+                </div>
+
+                <div class="premium-card">
+                    <h3>Creative Meetups</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 0;">An open forum structure for Houston's artists, thinkers, and designers to exchange ideas, talk process, and find alignment.</p>
+                </div>
+
+                <div class="premium-card">
+                    <h3>Pilates + Matcha</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 0;">A morning sequence combining intentional low-impact movement with a restorative ceremonial matcha pour to follow.</p>
+                </div>
+
+                <div class="premium-card">
+                    <h3>Community Chai Nights</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 0;">Slow evenings dedicated to deep conversation, warm hospitality, and house-brewed traditional spiced chai blends.</p>
+                </div>
+            </div>
+
+            <!-- Events Inquiry Form -->
+            <div class="page-section">
+                <h2>Host an Event</h2>
+                <p style="color: var(--text-muted);">Interested in gathering at the Soul House? Tell us about your vision below.</p>
+                
+                <form action="https://formspree.io/f/xwvjjwnz" method="POST">
+                    <input type="hidden" name="form_type" value="Event Inquiry">
+                    <input type="hidden" name="_next" value="https://formspree.io/thanks?message=Thank%20you%20%E2%80%94%20we%E2%80%99ll%20be%20in%20touch%20soon.">
+                    
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Event Type</label>
+                        <input type="text" name="event_type" placeholder="e.g., Creative Meetup, Workshop, Private Gathering" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Date</label>
+                        <input type="date" name="preferred_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Guests</label>
+                        <input type="number" name="number_of_guests" placeholder="Estimated guest count" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Message</label>
+                        <textarea name="message" rows="5" placeholder="Tell us more about your event layout, requirements, and timing..." required></textarea>
+                    </div>
+                    <button type="submit">Submit Event Inquiry</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 5. CAREERS PAGE -->
+        <section id="careers" class="page" style="display:none;">
+            <div class="page-section">
+                <h2>Join the Family</h2>
+                <p>We believe hospitality is an art form rooted in collective care. RAAHA is cultivated by a warm, calm, and craft-focused team culture that values precision, presence, and genuine connection.</p>
+                
+                <div class="premium-card">
+                    <h3>Now Hiring: Baristas</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 0;">We are seeking individuals passionate about craft beverage curation, slow hospitality, and maintaining community sanctuary dynamics.</p>
+                </div>
+            </div>
+
+            <!-- Careers Application Form -->
+            <div class="page-section">
+                <h2>Apply to RAAHA</h2>
+                <p style="color: var(--text-muted);">Share your story and hospitality interest framework directly with our management team.</p>
+                
+                <form action="https://formspree.io/f/xkoaapbk" method="POST">
+                    <input type="hidden" name="form_type" value="Career Application">
+                    <input type="hidden" name="_next" value="https://formspree.io/thanks?message=Thank%20you%20%E2%80%94%20we%E2%80%99ll%20be%20in%20touch%20soon.">
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone_number" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Position Interested In</label>
+                        <select name="position_interested_in" required>
+                            <option value="Barista (Part-Time)">Barista (Part-Time)</option>
+                            <option value="Barista (Full-Time)">Barista (Full-Time)</option>
+                            <option value="Hospitality Support / Lead">Hospitality Support / Lead</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <input type="text" name="availability" placeholder="e.g., Mornings, Weekends, Full Open Availability" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Previous Café / Barista Experience</label>
+                        <textarea name="experience" rows="3" placeholder="Briefly specify previous roles, coffee houses, or relevant craft work experience..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Message</label>
+                        <textarea name="message" rows="4" placeholder="Why do you feel aligned with the RAAHA third space team ethos?" required></textarea>
+                    </div>
+                    <button type="submit">Apply Now</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 6. CONTACT PAGE -->
+        <section id="contact" class="page" style="display:none;">
+            <div class="page-section">
+                <h2>Visit or Connect</h2>
+                <img src="assets/images/interior-warm-wood-community-seating.png" alt="RAAHA Soul House Interior Warm Wood Community Seating" class="responsive-hero-img">
+                <p>We look forward to welcoming you into our third space framework.</p>
+                
+                <div class="premium-card" style="border-top-color: var(--text-espresso);">
+                    <p style="margin-bottom: 10px;"><strong>Location:</strong> Houston, TX</p>
+                    <p style="margin-bottom: 10px;"><strong>Email:</strong> <a href="mailto:raahasoulhouse@gmail.com" style="color: var(--accent-clay-red); text-decoration: none; font-weight: 500;">raahasoulhouse@gmail.com</a></p>
+                    <p style="margin-bottom: 0;"><strong>Instagram:</strong> <a href="https://instagram.com/raahasoulhouse" target="_blank" rel="noopener" style="color: var(--accent-clay-red); text-decoration: none; font-weight: 500;">@raahasoulhouse</a></p>
+                </div>
+
+                <!-- Contact Inquiry Form -->
+                <form action="https://formspree.io/f/xykaabdw" method="POST">
+                    <input type="hidden" name="form_type" value="Contact Inquiry">
+                    <input type="hidden" name="_next" value="https://formspree.io/thanks?message=Thank%20you%20%E2%80%94%20we%E2%80%99ll%20be%20in%20touch%20soon.">
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" name="subject" placeholder="What is this regarding?" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" rows="5" placeholder="Share your message with our team..." required></textarea>
+                    </div>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FIXED PREMIUM BOTTOM NAVIGATION -->
+    <nav>
+        <a href="#home" id="nav-home" class="active" onclick="navigateTo('home')">Home</a>
+        <a href="#about" id="nav-about" onclick="navigateTo('about')">About</a>
+        <a href="#menu" id="nav-menu" onclick="navigateTo('menu')">Menu</a>
+        <a href="#events" id="nav-events" onclick="navigateTo('events')">Events</a>
+        <a href="#careers" id="nav-careers" onclick="navigateTo('careers')">Careers</a>
+        <a href="#contact" id="nav-contact" onclick="navigateTo('contact')">Contact</a>
+    </nav>
+
+    <!-- NAVIGATION SCRIPT -->
+    <script>
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            document.getElementById('nav-' + pageId).classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
