@@ -30,7 +30,7 @@
             color: var(--text-espresso);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.625;
-            padding-bottom: 90px;
+            padding-bottom: 0;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -53,31 +53,31 @@
             font-weight: 600;
         }
 
-        /* LOGO HEADER FRAME */
-        header {
-            background-color: var(--white);
-            text-align: center;
-            padding: 40px 20px 32px 20px;
-            border-bottom: 1px solid var(--border-light);
-        }
-
-        header h1 {
-            font-size: 2.4rem;
-            letter-spacing: 6px;
-            color: var(--accent-clay-red);
-            text-transform: uppercase;
-            margin-bottom: 0;
-        }
-
-        header p {
-            font-family: -apple-system, sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
+        /* CUSTOM INLINE TYPOGRAPHY FOR BRAND LOGO */
+        .brand-logo-text {
+            font-family: Georgia, serif;
+            font-size: 1.85rem;
             color: var(--accent-gold);
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-top: 8px;
-            margin-bottom: 0;
+            letter-spacing: 5px;
+            font-weight: 400;
+            margin: 0;
+            display: inline-block;
+        }
+        .brand-logo-text::first-letter {
+            font-size: 2.15rem;
+            font-style: italic;
+            letter-spacing: 2px;
+            padding-right: 1px;
+        }
+
+        /* RESPONSIVE NAVIGATION ENGINE HIDINGS */
+        @media (max-width: 850px) {
+            .desktop-header-nav { display: none !important; }
+            header { padding: 16px 20px !important; justify-content: center !important; flex-direction: column; gap: 8px; }
+            header .header-brand-divider { display: none !important; }
+            body { padding-bottom: 80px !important; }
+            nav.mobile-sticky-dock { display: flex !important; }
         }
 
         /* LAYOUT HOOKS & SECTIONS */
@@ -953,21 +953,21 @@
             text-align: left;
         }
 
-        /* BOTTOM STICKY PERSISTENT NAVIGATION DOCK */
-        nav {
+        /* STICKY BOTTOM DOCK - MOBILE ONLY GUARD */
+        nav.mobile-sticky-dock {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: var(--white);
-            display: flex;
+            display: none; /* Default hidden on laptop views */
             border-top: 1px solid var(--border-light);
             z-index: 1000;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
-        nav::-webkit-scrollbar { display: none; }
-        nav a {
+        nav.mobile-sticky-dock::-webkit-scrollbar { display: none; }
+        nav.mobile-sticky-dock a {
             flex: 1;
             min-width: 90px;
             text-align: center;
@@ -980,7 +980,7 @@
             text-transform: uppercase;
             white-space: nowrap;
         }
-        nav a.active {
+        nav.mobile-sticky-dock a.active {
             color: var(--accent-clay-red);
             font-weight: 700;
             border-top: 3px solid var(--accent-clay-red);
@@ -997,9 +997,20 @@
 </head>
 <body>
 
-    <header>
-        <h1>RAAHA</h1>
-        <p>Soul House</p>
+    <header style="background-color: var(--accent-clay-red); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+        <a href="#home" onclick="navigateTo('home')" style="text-decoration: none; display: flex; align-items: center; gap: 14px;">
+            <div class="brand-logo-text">Raaha</div>
+            <span class="header-brand-divider" style="font-family: -apple-system, sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 3px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 14px; height: 14px; display: flex; align-items: center; transform: translateY(2px);">Soul House</span>
+        </a>
+
+        <div class="desktop-header-nav" style="display: flex; gap: 32px;">
+            <a href="#home" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onclick="navigateTo('home')" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Home</a>
+            <a href="#about" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onclick="navigateTo('about')" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">About</a>
+            <a href="#menu" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onclick="navigateTo('menu')" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Menu</a>
+            <a href="#events" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onclick="navigateTo('events')" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Events & Experiences</a>
+            <a href="#careers" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onclick="navigateTo('careers')" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Careers</a>
+            <a href="#contact" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onclick="navigateTo('contact')" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Contact</a>
+        </div>
     </header>
 
     <main class="page-container">
@@ -1093,7 +1104,7 @@
             <div class="editorial-section">
                 <div class="editorial-container">
                     <div class="editorial-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="Community Connection Frame">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="Community Connection Frame">
                     </div>
                     <div class="editorial-text">
                         <span class="section-label">OUR COMMUNITY</span>
@@ -1220,7 +1231,7 @@
             <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
                 <div class="editorial-container">
                     <div class="editorial-image">
-                        <img src="assets/images/ourcommunity-diverses-guests-connection.png" alt="A Modern Community Café Frame">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="A Modern Community Café Frame">
                     </div>
                     <div class="editorial-text">
                         <span class="section-label">THE EXPERIENCE</span>
@@ -1234,7 +1245,7 @@
 
             <div class="grid-section" style="padding-top: 40px;">
                 <span class="section-label">WHAT WE STAND FOR</span>
-                <h2 class="section-heading-centered">Our Values</h2>
+                <h2 class="heading-centered" style="font-size: 2.5rem; text-align: center; margin-bottom: 24px;">Our Values</h2>
                 <div class="offerings-grid" style="grid-template-columns: repeat(3, 1fr);">
                     <div class="offering-card">
                         <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Hospitality</h4>
@@ -1286,6 +1297,7 @@
 
                 <div id="cat-espresso" class="menu-category-block">
                     <div class="menu-category-title">Espresso Bar</div>
+                    <img src="assets/images/specialty-coffee-ceramic-latte-art.png" alt="Specialty Coffee Espresso Bar Banner" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
                     <div class="menu-items-list">
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Espresso (Double)</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$3.75</div></div>
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Americano</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$4.00</div></div>
@@ -1300,6 +1312,7 @@
 
                 <div id="cat-siglattes" class="menu-category-block">
                     <div class="menu-category-title">Signature Lattes</div>
+                    <img src="assets/images/Signature latte featured drinks.png" alt="Signature Flavors Latte Banner" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
                     <div class="menu-items-list">
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Cardamom Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Rose Pistachio Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$8.00</div></div>
@@ -1378,7 +1391,7 @@
                         <p style="font-size: 1.1rem; color: var(--text-espresso);">From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
                     </div>
                     <div class="editorial-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
                     </div>
                 </div>
             </div>
@@ -1709,7 +1722,7 @@
     </footer>
 
 
-    <nav>
+    <nav class="mobile-sticky-dock">
         <a href="#home" id="nav-home" class="active" onclick="navigateTo('home')">Home</a>
         <a href="#about" id="nav-about" onclick="navigateTo('about')">About</a>
         <a href="#menu" id="nav-menu" onclick="navigateTo('menu')">Menu</a>
@@ -1725,8 +1738,8 @@
             document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
             // Mount target screen state view
             document.getElementById(pageId).style.display = 'block';
-            // Flush old dynamic active styles
-            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            // Flush old dynamic active styles for mobile dock
+            document.querySelectorAll('nav.mobile-sticky-dock a').forEach(link => link.classList.remove('active'));
             // Toggle active style highlight onto active node anchor link
             const targetNavLink = document.getElementById('nav-' + pageId);
             if (targetNavLink) targetNavLink.classList.add('active');
