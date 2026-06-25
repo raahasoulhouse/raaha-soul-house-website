@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAAHA Soul House</title>
+    <meta name="description" content="RAAHA Soul House is a Houston third-space café built for coffee, chai, matcha, light bites, creativity, conversation, and belonging.">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <style>
+        /* PREMIUM BRAND SYSTEM */
+        :root {
+            --bg-warm-ivory: #FAF6F0;    /* Premium warm ivory background */
+            --accent-clay-red: #8C3A27;  /* Refined, deep clay red */
+            --accent-gold: #C4A47C;      /* Muted sand gold accent */
+            --text-espresso: #26211F;    /* Rich espresso charcoal text */
+            --text-muted: #6E6562;       /* Soft charcoal for fine print */
+            --white: #FFFFFF;
+            --border-light: #EBE2D7;     /* Elegant tonal border */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            letter-spacing: -0.01em;
+        }
+
+        body {
+            background-color: var(--bg-warm-ivory);
+            color: var(--text-espresso);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.625;
+            padding-bottom: 90px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TYPOGRAPHY HIERARCHY */
+        h1, h2, h3, h4 {
+            font-family: Georgia, Garamond, "Times New Roman", serif;
+            font-weight: 400;
+            color: var(--text-espresso);
+            line-height: 1.25;
+        }
+
+        p {
+            font-size: 1.05rem;
+            color: var(--text-espresso);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE HEADER NAV BLOCK EFFECT OVERLAY */
+        @media (max-width: 850px) {
+            .desktop-header-nav { display: none !important; }
+            header { padding: 16px 20px !important; justify-content: center !important; }
+            header .header-brand-divider { display: none !important; }
+        }
+
+        /* LAYOUT HOOKS & SECTIONS */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .narrow-column {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-label {
+            font-family: -apple-system, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+
+        .section-heading-centered {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* 1. HERO SECTION */
+        .atoms-hero-container {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('assets/images/hero-cafe-warm-daylight-latte.png');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 20px;
+        }
+
+        .atoms-hero-content {
+            max-width: 700px;
+        }
+
+        .atoms-hero-content h2 {
+            font-size: 4rem;
+            color: var(--white);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .atoms-hero-content p {
+            font-size: 1.25rem;
+            color: var(--white);
+            margin-bottom: 36px;
+            font-weight: 300;
+        }
+
+        .hero-btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-solid {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            padding: 16px 32px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--white);
+            padding: 16px 32px;
+            border: 1px solid var(--white);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .btn-solid:hover, .btn-ghost:hover {
+            opacity: 0.9;
+        }
+
+        /* 2. THE RAAHA PHILOSOPHY */
+        .philosophy-section {
+            text-align: center;
+            padding: 80px 20px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .philosophy-section p {
+            font-size: 1.15rem;
+            margin-bottom: 24px;
+            color: var(--text-espresso);
+        }
+
+        .premium-divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--accent-gold);
+            margin: 40px auto 0 auto;
+            border: none;
+        }
+
+        /* 3. WHAT YOU'LL FIND GRID */
+        .grid-section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .offerings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .offering-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .offering-card-title {
+            font-family: Georgia, serif;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .offering-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* 4. SIGNATURE COLLECTION FEATURED DRINKS */
+        .featured-section {
+            padding: 80px 20px;
+            background-color: var(--white);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .drinks-scroll-container {
+            max-width: 1100px;
+            margin: 40px auto 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .drinks-scroll-container {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding-bottom: 16px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .drink-card {
+                flex: 0 0 280px;
+                scroll-snap-align: start;
+            }
+        }
+
+        .drink-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .drink-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 6px;
+        }
+
+        .drink-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* 5. SPLIT DARK ESPRESSO BLOCK - THE SPACE */
+        .dark-split-block {
+            background-color: var(--text-espresso);
+            color: var(--bg-warm-ivory);
+            padding: 100px 40px;
+        }
+
+        .dark-split-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .dark-split-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .dark-split-text h2 {
+            color: var(--bg-warm-ivory);
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .dark-split-text p {
+            color: var(--bg-warm-ivory);
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .highlight-item {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dark-split-image img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* 6. ASYMMETRICAL EDITORIAL BLOCK - OUR COMMUNITY */
+        .editorial-section {
+            padding: 100px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .editorial-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .editorial-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .editorial-image img {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .editorial-text .section-label {
+            text-align: left;
+        }
+
+        .editorial-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .editorial-text p {
+            color: var(--text-espresso);
+            margin-bottom: 20px;
+        }
+
+        .editorial-quote {
+            font-style: italic;
+            font-family: Georgia, serif;
+            color: var(--accent-clay-red);
+            font-size: 1.2rem;
+            margin-top: 28px;
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 16px;
+        }
+
+        /* 7. GATHER & GROW / EVENTS HOMEPAGE */
+        .events-home-section {
+            padding: 80px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .events-intro {
+            max-width: 700px;
+            margin: 0 auto 48px auto;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .events-home-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 900px) {
+            .events-home-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .event-home-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: left;
+        }
+
+        .event-home-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .event-home-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* 8. JOIN THE TEAM CENTERED HOMEPAGE */
+        .join-team-section {
+            padding: 100px 20px;
+            background-color: var(--white);
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .join-team-content {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .join-team-content h2 {
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .join-team-content p {
+            margin-bottom: 36px;
+            color: var(--text-muted);
+        }
+
+        /* 9. VISITING SECTION HOMEPAGE */
+        .visiting-home-section {
+            padding: 100px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .visiting-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .visiting-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .visiting-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .visiting-info-block {
+            margin-bottom: 20px;
+        }
+
+        .visiting-info-block h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .visiting-map-box {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+        }
+
+        .map-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        /* 10. NEWSLETTER HOMEPAGE */
+        .newsletter-section {
+            padding: 80px 20px;
+            background-color: var(--bg-warm-ivory);
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-content p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 500px) {
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            background-color: var(--white);
+            font-size: 1rem;
+        }
+
+        .btn-inline-submit {
+            background-color: var(--text-espresso);
+            color: var(--white);
+            padding: 16px 28px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* MENU CATEGORY HORIZONTAL FILTER BAR */
+        .menu-filter-bar {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 16px 4px;
+            margin-bottom: 40px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .menu-filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+        .filter-pill {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-espresso);
+            text-decoration: none;
+            white-space: nowrap;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-pill:hover {
+            border-color: var(--accent-clay-red);
+            color: var(--accent-clay-red);
+        }
+
+        /* MENU ROW EDITORIAL COMPONENT */
+        .menu-category-block {
+            margin-bottom: 60px;
+            scroll-margin-top: 20px;
+        }
+        .menu-category-title {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 8px;
+            color: var(--accent-clay-red);
+        }
+        .menu-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .menu-item-name h4 {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+        }
+        .menu-item-line {
+            flex: 1;
+            border-bottom: 1px dashed var(--border-light);
+            margin: 0 16px;
+            position: relative;
+            top: -4px;
+        }
+        .menu-item-price {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+        }
+
+        /* EVENTS MATRIX COMPONENTS */
+        .events-category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin: 40px auto 80px auto;
+        }
+        @media(max-width: 768px){ .events-category-grid { grid-template-columns: 1fr; } }
+        
+        .upcoming-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        @media(max-width: 768px){ .upcoming-matrix-grid { grid-template-columns: 1fr; } }
+
+        .upcoming-event-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+            position: relative;
+        }
+        .event-tag-pill {
+            display: inline-block;
+            background-color: var(--bg-warm-ivory);
+            border: 1px solid var(--border-light);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            margin-bottom: 16px;
+        }
+
+        /* CAREERS LAYOUT ELEMENTS */
+        .culture-cards-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        @media(max-width: 900px){ .culture-cards-matrix { grid-template-columns: 1fr; } }
+        
+        .culture-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+        }
+        .culture-card h4 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+        .culture-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .openings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .opening-row-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        .opening-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .opening-type-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .opening-row-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* DUAL COLUMN INPUTS */
+        .form-row-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media(max-width: 600px){ .form-row-split { grid-template-columns: 1fr; gap: 0; } }
+
+        /* CONTACT INFORMATION ARCHITECTURE */
+        .contact-split-container {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 60px;
+            margin-top: 60px;
+        }
+        @media(max-width: 850px){ .contact-split-container { grid-template-columns: 1fr; gap: 40px; } }
+        
+        .contact-info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        .info-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .info-icon {
+            font-size: 1.25rem;
+            color: var(--accent-gold);
+            margin-top: 2px;
+        }
+        .info-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        .info-details p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+        .social-follow-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .social-follow-link {
+            text-decoration: none;
+            color: var(--text-espresso);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--accent-gold);
+            padding-bottom: 2px;
+        }
+
+        /* COMPACT STRUCTURAL FIELD PACKS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            background-color: var(--white);
+            font-size: 1rem;
+            color: var(--text-espresso);
+            outline: none;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--accent-gold);
+        }
+        .btn-form-submit {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            padding: 18px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            width: 100%;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* FULL MASTER FOOTER SYSTEM */
+        footer {
+            background-color: var(--text-espresso);
+            color: var(--bg-warm-ivory);
+            padding: 80px 40px 40px 40px;
+            border-top: 1px solid var(--border-light);
+        }
+        .footer-grid-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 1fr 1fr;
+            gap: 40px;
+        }
+        @media(max-width: 900px){
+            .footer-grid-container { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+        @media(max-width: 550px){
+            .footer-grid-container { grid-template-columns: 1fr; gap: 32px; }
+        }
+        .footer-brand-logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .footer-col p {
+            color: var(--bg-warm-ivory);
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+        .footer-col h4 {
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-family: -apple-system, sans-serif;
+            font-weight: 600;
+        }
+        .footer-links-list {
+            list-style: none;
+        }
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
+        .footer-links-list a {
+            color: var(--bg-warm-ivory);
+            opacity: 0.8;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .footer-links-list a:hover {
+            opacity: 1;
+            color: var(--accent-gold);
+        }
+        .footer-newsletter-box p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+        .footer-newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .footer-newsletter-input {
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background-color: rgba(255,255,255,0.05);
+            color: var(--white);
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .btn-footer-subscribe {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            border: none;
+            padding: 14px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .footer-bottom-copyright {
+            max-width: 1100px;
+            margin: 60px auto 0 auto;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            opacity: 0.6;
+            text-align: left;
+        }
+
+        /* BOTTOM STICKY PERSISTENT NAVIGATION DOCK */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            display: flex;
+            border-top: 1px solid var(--border-light);
+            z-index: 1000;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        nav::-webkit-scrollbar { display: none; }
+        nav a {
+            flex: 1;
+            min-width: 90px;
+            text-align: center;
+            padding: 22px 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        nav a.active {
+            color: var(--accent-clay-red);
+            font-weight: 700;
+            border-top: 3px solid var(--accent-clay-red);
+            padding-top: 19px;
+        }
+        .internal-page-hero-img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <header style="background-color: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+        <a href="#home" onclick="navigateTo('home')" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+            <img src="assets/images/raaha-logo.png" alt="RAAHA" style="height: 38px; width: auto; object-fit: contain; display: block;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <h1 style="display: none; font-size: 1.6rem; letter-spacing: 4px; color: var(--accent-clay-red); text-transform: uppercase; font-family: Georgia, serif; font-weight: 400; margin: 0;">RAAHA</h1>
+            <span class="header-brand-divider" style="font-family: -apple-system, sans-serif; font-size: 0.72rem; font-weight: 600; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 3px; border-left: 1px solid var(--border-light); padding-left: 12px; height: 16px; display: flex; align-items: center;">Soul House</span>
+        </a>
+
+        <div class="desktop-header-nav" style="display: flex; gap: 32px;">
+            <a href="#home" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-espresso);" onclick="navigateTo('home')">Home</a>
+            <a href="#about" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-espresso);" onclick="navigateTo('about')">About</a>
+            <a href="#menu" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-espresso);" onclick="navigateTo('menu')">Menu</a>
+            <a href="#events" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-espresso);" onclick="navigateTo('events')">Events & Experiences</a>
+            <a href="#careers" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-espresso);" onclick="navigateTo('careers')">Careers</a>
+            <a href="#contact" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-espresso);" onclick="navigateTo('contact')">Contact</a>
+        </div>
+    </header>
+
+    <main class="page-container">
+
+        <section id="home" class="page">
+            
+            <div class="atoms-hero-container">
+                <div class="atoms-hero-content">
+                    <h2>Pause. Connect. Belong.</h2>
+                    <p>A Space for people. Built for Connection.<br>Serving specialty coffee, handcrafted chai, ceremonial matcha and memories worth sharing.</p>
+                    <div class="hero-btn-group">
+                        <a href="#menu" class="btn-solid" onclick="navigateTo('menu')">Explore the Menu &rarr;</a>
+                        <a href="#contact" class="btn-ghost" onclick="navigateTo('contact')">Visit RAAHA</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="philosophy-section">
+                <span class="section-label">The RAAHA Philosophy</span>
+                <h2 class="section-heading-centered">THE IDEA BEHIND RAAHA</h2>
+                <p>At RAAHA, coffee is the beginning—not the destination.</p>
+                <p>A cup of coffee or chai can start a conversation, spark an idea, reconnect old friends, or introduce strangers who become part of each other’s stories. We believe these everyday moments matter.</p>
+                <p>That’s why RAAHA is designed as more than a place to eat or drink. It’s a welcoming café where hospitality comes first, people feel at ease, and genuine connection has room to grow.</p>
+                <p>Whether you stop by for a morning coffee, an afternoon meeting, or an evening with friends, we hope RAAHA becomes a place you look forward to returning to.</p>
+                <p>Because when we care for one another and the communities around us, we create places worth returning to.</p>
+                <hr class="premium-divider">
+            </div>
+
+            <div class="grid-section">
+                <span class="section-label">WHAT YOU’LL FIND AT RAAHA</span>
+                <h2 class="section-heading-centered">Crafted With Intention</h2>
+                <div class="offerings-grid">
+                    <div class="offering-card"><div class="offering-card-title">☕ Specialty Coffee</div><p>Thoughtfully sourced and expertly brewed.</p></div>
+                    <div class="offering-card"><div class="offering-card-title">🍵 Ceremonial Matcha</div><p>Smooth, vibrant, and carefully whisked.</p></div>
+                    <div class="offering-card"><div class="offering-card-title">🫖 Chai</div><p>A comforting selection of traditional and modern tea experiences.</p></div>
+                    <div class="offering-card"><div class="offering-card-title">🥐 Fresh Pastries</div><p>Freshly baked and perfect alongside your favorite drink.</p></div>
+                    <div class="offering-card"><div class="offering-card-title">🥗 Light Bites</div><p>Simple, seasonal offerings made to nourish and satisfy.</p></div>
+                    <div class="offering-card"><div class="offering-card-title">👥 Shared Tables</div><p>Designed for conversation, connection, and shared moments.</p></div>
+                    <div class="offering-card" style="grid-column: span 1;"><div class="offering-card-title">🎉 Gatherings & Workshops</div><p>Coffee tastings, workshops, creative meetups, and community events that bring people together.</p></div>
+                </div>
+            </div>
+
+            <div class="featured-section">
+                <span class="section-label">SIGNATURE COLLECTION</span>
+                <h2 class="section-heading-centered">Featured Drinks</h2>
+                <div class="drinks-scroll-container">
+                    <div class="drink-card">
+                        <img src="assets/images/specialty-coffee-ceramic-latte-art.png" alt="Specialty Coffee">
+                        <h4>Specialty Coffee</h4>
+                        <p>Thoughtfully sourced coffee, expertly brewed with care.</p>
+                    </div>
+                    <div class="drink-card">
+                        <img src="assets/images/Signature latte featured drinks.png" alt="Signature Latte">
+                        <h4>Signature Latte</h4>
+                        <p>Seasonal lattes crafted with rich espresso and warm flavors.</p>
+                    </div>
+                    <div class="drink-card">
+                        <img src="assets/images/RAAHA chai featured drinks.png" alt="RAAHA Chai">
+                        <h4>RAAHA Chai</h4>
+                        <p>A comforting chai blend with warming spices and a slow-sipped finish.</p>
+                    </div>
+                    <div class="drink-card">
+                        <img src="assets/images/matcha-chai-artisanal-ceramics.png" alt="Ceremonial Matcha">
+                        <h4>Ceremonial Matcha</h4>
+                        <p>Smooth matcha, carefully whisked and served warm or iced.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dark-split-block">
+                <div class="dark-split-container">
+                    <div class="dark-split-text">
+                        <span class="section-label" style="text-align: left;">THE SPACE</span>
+                        <h2>Designed for the Way People Gather.</h2>
+                        <p>At RAAHA, every corner is created with intention. Whether you’re catching up with friends, working quietly, reading a book, or sharing a cup of chai, the space is designed to help you feel comfortable, connected, and at ease.</p>
+                        <div class="highlights-grid">
+                            <div class="highlight-item">✦ Cozy Lounge Seating</div>
+                            <div class="highlight-item">✦ Quiet Corners for Focus</div>
+                            <div class="highlight-item">✦ Shared Community Table</div>
+                            <div class="highlight-item">✦ Reading Nook & Bookshelf</div>
+                            <div class="highlight-item">✦ Board Games & Starters</div>
+                            <div class="highlight-item">✦ Spaces to Work & Unwind</div>
+                        </div>
+                    </div>
+                    <div class="dark-split-image">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="RAAHA Inner Space Layout">
+                    </div>
+                </div>
+            </div>
+
+            <div class="editorial-section">
+                <div class="editorial-container">
+                    <div class="editorial-image">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="Community Connection Frame">
+                    </div>
+                    <div class="editorial-text">
+                        <span class="section-label">OUR COMMUNITY</span>
+                        <h2>Where Every Visit Tells a Story</h2>
+                        <p>At RAAHA, we celebrate meaningful conversations, creativity, hospitality, friendship, and the simple joy of slowing down together.</p>
+                        <p>This is a place where old friends reconnect, new friendships begin, ideas are shared, and every visit feels welcoming. Whether you’re here for coffee, chai, matcha, or simply a moment to pause, we hope you leave feeling a little more connected than when you arrived.</p>
+                        <div class="editorial-quote">“The best conversations happen over great coffee.”</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="events-home-section">
+                <span class="section-label">GATHER & GROW</span>
+                <h2>Events & Experiences</h2>
+                <p class="events-intro">From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
+                <div class="events-home-grid">
+                    <div class="event-home-card"><h4>📚 Book Launches</h4><p>Celebrate stories, ideas, and local authors.</p></div>
+                    <div class="event-home-card"><h4>🎨 Creative Meetups</h4><p>A welcoming space for artists, writers, and makers.</p></div>
+                    <div class="event-home-card"><h4>🧘 Pilates & Matcha</h4><p>Bringing movement, mindfulness, and community together.</p></div>
+                    <div class="event-home-card"><h4>🫖 Community Chai Nights</h4><p>Slow down, share stories, and connect over chai.</p></div>
+                    <div class="event-home-card"><h4>☕ Coffee Tastings</h4><p>Explore brewing methods, tasting notes, and coffee origins.</p></div>
+                    <div class="event-home-card"><h4>✨ Seasonal Celebrations</h4><p>Celebrate the moments that bring us together.</p></div>
+                </div>
+                <a href="#events" class="btn-solid" onclick="navigateTo('events')">View Upcoming Events &rarr;</a>
+            </div>
+
+            <div class="join-team-section">
+                <div class="join-team-content">
+                    <span class="section-label">JOIN OUR TEAM</span>
+                    <h2>Passionate About People & Hospitality?</h2>
+                    <p>At RAAHA, we believe great hospitality is about more than serving coffee—it’s about making people feel seen, welcomed, and at home. If you enjoy creating meaningful experiences, working with intention, and being part of a community-driven team, we’d love to meet you.</p>
+                    <a href="#careers" class="btn-solid" onclick="navigateTo('careers')">Join the Team &rarr;</a>
+                </div>
+            </div>
+
+            <div class="visiting-home-section">
+                <div class="visiting-container">
+                    <div class="visiting-text">
+                        <span class="section-label" style="text-align: left;">FIND US</span>
+                        <h2>Visit Us in Houston</h2>
+                        <div class="visiting-info-block"><h4>Location</h4><p>Houston, Texas</p></div>
+                        <div class="visiting-info-block">
+                            <h4>Hours</h4>
+                            <p>Monday – Friday: 7:00 AM – 9:00 PM<br>Saturday – Sunday: 7:00 AM – 9:30 PM</p>
+                        </div>
+                        <div class="visiting-info-block"><h4>Questions?</h4><p>raahasoulhouse@gmail.com<br>hello@raahasoulhouse.com</p></div>
+                        <p style="margin-top: 28px; font-style: italic; color: var(--text-muted); font-size: 0.95rem;">
+                            We look forward to welcoming you—whether you’re stopping by for your morning coffee, an afternoon matcha, or an evening conversation.
+                        </p>
+                        <a href="#contact" class="btn-solid" style="margin-top: 12px;" onclick="navigateTo('contact')">Get in Touch &rarr;</a>
+                    </div>
+                    <div class="visiting-map-box">
+                        <div class="map-icon">📍</div>
+                        <h4 style="color: var(--text-espresso); font-family: -apple-system, sans-serif; font-size: 0.9rem; margin-bottom: 6px;">Map Placeholder</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 0;">Houston, Texas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="newsletter-section">
+                <div class="newsletter-content">
+                    <span class="section-label">NEWSLETTER</span>
+                    <h2>Stay Connected</h2>
+                    <p>Be the first to hear about seasonal drinks, community events, workshops, and thoughtful moments happening at RAAHA. Join us as we continue creating a place to pause, connect, and belong.</p>
+                    <form class="newsletter-form" action="https://formspree.io/f/xykaabdw" method="POST">
+                        <input type="hidden" name="form_type" value="Newsletter Subscription">
+                        <input type="email" name="subscriber_email" class="newsletter-input" placeholder="Enter your email address" required>
+                        <button type="submit" class="btn-inline-submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="about" class="page" style="display:none;">
+            
+            <div class="narrow-column" style="text-align: center; padding-bottom: 40px;">
+                <span class="section-label">OUR STORY</span>
+                <h2 style="font-size: 2.8rem; margin-bottom: 24px;">The Soul Behind RAAHA</h2>
+                <p style="font-size: 1.1rem; line-height: 1.75;">RAAHA Soul House was created from a belief that in a world moving faster every day, people deserve spaces that invite them to slow down, reconnect, and simply be.</p>
+                <p style="font-size: 1.1rem; line-height: 1.75;">More than a café, RAAHA is a modern third space where thoughtfully crafted drinks, intentional design, and genuine hospitality come together to create moments of calm and connection.</p>
+                <p style="font-size: 1.1rem; line-height: 1.75;">Every detail is guided by one purpose: to make people feel welcomed, valued, and at home.</p>
+            </div>
+
+            <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
+                <div class="editorial-container" style="grid-template-columns: 0.92fr 1.08fr;">
+                    <div class="editorial-text">
+                        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">A Place for People. Built for Connection.</h2>
+                        <p>In today’s fast-paced world, RAAHA offers something increasingly rare: a place to slow down, feel present, and connect.</p>
+                        <p>Inspired by the timeless role of gathering spaces throughout history, RAAHA is a welcoming third space where conversations unfold naturally, creativity flourishes, and everyday moments become meaningful.</p>
+                        <p>Whether you’re meeting a friend, enjoying a quiet moment alone, working between appointments, or joining a community event, you’ll find shared tables, cozy corners, thoughtfully crafted coffee, chai and matcha, and genuine hospitality designed to make you feel at home.</p>
+                        <div class="editorial-quote" style="margin-top: 24px;">“We don’t just serve coffee. We create space for connection.”</div>
+                    </div>
+                    <div class="editorial-image">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="A Place for People Matrix">
+                    </div>
+                </div>
+            </div>
+
+            <div class="dark-split-block" style="margin-top: 40px; margin-bottom: 40px;">
+                <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+                    <span class="section-label">OUR MISSION</span>
+                    <h2 style="color: var(--bg-warm-ivory); font-size: 2.8rem; margin-bottom: 24px;">Pause. Connect. Belong.</h2>
+                    <p style="color: var(--bg-warm-ivory); font-size: 1.15rem; opacity: 0.95; margin-bottom: 20px;">Our mission is to care for people through thoughtful hospitality and meaningful everyday experiences.</p>
+                    <p style="color: var(--bg-warm-ivory); font-size: 1.15rem; opacity: 0.95; margin-bottom: 48px;">Every decision we make, from the drinks we serve to the spaces we create, is guided by intention, kindness, and a commitment to making people feel welcome. We hope to build a place that guests trust, return to, and are excited to share with others.</p>
+                    
+                    <div class="highlights-grid" style="grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left;">
+                        <div class="offering-card" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12);">
+                            <h4 style="color: var(--accent-gold); font-family: Georgia, serif; font-size: 1.25rem; margin-bottom: 8px;">Pause</h4>
+                            <p style="color: var(--bg-warm-ivory); opacity: 0.85; font-size: 0.9rem; margin-bottom: 0;">Create moments of presence in the middle of busy lives.</p>
+                        </div>
+                        <div class="offering-card" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12);">
+                            <h4 style="color: var(--accent-gold); font-family: Georgia, serif; font-size: 1.25rem; margin-bottom: 8px;">Connect</h4>
+                            <p style="color: var(--bg-warm-ivory); opacity: 0.85; font-size: 0.9rem; margin-bottom: 0;">Build meaningful relationships through conversation and shared experiences.</p>
+                        </div>
+                        <div class="offering-card" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12);">
+                            <h4 style="color: var(--accent-gold); font-family: Georgia, serif; font-size: 1.25rem; margin-bottom: 8px;">Belong</h4>
+                            <p style="color: var(--bg-warm-ivory); opacity: 0.85; font-size: 0.9rem; margin-bottom: 0;">Find your place in a community that welcomes you exactly as you are.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
+                <div class="editorial-container">
+                    <div class="editorial-image">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="A Modern Community Café Frame">
+                    </div>
+                    <div class="editorial-text">
+                        <span class="section-label">THE EXPERIENCE</span>
+                        <h2>A Modern Community Café</h2>
+                        <p>RAAHA is designed for the rhythms of everyday life. Stop by for your morning coffee, settle into a cozy corner with a book, meet a friend over chai, or gather around a shared table for conversation and connection.</p>
+                        <p>Beyond the daily ritual of coffee and conversation, RAAHA brings people together through book launches, creative meetups, Pilates and matcha sessions, community chai nights, workshops, and seasonal gatherings that celebrate learning, creativity, and shared experiences.</p>
+                        <p>Whether you’re here for a quiet morning with your thoughts or an evening gathering with friends, you’ll always find a place to pause, connect, and feel at home.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-section" style="padding-top: 40px;">
+                <span class="section-label">WHAT WE STAND FOR</span>
+                <h2 class="heading-centered" style="font-size: 2.5rem; text-align: center; margin-bottom: 24px;">Our Values</h2>
+                <div class="offerings-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="offering-card">
+                        <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Hospitality</h4>
+                        <p style="font-size: 0.9rem;">Every guest is welcomed with warmth, presence, and genuine care. We create experiences that make people feel seen, comfortable, and at home.</p>
+                    </div>
+                    <div class="offering-card">
+                        <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Community</h4>
+                        <p style="font-size: 0.9rem;">RAAHA exists to bring people together through conversation, shared rituals, and meaningful moments that strengthen human connection.</p>
+                    </div>
+                    <div class="offering-card">
+                        <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Stewardship</h4>
+                        <p style="font-size: 0.9rem;">We believe in caring for people, our spaces, and our shared future with responsibility and intention. Every thoughtful choice helps create lasting positive impact.</p>
+                    </div>
+                    <div class="offering-card">
+                        <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Craftsmanship</h4>
+                        <p style="font-size: 0.9rem;">From every espresso shot to every cup of chai, we value quality, consistency, and attention to detail in everything we serve.</p>
+                    </div>
+                    <div class="offering-card">
+                        <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Inclusivity</h4>
+                        <p style="font-size: 0.9rem;">Everyone is welcome here. We celebrate different backgrounds, perspectives, and stories while creating a space where everyone can belong.</p>
+                    </div>
+                    <div class="offering-card">
+                        <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Creativity</h4>
+                        <p style="font-size: 0.9rem;">We encourage curiosity, learning, and new ideas through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="menu" class="page" style="display:none;">
+            <div class="narrow-column" style="max-width: 850px;">
+                
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span class="section-label">OUR MENU</span>
+                    <h2 style="font-size: 2.6rem; margin-bottom: 16px;">Crafted With Care</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 650px; margin: 0 auto 32px auto;">Every drink and bite at RAAHA is thoughtfully prepared with thoughtfully sourced ingredients, honoring tradition, embracing creativity, and celebrating everyday rituals.</p>
+                </div>
+
+                <div class="menu-filter-bar">
+                    <a href="#cat-espresso" class="filter-pill">Espresso Bar</a>
+                    <a href="#cat-siglattes" class="filter-pill">Signature Lattes</a>
+                    <a href="#cat-matcha" class="filter-pill">Matcha</a>
+                    <a href="#cat-tea" class="filter-pill">Chai & Tea</a>
+                    <a href="#cat-refreshers" class="filter-pill">Refreshers</a>
+                    <a href="#cat-bites" class="filter-pill">Light Bites & Pastries</a>
+                    <a href="#cat-addons" class="filter-pill">Add-Ons</a>
+                </div>
+
+                <div id="cat-espresso" class="menu-category-block">
+                    <div class="menu-category-title">Espresso Bar</div>
+                    <img src="assets/images/specialty-coffee-ceramic-latte-art.png" alt="Specialty Coffee Espresso Bar Banner" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Espresso (Double)</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$3.75</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Americano</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$4.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Cappuccino</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.25</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Flat White</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Mocha</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Drip Coffee</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$3.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Decaf Drip</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$3.50</div></div>
+                    </div>
+                </div>
+
+                <div id="cat-siglattes" class="menu-category-block">
+                    <div class="menu-category-title">Signature Lattes</div>
+                    <img src="assets/images/Signature latte featured drinks.png" alt="Signature Flavors Latte Banner" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Cardamom Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Rose Pistachio Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$8.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Tiramisu Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$8.00</div></div>
+                    </div>
+                </div>
+
+                <div id="cat-matcha" class="menu-category-block">
+                    <div class="menu-category-title">Matcha</div>
+                    <img src="assets/images/matcha-chai-artisanal-ceramics.png" alt="Ceremonial Artisanal Matcha Visual Frame" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Mango Matcha</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Strawberry Matcha</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
+                    </div>
+                </div>
+
+                <div id="cat-tea" class="menu-category-block">
+                    <div class="menu-category-title">Chai & Tea</div>
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>House Chai Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Moroccan Mint Tea</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Jasmine Green Tea</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Ashwagandha Tea</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Earl Grey</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Hibiscus Tea</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.00</div></div>
+                    </div>
+                </div>
+
+                <div id="cat-refreshers" class="menu-category-block">
+                    <div class="menu-category-title">Refreshers</div>
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Lemon Mint Refresher</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Strawberry Refresher</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Passion Fruit Refresher</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                    </div>
+                </div>
+
+                <div id="cat-bites" class="menu-category-block">
+                    <div class="menu-category-title">Light Bites & Pastries</div>
+                    <img src="assets/images/pastry-display-boutique-cafe.png" alt="Boutique Cafe Pastry Architecture Display" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Avocado Egg Toast</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$11.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Chicken Sandwich</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$12.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Veggie Sandwich</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$12.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Turkey & Cheese Croissant</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$9.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Chocolate Stuffed Dates</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Rotating Cake Slice</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$8.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Brownie</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Milk Cake</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Premium Chocolate Slice</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$9.00</div></div>
+                    </div>
+                </div>
+
+                <div id="cat-addons" class="menu-category-block" style="margin-bottom: 20px;">
+                    <div class="menu-category-title">Add-Ons</div>
+                    <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Oat Milk</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$1.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Almond Milk</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$1.00</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Syrup</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$0.75</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Extra Espresso Shot</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$0.75</div></div>
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Chia Seeds</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$0.50</div></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section id="events" class="page" style="display:none;">
+            
+            <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
+                <div class="editorial-container">
+                    <div class="editorial-text">
+                        <span class="section-label">GATHER & GROW</span>
+                        <h2 style="font-size: 3rem; margin-bottom: 20px;">Events & Experiences</h2>
+                        <p style="font-size: 1.1rem; color: var(--text-espresso);">From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
+                    </div>
+                    <div class="editorial-image">
+                        <img src="assets/images/community-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-container" style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
+                <div class="events-category-grid">
+                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Workshops</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Hands-on learning experiences in coffee, art, and craft.</p></div>
+                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Networking Gatherings</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Connect with professionals and creatives.</p></div>
+                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Creative Meetups</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Artists, writers, and makers welcome.</p></div>
+                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Coffee Tastings</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Explore origins, methods, and flavors.</p></div>
+                </div>
+            </div>
+
+            <div class="page-container" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px 80px 20px; border-top: 1px solid var(--border-light);">
+                <span class="section-label">WHAT'S COMING</span>
+                <h2 class="section-heading-centered" style="font-size: 2.4rem;">Upcoming Events</h2>
+                
+                <div class="upcoming-matrix-grid">
+                    <div class="upcoming-event-card">
+                        <div class="event-tag-pill">Book Launch</div>
+                        <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Book Launch Evening</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A cozy gathering for authors, readers, and thoughtful conversation.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                    </div>
+                    <div class="upcoming-event-card">
+                        <div class="event-tag-pill">Wellness</div>
+                        <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Pilates & Matcha</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Movement, mindfulness, and matcha in a calm community setting.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                    </div>
+                    <div class="upcoming-event-card">
+                        <div class="event-tag-pill">Chai Night</div>
+                        <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Community Chai Night</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">An evening to slow down, share stories, and connect over chai.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                    </div>
+                    <div class="upcoming-event-card">
+                        <div class="event-tag-pill">Coffee Tasting</div>
+                        <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Coffee Tasting</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Explore coffee origins, brewing methods, and tasting notes.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                    </div>
+                    <div class="upcoming-event-card">
+                        <div class="event-tag-pill">Creative Meetup</div>
+                        <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Creative Meetup</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A welcoming space for artists, writers, makers, and creatives.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                    </div>
+                    <div class="upcoming-event-card">
+                        <div class="event-tag-pill">Celebration</div>
+                        <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Seasonal Celebration</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A gathering to celebrate the moments that bring people together.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="join-team-section" style="border-bottom: 1px solid var(--border-light); text-align: left;">
+                <div class="narrow-column" style="max-width: 650px;">
+                    <span class="section-label" style="text-align: left;">HOST A GATHERING</span>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 12px;">Host an Event at RAAHA</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 32px;">Interested in gathering at RAAHA? Tell us a little about your vision, and we’ll be happy to connect.</p>
+                    
+                    <form action="https://formspree.io/f/xwvjjwnz" method="POST">
+                        <input type="hidden" name="form_type" value="Event Inquiry">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Type</label>
+                            <input type="text" name="event_type" placeholder="e.g., Creative Meetup, Workshop, Private Gathering" required>
+                        </div>
+                        <div class="form-row-split">
+                            <div class="form-group">
+                                <label>Preferred Date</label>
+                                <input type="date" name="preferred_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Guests</label>
+                                <input type="number" name="number_of_guests" placeholder="Estimated guest count" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Message or Event Details</label>
+                            <textarea name="message" rows="5" placeholder="Tell us more about your event layout, requirements, and timing..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-form-submit" style="margin-top: 10px;">Submit Event Inquiry</button>
+                    </form>
+                </div>
+            </div>
+
+        </section>
+
+
+        <section id="careers" class="page" style="display:none;">
+            
+            <div class="narrow-column" style="text-align: center; padding-bottom: 20px;">
+                <span class="section-label">JOIN OUR TEAM</span>
+                <h2 style="font-size: 2.8rem; margin-bottom: 24px;">Work Where You Belong</h2>
+                <p style="font-size: 1.1rem; line-height: 1.75; color: var(--text-espresso);">At RAAHA, hospitality begins with care. We are building a team that values warmth, consistency, creativity, and meaningful connection. If you take pride in your work and enjoy making people feel welcome, we would love to meet you.</p>
+            </div>
+
+            <div class="page-container" style="max-width: 1050px; margin: 0 auto; padding: 40px 20px; border-top: 1px solid var(--border-light);">
+                <div style="text-align: center;">
+                    <span class="section-label">OUR CULTURE</span>
+                    <h2 style="font-size: 2.2rem; margin-bottom: 16px;">Built on Care, Craft, and Connection</h2>
+                    <p style="max-width: 750px; margin: 0 auto; color: var(--text-espresso);">RAAHA is shaped by the people who bring it to life each day. We believe a strong team is built through respect, clear communication, learning, and pride in the details. Together, we create a space where guests feel welcomed and team members feel supported in doing meaningful work.</p>
+                </div>
+
+                <div class="culture-cards-matrix">
+                    <div class="culture-card"><h4>☕ Thoughtful Hospitality</h4><p>Create guest experiences with warmth, presence, and genuine care.</p></div>
+                    <div class="culture-card"><h4>✨ Craft With Intention</h4><p>Take pride in quality, consistency, and the details behind every drink and interaction.</p></div>
+                    <div class="culture-card"><h4>🤝 Community Mindset</h4><p>Work with a team that values belonging, respect, and connection.</p></div>
+                    <div class="culture-card"><h4>🌱 Growth & Learning</h4><p>Build your skills through training, practice, feedback, and hands-on experience.</p></div>
+                </div>
+            </div>
+
+            <div class="page-container" style="max-width: 850px; margin: 0 auto; padding: 40px 20px 80px 20px; border-top: 1px solid var(--border-light);">
+                <span class="section-label">OPEN POSITIONS</span>
+                <h2 class="section-heading-centered" style="font-size: 2.4rem;">Current Openings</h2>
+                
+                <div class="openings-list">
+                    <div class="opening-row-card">
+                        <div class="opening-header"><h3>Lead Barista</h3><div class="opening-type-badge">Full-time</div></div>
+                        <p>Lead our coffee program with skill, creativity, and a passion for hospitality. Minimum 2 years specialty coffee experience required.</p>
+                    </div>
+                    <div class="opening-row-card">
+                        <div class="opening-header"><h3>Barista</h3><div class="opening-type-badge">Full-time / Part-time</div></div>
+                        <p>Craft beautiful drinks while creating warm, welcoming experiences for every guest. Prior barista experience preferred.</p>
+                    </div>
+                    <div class="opening-row-card">
+                        <div class="opening-header"><h3>Community Events Coordinator</h3><div class="opening-type-badge">Part-time</div></div>
+                        <p>Support workshops, gatherings, and community programming that bring people together.</p>
+                    </div>
+                    <div class="opening-row-card">
+                        <div class="opening-header"><h3>Kitchen Team Member</h3><div class="opening-type-badge">Part-time / Full-time</div></div>
+                        <p>Prepare fresh pastries and light bites with care, consistency, and attention to quality.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="join-team-section" style="border-bottom: 1px solid var(--border-light); text-align: left;">
+                <div class="narrow-column" style="max-width: 650px;">
+                    <span class="section-label" style="text-align: left;">APPLY NOW</span>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 12px;">Join the RAAHA Team</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 32px;">Tell us about yourself, your experience, and why you’d be a great fit for RAAHA.</p>
+                    
+                    <form action="https://formspree.io/f/xkoaapbk" method="POST">
+                        <input type="hidden" name="form_type" value="Career Application">
+                        <div class="form-row-split">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" name="full_name" placeholder="Your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-row-split">
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" name="phone_number" placeholder="(555) 123-4567" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Position of Interest</label>
+                                <select name="position_interested_in" required>
+                                    <option value="" disabled selected>Select a position</option>
+                                    <option value="Lead Barista">Lead Barista (Full-time)</option>
+                                    <option value="Barista">Barista (Full/Part-time)</option>
+                                    <option value="Community Events Coordinator">Community Events Coordinator (Part-time)</option>
+                                    <option value="Kitchen Team Member">Kitchen Team Member (Full/Part-time)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Why do you want to join RAAHA?</label>
+                            <textarea name="message" rows="5" placeholder="Tell us about your experience, passion for hospitality, and what draws you to RAAHA..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-form-submit" style="margin-top: 10px;">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+
+        </section>
+
+
+        <section id="contact" class="page" style="display:none;">
+            
+            <div class="narrow-column" style="text-align: center; padding-bottom: 20px;">
+                <span class="section-label">GET IN TOUCH</span>
+                <h2 style="font-size: 2.8rem; margin-bottom: 24px;">Visit RAAHA</h2>
+                <p style="font-size: 1.1rem; line-height: 1.75; color: var(--text-espresso);">We’d love to welcome you. Whether you have a question, want to host a gathering, or simply want to say hello, reach out anytime.</p>
+            </div>
+
+            <div class="page-container" style="max-width: 950px; margin: 0 auto; padding: 40px 20px 80px 20px; border-top: 1px solid var(--border-light);">
+                <div class="contact-split-container">
+                    
+                    <div class="contact-info-panel">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 12px;">Contact Information</h3>
+                        
+                        <div class="info-row">
+                            <div class="info-icon">📍</div>
+                            <div class="info-details"><h4>Location</h4><p>Houston, Texas<br><span style="font-style: italic; opacity: 0.8;">Permanent location coming soon.</span></p></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon">⏰</div>
+                            <div class="info-details"><h4>Hours</h4><p>Opening soon. Follow us for updates.</p></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon">✉️</div>
+                            <div class="info-details"><h4>Email</h4><p><a href="mailto:raahasoulhouse@gmail.com" style="color:inherit; text-decoration:none;">raahasoulhouse@gmail.com</a></p></div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon">📞</div>
+                            <div class="info-details"><h4>Phone</h4><p>346-375-4525</p></div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 12px;">FOLLOW US</h4>
+                            <div class="social-follow-row">
+                                <a href="https://www.instagram.com/raahasoulhouse?igsh=NnBkbjM4NTlncnEw&utm_source=qr" target="_blank" rel="noopener" class="social-follow-link">Instagram</a>
+                                <a href="https://www.facebook.com/share/17XuyJ2QVN/?mibextid=wwXIfr" target="_blank" rel="noopener" class="social-follow-link">Facebook</a>
+                                <a href="https://www.tiktok.com/@raahasoulhouse?_r=1&_t=ZP-97W5F0VYTR0" target="_blank" rel="noopener" class="social-follow-link">TikTok</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 24px;">Send Us a Message</h3>
+                        <form action="https://formspree.io/f/xykaabdw" method="POST">
+                            <input type="hidden" name="form_type" value="General Contact Form Inquiry">
+                            <div class="form-row-split">
+                                <div class="form-group"><label>Name</label><input type="text" name="name" placeholder="Your name" required></div>
+                                <div class="form-group"><label>Email</label><input type="email" name="email" placeholder="your@email.com" required></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <select name="subject" required>
+                                    <option value="" disabled selected>Select a topic</option>
+                                    <option value="General Question">General Question</option>
+                                    <option value="Gathering or Event Inquiry">Gathering or Event Inquiry</option>
+                                    <option value="Partnership / Collaboration">Partnership / Collaboration</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea name="message" rows="5" placeholder="How can we help?" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-form-submit">Send Message &rarr;</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="newsletter-section" style="border-top: 1px solid var(--border-light); background-color: var(--white);">
+                <div class="newsletter-content" style="max-width: 650px;">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 12px;">Find Your Way to RAAHA</h2>
+                    <p style="font-weight: 500; color: var(--accent-clay-red); margin-bottom: 8px;">Houston, Texas</p>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px;">Our permanent location will be announced soon. Until then, follow our journey online and stay connected for upcoming gatherings and opening updates.</p>
+                    <div class="visiting-map-box" style="background-color: var(--bg-warm-ivory); border-style: dashed; height: 200px;">
+                        <span style="font-size: 1.5rem; margin-bottom: 4px;">🗺️</span>
+                        <p style="font-size: 0.9rem; font-weight: 500; color: var(--text-espresso);">Interactive map coming soon</p>
+                        <p style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0;">Houston, Texas &bull; raahasoulhouse.com</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-grid-container">
+            
+            <div class="footer-col">
+                <img src="assets/images/raaha-logo.png" alt="RAAHA SOUL HOUSE" class="footer-brand-logo" onerror="this.style.display='none';">
+                <h3 style="color: var(--white); font-family: Georgia, serif; font-size: 1.6rem; margin-bottom: 12px; letter-spacing: 2px;">RAAHA</h3>
+                <p style="margin-bottom: 16px; font-size: 0.9rem; opacity: 0.75;">A modern third space where specialty coffee, handcrafted chai, and meaningful human connection come together.</p>
+                <p style="font-style: italic; color: var(--accent-gold); font-size: 0.9rem;">Pause. Connect. Belong.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <ul class="footer-links-list">
+                    <li><a href="#home" onclick="navigateTo('home')">Home</a></li>
+                    <li><a href="#about" onclick="navigateTo('about')">About</a></li>
+                    <li><a href="#menu" onclick="navigateTo('menu')">Menu</a></li>
+                    <li><a href="#events" onclick="navigateTo('events')">Events & Experiences</a></li>
+                    <li><a href="#careers" onclick="navigateTo('careers')">Careers</a></li>
+                    <li><a href="#contact" onclick="navigateTo('contact')">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>VISIT US</h4>
+                <p style="margin-bottom: 8px; font-weight: 500;">Houston, Texas</p>
+                <p style="margin-bottom: 16px; font-size: 0.9rem; opacity: 0.8;"><a href="mailto:raahasoulhouse@gmail.com" style="color:inherit; text-decoration:none;">raahasoulhouse@gmail.com</a></p>
+                <p style="font-size: 0.85rem; opacity: 0.7; line-height: 1.5;">
+                    Mon – Fri: 7:00 AM – 9:00 PM<br>
+                    Sat – Sun: 7:00 AM – 9:30 PM
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>STAY CONNECTED</h4>
+                <div class="footer-newsletter-box">
+                    <p>Be the first to hear about new drinks, upcoming events, workshops, and stories from RAAHA.</p>
+                    <form class="footer-newsletter-form" action="https://formspree.io/f/xykaabdw" method="POST">
+                        <input type="hidden" name="form_type" value="Footer Sticky Form Subscription">
+                        <input type="email" name="subscriber_email" class="footer-newsletter-input" placeholder="Enter your email" required>
+                        <button type="submit" class="btn-footer-subscribe">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom-copyright">
+            &copy; 2026 RAAHA Soul House. All rights reserved.
+        </div>
+    </footer>
+
+
+    <nav>
+        <a href="#home" id="nav-home" class="active" onclick="navigateTo('home')">Home</a>
+        <a href="#about" id="nav-about" onclick="navigateTo('about')">About</a>
+        <a href="#menu" id="nav-menu" onclick="navigateTo('menu')">Menu</a>
+        <a href="#events" id="nav-events" onclick="navigateTo('events')">Events</a>
+        <a href="#careers" id="nav-careers" onclick="navigateTo('careers')">Careers</a>
+        <a href="#contact" id="nav-contact" onclick="navigateTo('contact')">Contact</a>
+    </nav>
+
+
+    <script>
+        function navigateTo(pageId) {
+            // Hide all sub pages
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            // Mount target screen state view
+            document.getElementById(pageId).style.display = 'block';
+            // Flush old dynamic active styles
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            // Toggle active style highlight onto active node anchor link
+            const targetNavLink = document.getElementById('nav-' + pageId);
+            if (targetNavLink) targetNavLink.classList.add('active');
+            // Reset viewport translation matrix smoothly to frame top layout
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        
+        // Listen to URL hash triggers if loaded or modified native deep link anchors
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'about', 'menu', 'events', 'careers', 'contact'].includes(hash)) {
+                navigateTo(hash);
+            }
+        });
+
+        // Intercept inline custom category jumping logic behaviors natively inside Menu Section context 
+        document.querySelectorAll('.menu-filter-bar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
