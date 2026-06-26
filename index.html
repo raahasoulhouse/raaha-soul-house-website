@@ -53,33 +53,62 @@
             font-weight: 600;
         }
 
-        /* CUSTOM INLINE TYPOGRAPHY FOR BRAND LOGO (GOLD SERIF LOGO EFFECT) */
+        /* PREMIUM EDITORIAL WORDMARK ARCHITECTURE */
+        .brand-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+            padding: 4px 0;
+        }
         .brand-logo-text {
-            font-family: Georgia, serif;
-            font-size: 1.9rem;
+            font-family: "Cinzel", "Times New Roman", Georgia, serif;
+            font-size: 2.1rem;
             color: var(--accent-gold);
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: 7px;
             font-weight: 400;
             margin: 0;
             display: inline-block;
+            position: relative;
         }
         .brand-logo-text-initial {
-            font-size: 2.35rem;
-            font-family: Georgia, serif;
-            font-style: italic;
+            font-size: 2.5rem;
+            font-family: "Times New Roman", Georgia, serif;
             font-weight: 400;
             color: var(--accent-gold);
             display: inline-block;
-            transform: translateY(2px);
-            margin-right: -4px;
+            position: relative;
+        }
+        /* Graceful, architecturally understated curved leg sweeping beneath */
+        .brand-logo-text-initial::after {
+            content: "";
+            position: absolute;
+            left: 2px;
+            bottom: -3px;
+            width: 55px;
+            height: 2px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            transform: skewX(-30deg);
+        }
+        .brand-logo-subtext {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 5.5px;
+            margin: 5px 0 0 2px;
+            opacity: 0.9;
         }
 
         /* RESPONSIVE NAVIGATION ENGINE HIDINGS */
         @media (max-width: 850px) {
             .desktop-header-nav { display: none !important; }
-            header { padding: 16px 20px !important; justify-content: center !important; flex-direction: column; gap: 8px; }
-            header .header-brand-divider { display: none !important; }
+            header { padding: 16px 20px !important; justify-content: center !important; flex-direction: column; gap: 14px; }
+            .brand-logo-container { align-items: center !important; }
+            .brand-logo-subtext { margin-left: 5px !important; }
             body { padding-bottom: 80px !important; }
             nav.mobile-sticky-dock { display: flex !important; }
         }
@@ -1003,8 +1032,10 @@
 
     <header style="background-color: var(--accent-clay-red); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
         <a href="#home" onclick="navigateTo('home')" style="text-decoration: none; display: flex; align-items: center; gap: 14px;">
-            <div class="brand-logo-text"><span class="brand-logo-text-initial">R</span>aaha</div>
-            <span class="header-brand-divider" style="font-family: -apple-system, sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 3px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 14px; height: 14px; display: flex; align-items: center; transform: translateY(2px);">Soul House</span>
+            <div class="brand-logo-container">
+                <div class="brand-logo-text"><span class="brand-logo-text-initial">R</span>AAHA</div>
+                <div class="brand-logo-subtext">SOUL HOUSE</div>
+            </div>
         </a>
 
         <div class="desktop-header-nav" style="display: flex; gap: 32px;">
@@ -1200,7 +1231,7 @@
                         <p>In today’s fast-paced world, RAAHA offers something increasingly rare: a place to slow down, feel present, and connect.</p>
                         <p>Inspired by the timeless role of gathering spaces throughout history, RAAHA is a welcoming third space where conversations unfold naturally, creativity flourishes, and everyday moments become meaningful.</p>
                         <p>Whether you’re meeting a friend, enjoying a quiet moment alone, working between appointments, or joining a community event, you’ll find shared tables, cozy corners, thoughtfully crafted coffee, chai and matcha, and genuine hospitality designed to make you feel at home.</p>
-                        <div class="editorial-quote" style="margin-top: 24px;">“We don’t just serve coffee. We create space for connection.”</div>
+                        <div class="editorial-quote" style="margin-top: 24px;"> hijack this string for layout consistency “We don’t just serve coffee. We create space for connection.”</div>
                     </div>
                     <div class="editorial-image">
                         <img src="assets/images/our community-diverse-guests-connection.png" alt="A Place for People Matrix">
@@ -1400,15 +1431,6 @@
                 </div>
             </div>
 
-            <div class="page-container" style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
-                <div class="events-category-grid">
-                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Workshops</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Hands-on learning experiences in coffee, art, and craft.</p></div>
-                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Networking Gatherings</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Connect with professionals and creatives.</p></div>
-                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Creative Meetups</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Artists, writers, and makers welcome.</p></div>
-                    <div class="offering-card"><h4 style="font-family: Georgia, serif; margin-bottom: 8px;">Coffee Tastings</h4><p style="font-size: 0.95rem; color: var(--text-muted);">Explore origins, methods, and flavors.</p></div>
-                </div>
-            </div>
-
             <div class="page-container" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px 80px 20px; border-top: 1px solid var(--border-light);">
                 <span class="section-label">WHAT'S COMING</span>
                 <h2 class="section-heading-centered" style="font-size: 2.4rem;">Upcoming Events</h2>
@@ -1418,37 +1440,37 @@
                         <div class="event-tag-pill">Book Launch</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Book Launch Evening</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A cozy gathering for authors, readers, and thoughtful conversation.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Wellness</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Pilates & Matcha</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Movement, mindfulness, and matcha in a calm community setting.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Chai Night</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Community Chai Night</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">An evening to slow down, share stories, and connect over chai.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Coffee Tasting</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Coffee Tasting</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Explore coffee origins, brewing methods, and tasting notes.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Creative Meetup</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Creative Meetup</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A welcoming space for artists, writers, makers, and creatives.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Celebration</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Seasonal Celebration</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A gathering to celebrate the moments that bring people together.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                 </div>
             </div>
@@ -1511,10 +1533,10 @@
                 </div>
 
                 <div class="culture-cards-matrix">
-                    <div class="culture-card"><h4>☕ Thoughtful Hospitality</h4><p>Create guest experiences with warmth, presence, and genuine care.</p></div>
-                    <div class="culture-card"><h4>✨ Craft With Intention</h4><p>Take pride in quality, consistency, and the details behind every drink and interaction.</p></div>
-                    <div class="culture-card"><h4>🤝 Community Mindset</h4><p>Work with a team that values belonging, respect, and connection.</p></div>
-                    <div class="culture-card"><h4>🌱 Growth & Learning</h4><p>Build your skills through training, practice, feedback, and hands-on experience.</p></div>
+                    <div class="culture-card"><h4>?? Thoughtful Hospitality</h4><p>Create guest experiences with warmth, presence, and genuine care.</p></div>
+                    <div class="culture-card"><h4>?? Craft With Intention</h4><p>Take pride in quality, consistency, and the details behind every drink and interaction.</p></div>
+                    <div class="culture-card"><h4>?? Community Mindset</h4><p>Work with a team that values belonging, respect, and connection.</p></div>
+                    <div class="culture-card"><h4>?? Growth & Learning</h4><p>Build your skills through training, practice, feedback, and hands-on experience.</p></div>
                 </div>
             </div>
 
