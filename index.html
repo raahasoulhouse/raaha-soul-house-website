@@ -10,8 +10,8 @@
         /* PREMIUM BRAND SYSTEM */
         :root {
             --bg-warm-ivory: #FAF6F0;    /* Premium warm ivory background */
-            --accent-clay-red: #8C3A27;  /* Refined, deep clay red */
-            --accent-gold: #C4A47C;      /* Muted sand gold accent */
+            --accent-clay-red: #8F3E2E;  /* Updated target deep clay red */
+            --accent-gold: #C9A86A;      /* Updated target muted sand gold */
             --text-espresso: #26211F;    /* Rich espresso charcoal text */
             --text-muted: #6E6562;       /* Soft charcoal for fine print */
             --white: #FFFFFF;
@@ -910,10 +910,20 @@
         @media(max-width: 550px){
             .footer-grid-container { grid-template-columns: 1fr; gap: 32px; }
         }
-        .footer-brand-logo {
+        .footer-brand-logo-frame {
+            width: 100%;
             max-width: 180px;
-            height: auto;
-            margin-bottom: 20px;
+            height: 90px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .footer-brand-logo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
             display: block;
         }
         .footer-col p {
@@ -1231,7 +1241,7 @@
                         <p>In today’s fast-paced world, RAAHA offers something increasingly rare: a place to slow down, feel present, and connect.</p>
                         <p>Inspired by the timeless role of gathering spaces throughout history, RAAHA is a welcoming third space where conversations unfold naturally, creativity flourishes, and everyday moments become meaningful.</p>
                         <p>Whether you’re meeting a friend, enjoying a quiet moment alone, working between appointments, or joining a community event, you’ll find shared tables, cozy corners, thoughtfully crafted coffee, chai and matcha, and genuine hospitality designed to make you feel at home.</p>
-                        <div class="editorial-quote" style="margin-top: 24px;"> hijack this string for layout consistency “We don’t just serve coffee. We create space for connection.”</div>
+                        <div class="editorial-quote" style="margin-top: 24px;">“We don’t just serve coffee. We create space for connection.”</div>
                     </div>
                     <div class="editorial-image">
                         <img src="assets/images/our community-diverse-guests-connection.png" alt="A Place for People Matrix">
@@ -1303,7 +1313,7 @@
                     </div>
                     <div class="offering-card">
                         <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Creativity</h4>
-                        <p style="font-size: 0.9rem;">We encourage curiosity, learning, and new ideas through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p>
+                        <p style="font-size: 0.9rem;">We encourage curiosity, learning, and data insights through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p>
                     </div>
                 </div>
             </div>
@@ -1440,37 +1450,37 @@
                         <div class="event-tag-pill">Book Launch</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Book Launch Evening</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A cozy gathering for authors, readers, and thoughtful conversation.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Wellness</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Pilates & Matcha</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Movement, mindfulness, and matcha in a calm community setting.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Chai Night</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Community Chai Night</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">An evening to slow down, share stories, and connect over chai.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Coffee Tasting</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Coffee Tasting</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Explore coffee origins, brewing methods, and tasting notes.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Creative Meetup</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Creative Meetup</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A welcoming space for artists, writers, makers, and creatives.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Celebration</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Seasonal Celebration</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">A gathering to celebrate the moments that bring people together.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">?? Schedule posted soon &bull; Follow socials for dates</p>
+                        <p style="font-size: 0.85rem; color: var(--text-espresso); margin-bottom: 0;">📆 Schedule posted soon &bull; Follow socials for dates</p>
                     </div>
                 </div>
             </div>
@@ -1533,10 +1543,10 @@
                 </div>
 
                 <div class="culture-cards-matrix">
-                    <div class="culture-card"><h4>?? Thoughtful Hospitality</h4><p>Create guest experiences with warmth, presence, and genuine care.</p></div>
-                    <div class="culture-card"><h4>?? Craft With Intention</h4><p>Take pride in quality, consistency, and the details behind every drink and interaction.</p></div>
-                    <div class="culture-card"><h4>?? Community Mindset</h4><p>Work with a team that values belonging, respect, and connection.</p></div>
-                    <div class="culture-card"><h4>?? Growth & Learning</h4><p>Build your skills through training, practice, feedback, and hands-on experience.</p></div>
+                    <div class="culture-card"><h4>☕ Thoughtful Hospitality</h4><p>Create guest experiences with warmth, presence, and genuine care.</p></div>
+                    <div class="culture-card"><h4>✨ Craft With Intention</h4><p>Take pride in quality, consistency, and the details behind every drink and interaction.</p></div>
+                    <div class="culture-card"><h4>🤝 Community Mindset</h4><p>Work with a team that values belonging, respect, and connection.</p></div>
+                    <div class="culture-card"><h4>🌱 Growth & Learning</h4><p>Build your skills through training, practice, feedback, and hands-on experience.</p></div>
                 </div>
             </div>
 
@@ -1700,8 +1710,9 @@
         <div class="footer-grid-container">
             
             <div class="footer-col">
-                <img src="assets/images/raaha-logo.png" alt="RAAHA SOUL HOUSE" class="footer-brand-logo" onerror="this.style.display='none';">
-                <h3 style="color: var(--white); font-family: Georgia, serif; font-size: 1.6rem; margin-bottom: 12px; letter-spacing: 2px;">RAAHA</h3>
+                <div class="footer-brand-logo-frame">
+                    <img src="assets/images/raaha-logo.png" alt="RAAHA SOUL HOUSE" onerror="this.parentNode.style.display='none';">
+                </div>
                 <p style="margin-bottom: 16px; font-size: 0.9rem; opacity: 0.75;">A modern third space where specialty coffee, handcrafted chai, and meaningful human connection come together.</p>
                 <p style="font-style: italic; color: var(--accent-gold); font-size: 0.9rem;">Pause. Connect. Belong.</p>
             </div>
