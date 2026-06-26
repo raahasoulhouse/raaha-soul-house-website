@@ -64,11 +64,15 @@
             margin: 0;
             display: inline-block;
         }
-        .brand-logo-text::first-letter {
-            font-size: 2.2rem;
+        .brand-logo-text-initial {
+            font-size: 2.35rem;
+            font-family: Georgia, serif;
             font-style: italic;
-            letter-spacing: 1px;
-            padding-right: 1px;
+            font-weight: 400;
+            color: var(--accent-gold);
+            display: inline-block;
+            transform: translateY(2px);
+            margin-right: -4px;
         }
 
         /* RESPONSIVE NAVIGATION ENGINE HIDINGS */
@@ -425,7 +429,7 @@
             color: var(--text-muted);
         }
 
-        .events-home-grid {
+        .events-home-section .events-home-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
@@ -433,7 +437,7 @@
         }
 
         @media (max-width: 900px) {
-            .events-home-grid {
+            .events-home-section .events-home-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -999,7 +1003,7 @@
 
     <header style="background-color: var(--accent-clay-red); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
         <a href="#home" onclick="navigateTo('home')" style="text-decoration: none; display: flex; align-items: center; gap: 14px;">
-            <div class="brand-logo-text">Raaha</div>
+            <div class="brand-logo-text"><span class="brand-logo-text-initial">R</span>aaha</div>
             <span class="header-brand-divider" style="font-family: -apple-system, sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 3px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 14px; height: 14px; display: flex; align-items: center; transform: translateY(2px);">Soul House</span>
         </a>
 
@@ -1096,7 +1100,7 @@
                         </div>
                     </div>
                     <div class="dark-split-image">
-                        <img src="assets/images/community-diverse-guests-connection.png" alt="RAAHA Inner Space Layout">
+                        <img src="assets/images/our community-diverse-guests-connection.png" alt="RAAHA Inner Space Layout">
                     </div>
                 </div>
             </div>
@@ -1104,7 +1108,7 @@
             <div class="editorial-section">
                 <div class="editorial-container">
                     <div class="editorial-image">
-                        <img src="assets/images/community-diverse-guests-connection.png" alt="Community Connection Frame">
+                        <img src="assets/images/our community-diverse-guests-connection.png" alt="Community Connection Frame">
                     </div>
                     <div class="editorial-text">
                         <span class="section-label">OUR COMMUNITY</span>
@@ -1192,14 +1196,14 @@
             <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
                 <div class="editorial-container" style="grid-template-columns: 0.92fr 1.08fr;">
                     <div class="editorial-text">
-                        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">A Place for People. Built for Connection.</h2>
+                        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">A Space for People, Built for Connection</h2>
                         <p>In today’s fast-paced world, RAAHA offers something increasingly rare: a place to slow down, feel present, and connect.</p>
                         <p>Inspired by the timeless role of gathering spaces throughout history, RAAHA is a welcoming third space where conversations unfold naturally, creativity flourishes, and everyday moments become meaningful.</p>
                         <p>Whether you’re meeting a friend, enjoying a quiet moment alone, working between appointments, or joining a community event, you’ll find shared tables, cozy corners, thoughtfully crafted coffee, chai and matcha, and genuine hospitality designed to make you feel at home.</p>
                         <div class="editorial-quote" style="margin-top: 24px;">“We don’t just serve coffee. We create space for connection.”</div>
                     </div>
                     <div class="editorial-image">
-                        <img src="assets/images/community-diverse-guests-connection.png" alt="A Place for People Matrix">
+                        <img src="assets/images/our community-diverse-guests-connection.png" alt="A Place for People Matrix">
                     </div>
                 </div>
             </div>
@@ -1231,7 +1235,7 @@
             <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
                 <div class="editorial-container">
                     <div class="editorial-image">
-                        <img src="assets/images/community-diverse-guests-connection.png" alt="A Modern Community Café Frame">
+                        <img src="assets/images/our community-diverse-guests-connection.png" alt="A Modern Community Café Frame">
                     </div>
                     <div class="editorial-text">
                         <span class="section-label">THE EXPERIENCE</span>
@@ -1323,6 +1327,7 @@
                     <div class="menu-category-title">Matcha</div>
                     <img src="assets/images/matcha-chai-artisanal-ceramics.png" alt="Ceremonial Artisanal Matcha Visual Frame" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
                     <div class="menu-items-list">
+                        <div class="menu-item-row"><div class="menu-item-name"><h4>Ceremonial Matcha Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Mango Matcha</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Strawberry Matcha</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
                     </div>
@@ -1390,7 +1395,7 @@
                         <p style="font-size: 1.1rem; color: var(--text-espresso);">From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
                     </div>
                     <div class="editorial-image">
-                        <img src="assets/images/community-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
+                        <img src="assets/images/our community-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
                     </div>
                 </div>
             </div>
