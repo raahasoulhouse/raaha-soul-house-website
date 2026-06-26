@@ -10,8 +10,8 @@
         /* PREMIUM BRAND SYSTEM */
         :root {
             --bg-warm-ivory: #FAF6F0;    /* Premium warm ivory background */
-            --accent-clay-red: #8F3E2E;  /* Updated target deep clay red */
-            --accent-gold: #C9A86A;      /* Updated target muted sand gold */
+            --accent-clay-red: #8F3E2E;  /* Precisely updated custom deep clay red */
+            --accent-gold: #C9A86A;      /* Precisely updated custom muted gold */
             --text-espresso: #26211F;    /* Rich espresso charcoal text */
             --text-muted: #6E6562;       /* Soft charcoal for fine print */
             --white: #FFFFFF;
@@ -910,20 +910,21 @@
         @media(max-width: 550px){
             .footer-grid-container { grid-template-columns: 1fr; gap: 32px; }
         }
-        .footer-brand-logo-frame {
-            width: 100%;
-            max-width: 180px;
+        .footer-brand-logo-container {
+            width: 160px;
             height: 90px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
+            position: relative;
+            margin-bottom: 24px;
+            border-radius: 4px;
         }
-        .footer-brand-logo-frame img {
+        /* Crop red canvas edges out, zoom and keep wordmark perfectly inside boundaries */
+        .footer-brand-logo-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.4); 
             display: block;
         }
         .footer-col p {
@@ -1141,7 +1142,7 @@
                         </div>
                     </div>
                     <div class="dark-split-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="RAAHA Inner Space Layout">
+                        <img src="assets/images/we-diverse-guests-connection.png" alt="RAAHA Inner Space Layout">
                     </div>
                 </div>
             </div>
@@ -1149,7 +1150,7 @@
             <div class="editorial-section">
                 <div class="editorial-container">
                     <div class="editorial-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="Community Connection Frame">
+                        <img src="assets/images/we-diverse-guests-connection.png" alt="Community Connection Frame">
                     </div>
                     <div class="editorial-text">
                         <span class="section-label">OUR COMMUNITY</span>
@@ -1244,7 +1245,7 @@
                         <div class="editorial-quote" style="margin-top: 24px;">“We don’t just serve coffee. We create space for connection.”</div>
                     </div>
                     <div class="editorial-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="A Place for People Matrix">
+                        <img src="assets/images/we-diverse-guests-connection.png" alt="A Place for People Matrix">
                     </div>
                 </div>
             </div>
@@ -1276,7 +1277,7 @@
             <div class="editorial-section" style="padding-top: 40px; padding-bottom: 40px;">
                 <div class="editorial-container">
                     <div class="editorial-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="A Modern Community Café Frame">
+                        <img src="assets/images/we-diverse-guests-connection.png" alt="A Modern Community Café Frame">
                     </div>
                     <div class="editorial-text">
                         <span class="section-label">THE EXPERIENCE</span>
@@ -1313,7 +1314,7 @@
                     </div>
                     <div class="offering-card">
                         <h4 style="font-family: Georgia, serif; margin-bottom: 10px;">Creativity</h4>
-                        <p style="font-size: 0.9rem;">We encourage curiosity, learning, and data insights through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p>
+                        <p style="font-size: 0.9rem;">We encourage curiosity, learning, and new ideas through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p>
                     </div>
                 </div>
             </div>
@@ -1436,7 +1437,7 @@
                         <p style="font-size: 1.1rem; color: var(--text-espresso);">From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
                     </div>
                     <div class="editorial-image">
-                        <img src="assets/images/our community-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
+                        <img src="assets/images/we-diverse-guests-connection.png" alt="Gather and Grow Core Conceptual View">
                     </div>
                 </div>
             </div>
@@ -1710,10 +1711,10 @@
         <div class="footer-grid-container">
             
             <div class="footer-col">
-                <div class="footer-brand-logo-frame">
-                    <img src="assets/images/raaha-logo.png" alt="RAAHA SOUL HOUSE" onerror="this.parentNode.style.display='none';">
+                <div class="footer-brand-logo-container">
+                    <img src="assets/images/raaha-logo.png" alt="RAAHA SOUL HOUSE">
                 </div>
-                <p style="margin-bottom: 16px; font-size: 0.9rem; opacity: 0.75;">A modern third space where specialty coffee, handcrafted chai, and meaningful human connection come together.</p>
+                <p style="margin-bottom: 16px; font-size: 0.9rem; opacity: 0.75; line-height: 1.6;">A modern third space where specialty coffee, handcrafted chai, and meaningful human connection come together.</p>
                 <p style="font-style: italic; color: var(--accent-gold); font-size: 0.9rem;">Pause. Connect. Belong.</p>
             </div>
 
