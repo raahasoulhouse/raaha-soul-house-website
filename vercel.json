@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/careers",
+      "destination": "/#careers",
+      "permanent": true
+    }
+  ]
+}
