@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAAHA Coffee Cart — Event Booking in Houston | RAAHA Soul House</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="Bring RAAHA to your next Houston gathering. The RAAHA Coffee Cart serves specialty coffee, handcrafted chai, and ceremonial matcha for weddings, corporate events, and private celebrations.">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <style>
+        /* PREMIUM BRAND SYSTEM */
+        :root {
+            --bg-warm-ivory: #FAF6F0;    /* Premium warm ivory background */
+            --accent-clay-red: #892F20;  /* Precisely updated custom deep clay red */
+            --accent-gold: #C9A86A;      /* Precisely updated custom muted gold */
+            --text-espresso: #26211F;    /* Rich espresso charcoal text */
+            --text-muted: #6E6562;       /* Soft charcoal for fine print */
+            --white: #FFFFFF;
+            --border-light: #EBE2D7;     /* Elegant tonal border */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            letter-spacing: -0.01em;
+        }
+
+        body {
+            background-color: var(--bg-warm-ivory);
+            color: var(--text-espresso);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.625;
+            padding-bottom: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TYPOGRAPHY HIERARCHY */
+        h1, h2, h3, h4 {
+            font-family: Georgia, Garamond, "Times New Roman", serif;
+            font-weight: 400;
+            color: var(--text-espresso);
+            line-height: 1.25;
+        }
+
+        p {
+            font-size: 1.05rem;
+            color: var(--text-espresso);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* PREMIUM EDITORIAL WORDMARK ARCHITECTURE */
+        .brand-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+            padding: 4px 0;
+        }
+        .brand-logo-text { color: var(--accent-gold);
+            font-family: "Cinzel", "Times New Roman", Georgia, serif;
+            font-size: 2.1rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 7px;
+            font-weight: 400;
+            margin: 0;
+            display: inline-block;
+            position: relative;
+        }
+        .brand-logo-text-initial {
+            font-size: 2.5rem;
+            font-family: "Times New Roman", Georgia, serif;
+            font-weight: 400;
+            color: var(--accent-gold);
+            display: inline-block;
+            position: relative;
+        }
+        /* Graceful, architecturally understated curved leg sweeping beneath */
+        .brand-logo-text-initial::after {
+            content: "";
+            position: absolute;
+            left: 2px;
+            bottom: -3px;
+            width: 55px;
+            height: 2px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            transform: skewX(-30deg);
+        }
+        .brand-logo-subtext { color: var(--accent-gold);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 5.5px;
+            margin: 5px 0 0 2px;
+            opacity: 0.9;
+        }
+
+        /* RESPONSIVE NAVIGATION ENGINE HIDINGS */
+        @media (max-width: 850px) {
+            .desktop-header-nav { display: none !important; }
+            header { padding: 16px 20px !important; justify-content: center !important; flex-direction: column; gap: 14px; }
+            .brand-logo-container { align-items: center !important; }
+            .brand-logo-subtext { color: var(--accent-gold);  margin-left: 5px !important; }
+            body { padding-bottom: 95px !important; }
+            nav.mobile-sticky-dock { display: flex !important; }
+            .editorial-image img { height: 320px !important; }
+            .mission-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* LAYOUT HOOKS & SECTIONS */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .narrow-column {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-label {
+            font-family: -apple-system, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+
+        .section-heading-centered {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* 1. HERO SECTION */
+        .atoms-hero-container {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('assets/images/hero-cafe-warm-daylight-latte.png');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 20px;
+        }
+
+        .atoms-hero-content {
+            max-width: 700px;
+        }
+
+        .atoms-hero-content h2 {
+            font-size: 4rem;
+            color: var(--white);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .atoms-hero-content p {
+            font-size: 1.25rem;
+            color: var(--white);
+            margin-bottom: 36px;
+            font-weight: 300;
+        }
+
+        .hero-btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-solid {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            padding: 16px 32px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: var(--white);
+            padding: 16px 32px;
+            border: 1px solid var(--white);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .btn-solid:hover, .btn-ghost:hover {
+            opacity: 0.9;
+        }
+
+        /* 2. THE RAAHA PHILOSOPHY */
+        .philosophy-section {
+            text-align: center;
+            padding: 80px 20px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .philosophy-section p {
+            font-size: 1.15rem;
+            margin-bottom: 24px;
+            color: var(--text-espresso);
+        }
+
+        .premium-divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--accent-gold);
+            margin: 40px auto 0 auto;
+            border: none;
+        }
+
+        /* 3. WHAT YOU'LL FIND GRID */
+        .grid-section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .offerings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .offerings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .offering-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .offering-card-title {
+            font-family: Georgia, serif;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .offering-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* 4. SIGNATURE COLLECTION FEATURED DRINKS */
+        .featured-section {
+            padding: 80px 20px;
+            background-color: var(--white);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .drinks-scroll-container {
+            max-width: 1100px;
+            margin: 40px auto 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .drinks-scroll-container {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding-bottom: 16px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .drink-card {
+                flex: 0 0 280px;
+                scroll-snap-align: start;
+            }
+        }
+
+        .drink-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .drink-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 6px;
+        }
+
+        .drink-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* 5. SPLIT DARK ESPRESSO BLOCK - THE SPACE */
+        .dark-split-block {
+            background-color: var(--text-espresso);
+            color: var(--bg-warm-ivory);
+            padding: 100px 40px;
+        }
+
+        .dark-split-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .dark-split-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .dark-split-text h2 {
+            color: var(--bg-warm-ivory);
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .dark-split-text p {
+            color: var(--bg-warm-ivory);
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .highlight-item {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dark-split-image img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* 6. ASYMMETRICAL EDITORIAL BLOCK - OUR COMMUNITY */
+        .editorial-section {
+            padding: 100px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .editorial-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .editorial-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .editorial-image img {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .editorial-text .section-label {
+            text-align: left;
+        }
+
+        .editorial-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .editorial-text p {
+            color: var(--text-espresso);
+            margin-bottom: 20px;
+        }
+
+        .editorial-quote {
+            font-style: italic;
+            font-family: Georgia, serif;
+            color: var(--accent-clay-red);
+            font-size: 1.2rem;
+            margin-top: 28px;
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 16px;
+        }
+
+        /* 7. GATHER & GROW / EVENTS HOMEPAGE */
+        .events-home-section {
+            padding: 80px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .events-intro {
+            max-width: 700px;
+            margin: 0 auto 48px auto;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .events-home-section .events-home-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 900px) {
+            .events-home-section .events-home-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .event-home-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: left;
+        }
+
+        .event-home-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .event-home-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* 8. JOIN THE TEAM CENTERED HOMEPAGE */
+        .join-team-section {
+            padding: 100px 20px;
+            background-color: var(--white);
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .join-team-content {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .join-team-content h2 {
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .join-team-content p {
+            margin-bottom: 36px;
+            color: var(--text-muted);
+        }
+
+        /* 9. VISITING SECTION HOMEPAGE */
+        .visiting-home-section {
+            padding: 100px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .visiting-container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .visiting-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .visiting-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 24px;
+        }
+
+        .visiting-info-block {
+            margin-bottom: 20px;
+        }
+
+        .visiting-info-block h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .visiting-map-box {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+        }
+
+        .map-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        /* 10. NEWSLETTER HOMEPAGE */
+        .newsletter-section {
+            padding: 80px 20px;
+            background-color: var(--bg-warm-ivory);
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-content p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 500px) {
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            background-color: var(--white);
+            font-size: 1rem;
+        }
+
+        .btn-inline-submit {
+            background-color: var(--text-espresso);
+            color: var(--white);
+            padding: 16px 28px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* MENU CATEGORY HORIZONTAL FILTER BAR */
+        .menu-filter-bar {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 16px 4px;
+            margin-bottom: 40px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .menu-filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+        .filter-pill {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-espresso);
+            text-decoration: none;
+            white-space: nowrap;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .filter-pill:hover {
+            border-color: var(--accent-clay-red);
+            color: var(--accent-clay-red);
+        }
+
+        /* MENU ROW EDITORIAL COMPONENT */
+        .menu-category-block {
+            margin-bottom: 60px;
+            scroll-margin-top: 20px;
+        }
+        .menu-category-title {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 8px;
+            color: var(--accent-clay-red);
+        }
+        .menu-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .menu-item-name h4 {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+        }
+        .menu-item-line {
+            flex: 1;
+            border-bottom: 1px dashed var(--border-light);
+            margin: 0 16px;
+            position: relative;
+            top: -4px;
+        }
+        .menu-item-price {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+        }
+
+        /* EVENTS MATRIX COMPONENTS */
+        .events-category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin: 40px auto 80px auto;
+        }
+        @media(max-width: 768px){ .events-category-grid { grid-template-columns: 1fr; } }
+
+        .upcoming-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        @media(max-width: 768px){ .upcoming-matrix-grid { grid-template-columns: 1fr; } }
+
+        .upcoming-event-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+            position: relative;
+        }
+        .event-tag-pill {
+            display: inline-block;
+            background-color: var(--bg-warm-ivory);
+            border: 1px solid var(--border-light);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            margin-bottom: 16px;
+        }
+
+        /* CAREERS LAYOUT ELEMENTS */
+        .culture-cards-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        @media(max-width: 900px){ .culture-cards-matrix { grid-template-columns: 1fr; } }
+
+        .culture-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+        }
+        .culture-card h4 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+        .culture-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        .openings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .opening-row-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        .opening-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .opening-type-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .opening-row-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* DUAL COLUMN INPUTS */
+        .form-row-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media(max-width: 600px){ .form-row-split { grid-template-columns: 1fr; gap: 0; } }
+
+        /* CONTACT INFORMATION ARCHITECTURE */
+        .contact-split-container {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 60px;
+            margin-top: 60px;
+        }
+        @media(max-width: 850px){ .contact-split-container { grid-template-columns: 1fr; gap: 40px; } }
+
+        .contact-info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        .info-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .info-icon {
+            font-size: 1.25rem;
+            color: var(--accent-gold);
+            margin-top: 2px;
+        }
+        .info-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        .info-details p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+        .social-follow-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .social-follow-link {
+            text-decoration: none;
+            color: var(--text-espresso);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--accent-gold);
+            padding-bottom: 2px;
+        }
+
+        /* COMPACT STRUCTURAL FIELD PACKS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            background-color: var(--white);
+            font-size: 1rem;
+            color: var(--text-espresso);
+            outline: none;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--accent-gold);
+        }
+        .btn-form-submit {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            padding: 18px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            width: 100%;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* FULL MASTER FOOTER SYSTEM */
+        footer {
+            background-color: var(--text-espresso);
+            color: var(--bg-warm-ivory);
+            padding: 80px 40px 40px 40px;
+            border-top: 1px solid var(--border-light);
+        }
+        .footer-grid-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 1fr 1fr;
+            gap: 40px;
+        }
+        @media(max-width: 900px){
+            .footer-grid-container { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+        @media(max-width: 550px){
+            .footer-grid-container { grid-template-columns: 1fr; gap: 32px; }
+        }
+        .footer-brand-logo-container {
+            width: 160px;
+            height: 90px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 24px;
+            border-radius: 4px;
+        }
+        /* Crop red canvas edges out, zoom and keep wordmark perfectly inside boundaries */
+        .footer-brand-logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.4);
+            display: block;
+        }
+        .footer-col p {
+            color: var(--bg-warm-ivory);
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+        .footer-col h4 {
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-family: -apple-system, sans-serif;
+            font-weight: 600;
+        }
+        .footer-links-list {
+            list-style: none;
+        }
+        .footer-links-list li {
+            margin-bottom: 12px;
+        }
+        .footer-links-list a {
+            color: var(--bg-warm-ivory);
+            opacity: 0.8;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .footer-links-list a:hover {
+            opacity: 1;
+            color: var(--accent-gold);
+        }
+        .footer-newsletter-box p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+        .footer-newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .footer-newsletter-input {
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background-color: rgba(255,255,255,0.05);
+            color: var(--white);
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .btn-footer-subscribe {
+            background-color: var(--accent-clay-red);
+            color: var(--white);
+            border: none;
+            padding: 14px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .footer-bottom-copyright {
+            max-width: 1100px;
+            margin: 60px auto 0 auto;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            opacity: 0.6;
+            text-align: left;
+        }
+
+        /* STICKY BOTTOM DOCK - MOBILE ONLY GUARD */
+        nav.mobile-sticky-dock {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            display: none; /* Default hidden on laptop views */
+            border-top: 1px solid var(--border-light);
+            z-index: 1000;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        nav.mobile-sticky-dock::-webkit-scrollbar { display: none; }
+        nav.mobile-sticky-dock a {
+            flex: 1;
+            min-width: 90px;
+            text-align: center;
+            padding: 22px 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        nav.mobile-sticky-dock a.active {
+            color: var(--accent-clay-red);
+            font-weight: 700;
+            border-top: 3px solid var(--accent-clay-red);
+            padding-top: 19px;
+        }
+        .internal-page-hero-img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .mission-grid { display: grid; }
+
+        /* ANNOUNCEMENT BAR - COFFEE CART */
+        .announcement-bar {
+            background-color: var(--text-espresso);
+            color: var(--bg-warm-ivory);
+            text-align: center;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+        }
+        .announcement-bar p {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            color: var(--bg-warm-ivory);
+        }
+        .announcement-bar a {
+            color: var(--accent-gold);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        @media (max-width: 500px) {
+            .announcement-bar p { font-size: 0.72rem; }
+        }
+
+        /* COFFEE CART PAGE - FAQ ACCORDION (reuses existing brand tokens/spacing) */
+        .faq-item {
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 0;
+        }
+        .faq-item summary {
+            font-family: Georgia, serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-espresso);
+        }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after {
+            content: "+";
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            margin-left: 16px;
+        }
+        .faq-item[open] summary::after { content: "–"; }
+        .faq-item p {
+            margin-top: 12px;
+            margin-bottom: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* COFFEE CART PAGE - SERVICE AREA PILLS */
+        .service-area-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+        .service-area-pill {
+            background-color: var(--white);
+            border: 1px solid var(--border-light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-espresso);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-bar">
+        <p>RAAHA Coffee Cart — Now accepting Houston event bookings. <a href="#book">Book Now &rarr;</a></p>
+    </div>
+
+    <header style="background-color: var(--accent-clay-red); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 14px;">
+            <div class="brand-logo-container">
+                <div class="brand-logo-text"><span class="brand-logo-text-initial">R</span>AAHA</div>
+                <div class="brand-logo-subtext">SOUL HOUSE</div>
+            </div>
+        </a>
+
+        <div class="desktop-header-nav" style="display: flex; gap: 32px;">
+            <a href="/#home" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Home</a>
+            <a href="/#about" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">About</a>
+            <a href="/#menu" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Menu</a>
+            <a href="/coffee-cart" style="text-decoration: none; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 1; transition: opacity 0.2s; border-bottom: 2px solid var(--accent-gold); padding-bottom: 2px;">Coffee Cart</a>
+            <a href="/#events" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Events & Experiences</a>
+            <a href="/#careers" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Careers</a>
+            <a href="/#contact" style="text-decoration: none; font-size: 0.78rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--bg-warm-ivory); opacity: 0.85; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">Contact</a>
+        </div>
+    </header>
+
+    <main class="page-container">
+
+        <div class="atoms-hero-container" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('assets/images/speciality latte enjoying.png');">
+            <div class="atoms-hero-content">
+                <h2>Bring RAAHA to Your Gathering</h2>
+                <p>Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers.</p>
+                <div class="hero-btn-group">
+                    <a href="#sample-menu" class="btn-solid">Explore Sample Menu &rarr;</a>
+                    <a href="#book" class="btn-ghost">Book the Coffee Cart</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="philosophy-section">
+            <span class="section-label">RAAHA, ON THE MOVE</span>
+            <h2 class="section-heading-centered">Coffee, Chai & Matcha for Your Event</h2>
+            <p>The RAAHA Coffee Cart brings the same care, craft, and hospitality that define RAAHA Soul House directly to your gathering. Every cup is made to order — specialty espresso, handcrafted chai, and ceremonial matcha — served by a team that treats your guests the way we treat ours.</p>
+            <p>Whether it's an intimate celebration or a large community gathering, the Coffee Cart is built to bring people together over something warm, well made, and shared.</p>
+            <hr class="premium-divider">
+        </div>
+
+        <div class="grid-section">
+            <div style="text-align: center; margin-bottom: 8px;">
+                <span class="section-label">WHERE WE SHOW UP</span>
+                <h2 class="section-heading-centered">Event Types We Serve</h2>
+            </div>
+            <div class="offerings-grid">
+                <div class="offering-card"><div class="offering-card-title">💍 Weddings & Engagements</div><p>A warm, elevated coffee and chai bar for your ceremony or reception.</p></div>
+                <div class="offering-card"><div class="offering-card-title">🏢 Corporate & Office Events</div><p>Meetings, launches, and team celebrations, fueled by specialty drinks.</p></div>
+                <div class="offering-card"><div class="offering-card-title">🎉 Private Parties & Celebrations</div><p>Birthdays, anniversaries, and milestone moments worth savoring.</p></div>
+                <div class="offering-card"><div class="offering-card-title">🤝 Community & Nonprofit Gatherings</div><p>Bringing people together for causes and conversations that matter.</p></div>
+                <div class="offering-card"><div class="offering-card-title">🌸 Baby Showers & Bridal Events</div><p>A thoughtful, photo-ready addition to your celebration.</p></div>
+                <div class="offering-card"><div class="offering-card-title">✨ Brand Activations & Pop-Ups</div><p>A memorable, hospitality-first touchpoint for your brand or space.</p></div>
+            </div>
+        </div>
+
+        <div class="featured-section" id="sample-menu">
+            <div class="page-container">
+                <div style="text-align: center; margin-bottom: 8px;">
+                    <span class="section-label">SAMPLE MENU</span>
+                    <h2 class="section-heading-centered" style="font-size: 2.4rem;">Crafted for Your Event</h2>
+                    <p style="color: var(--text-muted); max-width: 650px; margin: 0 auto 8px auto;">A curated selection from the RAAHA menu, built for event service. Full menus are customized to your guest count and event type.</p>
+                </div>
+
+                <div class="narrow-column" style="padding-top: 24px;">
+                    <div class="menu-category-block">
+                        <div class="menu-category-title">Coffee & Espresso</div>
+                        <div class="menu-items-list">
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Espresso (Double)</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$3.75</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Americano</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$4.00</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$5.50</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Cardamom Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Rose Pistachio Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$8.00</div></div>
+                        </div>
+                    </div>
+
+                    <div class="menu-category-block">
+                        <div class="menu-category-title">Chai & Matcha</div>
+                        <div class="menu-items-list">
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>House Chai Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.00</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Ceremonial Matcha Latte</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$6.50</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Strawberry Matcha</h4></div><div class="menu-item-line"></div><div class="menu-item-price">$7.50</div></div>
+                        </div>
+                    </div>
+
+                    <div class="menu-category-block" style="margin-bottom: 0;">
+                        <div class="menu-category-title">Add-Ons</div>
+                        <div class="menu-items-list">
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Oat or Almond Milk</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$1.00</div></div>
+                            <div class="menu-item-row"><div class="menu-item-name"><h4>Extra Espresso Shot</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$0.75</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="narrow-column" style="text-align: center; padding-top: 60px; padding-bottom: 40px;">
+            <span class="section-label">HOUSTON SERVICE AREA</span>
+            <h2 class="section-heading-centered" style="font-size: 2.2rem;">Where We Travel</h2>
+            <p style="color: var(--text-muted);">The RAAHA Coffee Cart currently serves gatherings across the greater Houston area, including:</p>
+            <div class="service-area-pills">
+                <span class="service-area-pill">The Heights</span>
+                <span class="service-area-pill">Montrose</span>
+                <span class="service-area-pill">EaDo</span>
+                <span class="service-area-pill">Midtown</span>
+                <span class="service-area-pill">Rice Village</span>
+                <span class="service-area-pill">Museum District</span>
+                <span class="service-area-pill">Downtown Houston</span>
+                <span class="service-area-pill">River Oaks</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 24px; margin-bottom: 0;">Outside these neighborhoods? Reach out below — we evaluate requests across the greater Houston metro on a case-by-case basis.</p>
+        </div>
+
+        <div class="narrow-column" style="padding-top: 20px; padding-bottom: 60px; border-top: 1px solid var(--border-light);">
+            <div style="text-align: center; margin-bottom: 8px;">
+                <span class="section-label">GOOD TO KNOW</span>
+                <h2 class="section-heading-centered" style="font-size: 2.2rem;">Frequently Asked Questions</h2>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <details class="faq-item">
+                    <summary>How far in advance should I book?</summary>
+                    <p>We recommend booking at least 3–4 weeks ahead of your event date. Peak season and weekend dates fill faster, so earlier requests get first choice of timing.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What is the minimum guest count for booking?</summary>
+                    <p>The Coffee Cart is built for gatherings of 25 guests and up. Smaller or larger events are welcome — share your guest count in the booking form and we'll confirm fit and pricing.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Do you need power or water access at the venue?</summary>
+                    <p>The cart can run on standard power access; for venues without power on-site, let us know in your booking details and we'll confirm what's needed ahead of time.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can the menu be customized for my event?</summary>
+                    <p>Yes. The sample menu above reflects our core event offerings — we can tailor drink selection, quantities, and add-ons to your guest count, budget, and occasion.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>How long does the cart stay at an event?</summary>
+                    <p>Standard service windows are 2–3 hours. Extended service is available — note your preferred duration in the booking form and we'll confirm pricing.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>How does payment and deposit work?</summary>
+                    <p>A deposit secures your date, with the remaining balance due ahead of the event. Full details are confirmed once we review your booking request.</p>
+                </details>
+            </div>
+        </div>
+
+        <div class="join-team-section" style="border-top: 1px solid var(--border-light); text-align: left;" id="book">
+            <div class="narrow-column" style="max-width: 650px;">
+                <span class="section-label" style="text-align: left;">BOOK THE COFFEE CART</span>
+                <h2 style="font-size: 2.5rem; margin-bottom: 12px;">Tell Us About Your Event</h2>
+                <p style="color: var(--text-muted); margin-bottom: 32px;">Share the details below and our team will follow up to confirm availability, menu, and pricing for your gathering.</p>
+
+                <form action="https://formspree.io/f/xwvjjwnz" method="POST">
+                    <input type="hidden" name="form_type" value="Coffee Cart Booking Inquiry">
+                    <div class="form-row-split">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-row-split">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="(713) 555-0123" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Type</label>
+                            <select name="event_type" required>
+                                <option value="" disabled selected>Select an event type</option>
+                                <option value="Wedding / Engagement">Wedding / Engagement</option>
+                                <option value="Corporate / Office Event">Corporate / Office Event</option>
+                                <option value="Private Party / Celebration">Private Party / Celebration</option>
+                                <option value="Community / Nonprofit Gathering">Community / Nonprofit Gathering</option>
+                                <option value="Baby Shower / Bridal Event">Baby Shower / Bridal Event</option>
+                                <option value="Brand Activation / Pop-Up">Brand Activation / Pop-Up</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row-split">
+                        <div class="form-group">
+                            <label>Preferred Event Date</label>
+                            <input type="date" name="preferred_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Estimated Guest Count</label>
+                            <input type="number" name="number_of_guests" placeholder="e.g., 75" required>
+                        </div>
+                    </div>
+                    <div class="form-row-split">
+                        <div class="form-group">
+                            <label>Service Duration</label>
+                            <input type="text" name="service_duration" placeholder="e.g., 2 hours">
+                        </div>
+                        <div class="form-group">
+                            <label>City / Neighborhood</label>
+                            <input type="text" name="city_neighborhood" placeholder="e.g., The Heights, Houston" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Event Venue / Address</label>
+                        <input type="text" name="venue_address" placeholder="Venue name or address">
+                    </div>
+                    <div class="form-group">
+                        <label>Message or Event Details</label>
+                        <textarea name="message" rows="5" placeholder="Tell us more about your event, menu preferences, or any special requests..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-form-submit" style="margin-top: 10px;">Submit Booking Request</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+    <footer>
+        <div class="footer-grid-container">
+
+            <div class="footer-col">
+                <div class="footer-brand-logo-container">
+                    <img src="assets/images/raaha-logo.png" alt="RAAHA SOUL HOUSE">
+                </div>
+                <p style="margin-bottom: 16px; font-size: 0.9rem; opacity: 0.75; line-height: 1.6;">A modern third space where specialty coffee, handcrafted chai, and meaningful human connection come together.</p>
+                <p style="font-style: italic; color: var(--accent-gold); font-size: 0.9rem;">Pause. Connect. Belong.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <ul class="footer-links-list">
+                    <li><a href="/#home">Home</a></li>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/#menu">Menu</a></li>
+                    <li><a href="/coffee-cart">Coffee Cart</a></li>
+                    <li><a href="/#events">Events & Experiences</a></li>
+                    <li><a href="/#careers">Careers</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>VISIT US</h4>
+                <p style="margin-bottom: 8px; font-weight: 500;">Houston, Texas</p>
+                <p style="margin-bottom: 0; font-size: 0.9rem; opacity: 0.8;"><a href="mailto:raahasoulhouse@gmail.com" style="color:inherit; text-decoration:none;">raahasoulhouse@gmail.com</a></p>
+            </div>
+
+            <div class="footer-col">
+                <h4>STAY CONNECTED</h4>
+                <div class="footer-newsletter-box">
+                    <p>Be the first to hear about new drinks, upcoming events, workshops, and stories from RAAHA.</p>
+                    <form class="footer-newsletter-form" action="https://formspree.io/f/xykaabdw" method="POST">
+                        <input type="hidden" name="form_type" value="Footer Sticky Form Subscription">
+                        <input type="email" name="subscriber_email" class="footer-newsletter-input" placeholder="Enter your email" required>
+                        <button type="submit" class="btn-footer-subscribe">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom-copyright">
+            &copy; 2026 RAAHA Soul House. All rights reserved.
+        </div>
+    </footer>
+
+
+    <nav class="mobile-sticky-dock">
+        <a href="/#home">Home</a>
+        <a href="/#about">About</a>
+        <a href="/#menu">Menu</a>
+        <a href="/coffee-cart" class="active">Cart</a>
+        <a href="/#events">Events</a>
+        <a href="/#careers">Careers</a>
+        <a href="/#contact">Contact</a>
+    </nav>
+
+</body>
+</html>
