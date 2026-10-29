@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>RAAHA Admin</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <header class="bar">
+        <span class="brand">RAAHA <small>Admin</small></span>
+        <span class="env" id="env-badge" hidden></span>
+        <button class="link" id="sign-out" type="button" hidden>Sign out</button>
+    </header>
+
+    <!-- Sign in -->
+    <main id="login-view" class="login" hidden>
+        <h1>Sign in</h1>
+        <form id="login-form">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" autocomplete="username" required>
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" autocomplete="current-password" required>
+            <button class="primary" type="submit">Sign in</button>
+            <p class="msg" id="login-msg" role="alert"></p>
+        </form>
+    </main>
+
+    <!-- Inquiries -->
+    <main id="app-view" hidden>
+        <section class="summary" aria-label="Summary">
+            <div class="stat"><span id="s-new">0</span>New</div>
+            <div class="stat"><span id="s-open">0</span>In progress</div>
+            <div class="stat"><span id="s-confirmed">0</span>Confirmed bookings</div>
+            <div class="stat"><span id="s-overdue">0</span>Follow-ups due</div>
+            <div class="stat"><span id="s-rate">–</span>Inquiry → booking</div>
+        </section>
+
+        <section class="reports" aria-label="Reports">
+            <div>
+                <h2>By source</h2>
+                <table id="r-source"><thead><tr><th>Source</th><th>Inquiries</th><th>Booked</th></tr></thead><tbody></tbody></table>
+            </div>
+            <div>
+                <h2>By month</h2>
+                <table id="r-month"><thead><tr><th>Month</th><th>Inquiries</th><th>Booked</th><th>Booked value</th></tr></thead><tbody></tbody></table>
+            </div>
+        </section>
+
+        <section class="toolbar" aria-label="Filters">
+            <label>Status
+                <select id="f-status">
+                    <option value="active">Active (new → confirmed)</option>
+                    <option value="all">All</option>
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="quoted">Quoted</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="completed">Completed</option>
+                    <option value="declined">Declined</option>
+                    <option value="lost">Lost</option>
+                </select>
+            </label>
+            <label class="check"><input type="checkbox" id="f-tests"> Show test inquiries</label>
+            <span class="spacer"></span>
+            <button type="button" id="refresh">Refresh</button>
+            <button type="button" id="export">Download CSV backup</button>
+        </section>
+
+        <div class="layout">
+            <table class="list" id="list">
+                <thead><tr><th>Received</th><th>Name</th><th>Event</th><th>Event date</th><th>Guests</th><th>Status</th><th>Follow up</th></tr></thead>
+                <tbody></tbody>
+            </table>
+
+            <aside class="detail" id="detail" hidden aria-live="polite">
+                <button class="link close" type="button" id="close-detail">Close</button>
+                <h2 id="d-name"></h2>
+                <p class="muted" id="d-meta"></p>
+                <dl id="d-fields"></dl>
+
+                <form id="d-form">
+                    <div class="grid">
+                        <label>Status
+                            <select name="status">
+                                <option value="new">New</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="quoted">Quoted</option>
+                                <option value="confirmed">Confirmed (deposit received)</option>
+                                <option value="completed">Completed</option>
+                                <option value="declined">Declined</option>
+                                <option value="lost">Lost</option>
+                            </select>
+                        </label>
+                        <label>Follow up on <input type="date" name="follow_up_on"></label>
+                        <label>Quote ($) <input type="number" name="quote_amount" min="0" step="0.01"></label>
+                        <label>Deposit ($) <input type="number" name="deposit_amount" min="0" step="0.01"></label>
+                        <label>Deposit received <input type="date" name="deposit_received_on"></label>
+                        <label>Reason (declined / lost) <input type="text" name="closed_reason" maxlength="500"></label>
+                    </div>
+                    <button class="primary" type="submit">Save changes</button>
+                    <p class="msg" id="d-msg" role="status"></p>
+                </form>
+
+                <h3>Notes</h3>
+                <ol class="notes" id="d-notes"></ol>
+                <form id="note-form">
+                    <label for="note-body" class="sr-only">Add a note</label>
+                    <textarea id="note-body" rows="3" maxlength="4000" placeholder="Add a note — call summary, menu ideas, next step"></textarea>
+                    <button type="submit">Add note</button>
+                </form>
+            </aside>
+        </div>
+    </main>
+
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/vendor/supabase-js-2.118.0.js"></script>
+    <script src="/admin/admin.js"></script>
+</body>
+</html>

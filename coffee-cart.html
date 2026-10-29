@@ -259,6 +259,20 @@
                         <input id="cart-venue_address" type="text" name="venue_address" placeholder="Venue name or address">
                     </div>
                     <div class="form-group">
+                        <label for="cart-heard_about">How did you hear about us?</label>
+                        <select id="cart-heard_about" name="heard_about">
+                            <option value="" selected>Choose one (optional)</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Google search">Google search</option>
+                            <option value="Friend or family">Friend or family</option>
+                            <option value="Attended a RAAHA event">Attended a RAAHA event</option>
+                            <option value="Venue or planner">Venue or planner</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="cart-message">Message or Event Details</label>
                         <textarea id="cart-message" name="message" rows="5" placeholder="Tell us more about your event, menu preferences, or any special requests..." required></textarea>
                     </div>
@@ -328,6 +342,8 @@
         <a href="/#contact">Contact</a>
     </nav>
 
+    <script src="/assets/js/config.js" defer></script>
+    <script src="/assets/js/inquiry.js" defer></script>
     <script src="/assets/js/forms.js" defer></script>
 </body>
 </html>
