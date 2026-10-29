@@ -146,7 +146,8 @@
     [['Email', r.email, 'mailto:' + r.email], ['Phone', r.phone, r.phone ? 'tel:' + r.phone.replace(/[^0-9+]/g, '') : null],
      ['Event type', r.event_type], ['Event date', r.event_date ? fmtDate(r.event_date) : null], ['Guests', r.guest_count],
      ['Service', r.service_duration], ['Area', r.city_neighborhood], ['Venue', r.venue_address],
-     ['Message', r.message], ['Source', sourceOf(r)]].forEach(function (f) {
+     ['Message', r.message], ['Source', sourceOf(r)],
+     ['Confirmed', r.confirmed_at ? fmtDate(r.confirmed_at) + (r.confirmation_exception ? ' (exception)' : ' (deposit verified)') : null]].forEach(function (f) {
       if (f[1] == null || f[1] === '') return;
       dl.appendChild(el('dt', f[0]));
       var dd = el('dd');
@@ -159,7 +160,7 @@
       if (clash.length) { dl.appendChild(el('dt', 'Heads up')); dl.appendChild(el('dd', clash.length + ' confirmed booking(s) already on this date.', 'due')); }
     }
     var f = $('d-form');
-    ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on', 'closed_reason'].forEach(function (k) {
+    ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on', 'payment_reference', 'confirmation_exception', 'closed_reason'].forEach(function (k) {
       f.elements[k].value = r[k] == null ? '' : r[k];
     });
     $('d-msg').textContent = '';
@@ -174,11 +175,12 @@
     e.preventDefault();
     if (!current) return;
     var f = e.target, patch = {};
-    ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on', 'closed_reason'].forEach(function (k) {
+    ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on', 'payment_reference', 'confirmation_exception', 'closed_reason'].forEach(function (k) {
       var v = f.elements[k].value.trim(); patch[k] = v === '' ? null : v;
     });
-    if (patch.status === 'confirmed' && !patch.deposit_received_on) {
-      $('d-msg').textContent = 'A booking is confirmed once the deposit is received — add the deposit date first.';
+    if ((patch.status === 'confirmed' || patch.status === 'completed') && !patch.confirmation_exception &&
+        !(Number(patch.deposit_amount) > 0 && patch.deposit_received_on && patch.payment_reference)) {
+      $('d-msg').textContent = 'To confirm, record the deposit amount, date received and payment reference — or write an approved exception.';
       return;
     }
     if ((patch.status === 'declined' || patch.status === 'lost') && !patch.closed_reason) {

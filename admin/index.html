@@ -88,7 +88,7 @@
                                 <option value="new">New</option>
                                 <option value="contacted">Contacted</option>
                                 <option value="quoted">Quoted</option>
-                                <option value="confirmed">Confirmed (deposit received)</option>
+                                <option value="confirmed">Confirmed (deposit verified)</option>
                                 <option value="completed">Completed</option>
                                 <option value="declined">Declined</option>
                                 <option value="lost">Lost</option>
@@ -98,6 +98,9 @@
                         <label>Quote ($) <input type="number" name="quote_amount" min="0" step="0.01"></label>
                         <label>Deposit ($) <input type="number" name="deposit_amount" min="0" step="0.01"></label>
                         <label>Deposit received <input type="date" name="deposit_received_on"></label>
+                        <label>Payment reference <input type="text" name="payment_reference" maxlength="120" placeholder="Square invoice / receipt #"></label>
+                        <label class="wide">Confirmation exception (only if confirming without a deposit — write who approved and why)
+                            <input type="text" name="confirmation_exception" maxlength="500"></label>
                         <label>Reason (declined / lost) <input type="text" name="closed_reason" maxlength="500"></label>
                     </div>
                     <button class="primary" type="submit">Save changes</button>

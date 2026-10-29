@@ -76,3 +76,4 @@ td.empty { color: var(--muted); }
     .detail { width: auto; position: static; max-height: none; }
     .list th:nth-child(3), .list td:nth-child(3), .list th:nth-child(5), .list td:nth-child(5) { display: none; }
 }
+.detail .grid .wide { grid-column: 1 / -1; }

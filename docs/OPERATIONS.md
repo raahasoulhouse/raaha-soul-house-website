@@ -19,7 +19,8 @@ Platform budget: **$0/month in new subscriptions.** Everything below runs on fre
 2. The browser saves the inquiry to Supabase (visitors can add, never read) and sends the usual Formspree email.
 3. If Supabase is unavailable, the email still goes out — no lead is lost.
 4. Inquiries submitted anywhere other than raahasoulhouse.com are marked **test** automatically.
-5. RAAHA manages it in `/admin`: New → Contacted → Quoted → Confirmed (deposit received) → Completed, or Declined / Lost with a reason.
+5. RAAHA manages it in `/admin`: New → Contacted → Quoted → Confirmed → Completed, or Declined / Lost with a reason.
+6. **Confirmed requires verified payment**: deposit amount, date received and a payment reference (Square invoice/receipt #) — or a written, approved exception. The database enforces this, not just the screen.
 
 ## Admin access
 
