@@ -21,10 +21,29 @@
     } catch (e) { /* no session */ }
   }
 
+  // Signed-in admin browsing the site: small shortcut back to the admin (visitors never see it)
+  if (!wantDraft) {
+    try {
+      var s0 = JSON.parse(localStorage.getItem('raaha-admin-auth'));
+      if (s0 && s0.access_token && s0.expires_at * 1000 > Date.now()) {
+        document.addEventListener('DOMContentLoaded', function () {
+          var a = document.createElement('a'); a.href = '/admin/'; a.textContent = 'RAAHA admin';
+          a.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:3000;background:#2E2A27;color:#F4EDE4;border-radius:999px;padding:6px 14px;font:13px/1.4 -apple-system,Segoe UI,Arial,sans-serif;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.2)';
+          document.body.appendChild(a);
+        });
+      }
+    } catch (e) { /* not signed in */ }
+  }
+
   var headers = { apikey: cfg.supabasePublishableKey };
   if (token) headers.Authorization = 'Bearer ' + token;
   var base = cfg.supabaseUrl + '/rest/v1/';
-  var columns = token ? 'id,collection,key,sort,draft,draft_deleted,published' : 'id,collection,key,sort,published';
+  // The live domain reads the PRODUCTION copy; every other address (previews) reads the PREVIEW copy.
+  var isProduction = (cfg.productionHosts || []).indexOf(location.hostname) !== -1;
+  var column = isProduction ? 'live' : 'published';
+  var query = token
+    ? 'select=id,collection,key,sort,draft,draft_deleted&draft=not.is.null'
+    : 'select=id,collection,key,sort,' + column + '&' + column + '=not.is.null';
 
   function getJson(url) {
     return fetch(url, { headers: headers }).then(function (r) {
@@ -35,13 +54,29 @@
 
   function imageUrl(v) {
     if (!v) return null;
+    if (v.signed) return v.signed;            // draft preview: private photo, temporary link
     if (v.src) return MEDIA_BASE + v.src;
     return v.static_src || null;
   }
 
   // ---------- load ----------
-  var load = getJson(base + 'cms_entries?select=' + columns + '&order=sort.asc,id.asc');
-  var loadMedia = token ? getJson(base + 'media?select=id,path,thumb_path,alt_text,width,height') : Promise.resolve([]);
+  var load = getJson(base + 'cms_entries?' + query + '&order=sort.asc,id.asc');
+  var loadMedia = token ? getJson(base + 'media?select=id,path,thumb_path,alt_text,width,height').then(signMedia) : Promise.resolve([]);
+
+  // Drafts may use photos that are not public yet: ask for short-lived private links (admin only)
+  function signMedia(list) {
+    if (!list.length) return list;
+    return fetch(cfg.supabaseUrl + '/storage/v1/object/sign/media-private', {
+      method: 'POST',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+      body: JSON.stringify({ expiresIn: 3600, paths: list.map(function (m) { return m.path; }) })
+    }).then(function (r) { return r.ok ? r.json() : []; }).then(function (signed) {
+      var byPath = {};
+      (signed || []).forEach(function (x) { if (x.signedURL) byPath[x.path] = cfg.supabaseUrl + '/storage/v1' + x.signedURL; });
+      list.forEach(function (m) { m.signed = byPath[m.path] || null; });
+      return list;
+    }).catch(function () { return list; });
+  }
 
   Promise.all([load, loadMedia]).then(function (res) {
     var rows = res[0], media = {};
@@ -54,9 +89,9 @@
         if (r.draft_deleted || !r.draft) return;
         v = Object.assign({}, r.draft);
         var m = v.media_id && media[v.media_id];
-        if (m) { v.src = m.path; v.thumb = m.thumb_path || m.path; v.alt = v.alt || m.alt_text || ''; }
+        if (m) { v.signed = m.signed; v.alt = v.alt || m.alt_text || ''; v.w = m.width; v.h = m.height; }
       } else {
-        v = r.published;
+        v = r[column];
       }
       if (!v) return;
       if (r.key) single[r.collection + ':' + r.key] = v;
@@ -90,6 +125,12 @@
       if (img.getAttribute('src') !== url) img.src = url;
       if (v.alt) img.alt = v.alt;
       if (v.w && v.h) { img.width = v.w; img.height = v.h; }
+    });
+    document.querySelectorAll('[data-cms-link]').forEach(function (a) {
+      var v = single['link:' + a.getAttribute('data-cms-link')];
+      if (!v) return;
+      if (typeof v.label === 'string' && v.label.trim()) a.textContent = v.label;
+      if (typeof v.href === 'string' && /^(\/|#|https:\/\/|mailto:|tel:)/.test(v.href)) a.setAttribute('href', v.href);
     });
     document.querySelectorAll('[data-cms-show]').forEach(function (el) {
       var v = single['toggle:' + el.getAttribute('data-cms-show')];
@@ -155,7 +196,8 @@
   }
   function splitEvents(events) {
     var t = todayIso();
-    var visible = events.filter(function (e) { return e.visible !== false; });
+    // hidden: switched off, or "announce from" date not reached yet
+    var visible = events.filter(function (e) { return e.visible !== false && !(e.show_from && e.show_from > t); });
     var upcoming = visible.filter(function (e) { return e.status === 'upcoming' && e.date && e.date >= t; })
       .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
     var concepts = visible.filter(function (e) { return e.status !== 'upcoming'; });
@@ -192,10 +234,11 @@
 
   // ---------- menu ----------
   function money(n, prefix) { return (prefix || '') + '$' + Number(n).toFixed(2); }
-  function menuRow(name, price, prefix, desc, available) {
+  function menuRow(name, price, prefix, desc, available, featured) {
     var row = document.createElement('div'); row.className = 'menu-item-row';
     var nm = document.createElement('div'); nm.className = 'menu-item-name';
     var h = document.createElement('h4'); h.textContent = name; nm.appendChild(h);
+    if (featured) { var tag = document.createElement('span'); tag.textContent = ' Signature'; tag.style.cssText = 'font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8F3E2E; margin-left: 6px;'; h.appendChild(tag); }
     if (desc) { var d = document.createElement('p'); d.textContent = desc; d.style.cssText = 'font-size: 0.85rem; color: var(--text-muted); margin: 2px 0 0;'; nm.appendChild(d); }
     var line = document.createElement('div'); line.className = 'menu-item-line';
     var pr = document.createElement('div'); pr.className = 'menu-item-price';
@@ -219,7 +262,7 @@
         img.src = url; img.alt = c.alt || ''; img.style.marginBottom = '24px'; block.appendChild(img);
       }
       var list = document.createElement('div'); list.className = 'menu-items-list';
-      its.forEach(function (i) { list.appendChild(menuRow(i.name, i.price, c.price_prefix, i.description, i.available)); });
+      its.forEach(function (i) { list.appendChild(menuRow(i.name, i.price, c.price_prefix, i.description, i.available, i.featured)); });
       block.appendChild(list);
       box.appendChild(block);
     });

@@ -28,6 +28,14 @@ Platform budget: **$0/month in new subscriptions.** Everything below runs on fre
 - To add the first admin account: Supabase dashboard → Authentication → Users → Add user → `raahasoulhouse@gmail.com`, set a strong password, tick *Auto confirm*.
 - Recommended: Authentication → Sign In / Providers → turn off *Allow new users to sign up* (the allowlist already blocks strangers from seeing data; this also stops stray accounts).
 
+## Editing the website (admin → Website content / Menu / Events / Photos)
+- Workflow: edit → **Save draft** (private) → **Preview drafts** (opens the site with `?preview=draft`; only works in a browser signed in to the admin) → **Publish to preview site**.
+- Publishing updates the **preview** website only. The production domain reads a separate copy (`live`) that stays empty while `site_settings.production_publishing_enabled = false`, so raahasoulhouse.com keeps its built-in content. Turning production on is a launch decision.
+- Photos: uploads are resized in the browser (max 1920 px WebP + 600 px thumbnail) and stored in the private `media-private` bucket. At publish, photos used by content are copied to the public `site-media` bucket; public copies no longer used are removed. HEIC must be exported as JPG first.
+- Undo: Publishing → history → "Undo — restore version before this" restores the preview site to the previous publish (drafts are kept). "Discard drafts" throws away unpublished edits.
+- If Supabase is down or paused, every page shows its built-in approved content; nothing breaks.
+- Events: "Planned concept" never shows a date. "Confirmed event" requires its date, hides itself after that date, and can be held back until an "Announce from" date.
+
 ## Free-plan limits to watch (check monthly in Supabase → Usage)
 
 | Limit | Free allowance | Expected use |
