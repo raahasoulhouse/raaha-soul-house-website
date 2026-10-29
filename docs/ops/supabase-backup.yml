@@ -1,0 +1,50 @@
+# Copy this file to .github/workflows/supabase-backup.yml in a PRIVATE repository
+# (for example raahasoulhouse/raaha-ops). Never add it to the public website repo.
+#
+# Required repository secrets (Settings > Secrets and variables > Actions):
+#   SUPABASE_DB_URL      Session pooler connection string from Supabase (Connect > Session pooler)
+#   BACKUP_PASSPHRASE    A long passphrase; store it in your password manager too
+#
+# What it does every day:
+#   1. Touches the database, so the free project is never paused for inactivity
+#   2. Takes a full encrypted backup and keeps it for 30 days
+# GitHub emails the repository owner automatically if a run fails.
+
+name: Supabase daily backup
+
+on:
+  schedule:
+    - cron: "17 9 * * *"   # daily, about 4am Houston time
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container: postgres:17
+    steps:
+      - name: Keep the project active
+        run: psql "$SUPABASE_DB_URL" -c "select count(*) from public.inquiries;"
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
+      - name: Dump and encrypt
+        run: |
+          apt-get update -qq && apt-get install -y -qq gnupg >/dev/null
+          STAMP=$(date -u +%Y-%m-%d)
+          pg_dump "$SUPABASE_DB_URL" --no-owner --no-privileges --schema=public --schema=private \
+            --file=raaha-$STAMP.sql
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" \
+            --symmetric --cipher-algo AES256 --output raaha-$STAMP.sql.gpg raaha-$STAMP.sql
+          rm raaha-$STAMP.sql
+          ls -la raaha-$STAMP.sql.gpg
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+
+      - name: Keep for 30 days
+        uses: actions/upload-artifact@v4
+        with:
+          name: raaha-db-backup
+          path: raaha-*.sql.gpg
+          retention-days: 30
