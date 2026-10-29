@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin
+Disallow: /preview
+Sitemap: https://www.raahasoulhouse.com/sitemap.xml
