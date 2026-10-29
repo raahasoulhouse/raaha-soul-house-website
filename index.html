@@ -43,6 +43,10 @@
     <a class="skip-link" href="#main">Skip to content</a>
 
     <div class="preview-notice" id="preview-notice" hidden>Preview environment — not the live website.</div>
+    <div class="announcement" data-cms-show="show.site.announcement">
+        <span data-cms="site.announcement.text">RAAHA Coffee Cart — Now accepting Houston event bookings.</span>
+        <a href="/coffee-cart#book">Book now</a>
+    </div>
 
     <header class="site-header">
         <div class="header-inner">
@@ -63,11 +67,11 @@
 
     <main id="main">
         <section class="hero-immersive" aria-labelledby="hero-title">
-            <img class="hero-photo" src="/assets/images/web/hero-cafe-latte.webp" alt="A latte with latte art on a wooden table in soft window light" width="1536" height="1024" fetchpriority="high">
+            <img class="hero-photo" data-cms-img="home.hero.image" src="/assets/images/web/hero-cafe-latte.webp" alt="A latte with latte art on a wooden table in soft window light" width="1536" height="1024" fetchpriority="high">
             <div class="hero-copy">
-                <h1 id="hero-title"><span>Pause.</span> <span>Connect.</span> <span>Belong.</span></h1>
+                <h1 id="hero-title"><span data-cms="home.hero.line1">Pause.</span> <span data-cms="home.hero.line2">Connect.</span> <span data-cms="home.hero.line3">Belong.</span></h1>
                 <div class="hero-foot">
-                <p class="hero-lede">A space for people, built for connection. Specialty coffee, handcrafted chai, ceremonial matcha, and memories worth sharing.</p>
+                <p class="hero-lede" data-cms="home.hero.lede">A space for people, built for connection. Specialty coffee, handcrafted chai, ceremonial matcha, and memories worth sharing.</p>
                 <div class="hero-actions">
                     <a class="btn btn-ivory" href="/coffee-cart">Book the Coffee Cart</a>
                     <a class="btn btn-line-light" href="/classic#menu">Explore the menu</a>
@@ -75,27 +79,30 @@
                 </div>
             </div>
         </section>
-        <p class="hero-lede-after">A space for people, built for connection. Specialty coffee, handcrafted chai, ceremonial matcha, and memories worth sharing.</p>
+        <p class="hero-lede-after" data-cms="home.hero.lede">A space for people, built for connection. Specialty coffee, handcrafted chai, ceremonial matcha, and memories worth sharing.</p>
 
-        <section class="section philosophy" aria-labelledby="idea-title">
+        <section class="section philosophy" aria-labelledby="idea-title" data-cms-show="show.home.idea">
             <div class="section-inner">
-                <h2 class="section-title" id="idea-title">The idea behind RAAHA</h2>
+                <h2 class="section-title" id="idea-title" data-cms="home.idea.title">The idea behind RAAHA</h2>
                 <div class="prose">
-                    <p class="lead">At RAAHA, coffee is the beginning—not the destination.</p>
+                    <p class="lead" data-cms="home.idea.lead">At RAAHA, coffee is the beginning—not the destination.</p>
+                    <div data-cms-paras="home.idea.body">
                     <p>A cup of coffee or chai can start a conversation, spark an idea, reconnect old friends, or introduce strangers who become part of each other’s stories. We believe these everyday moments matter.</p>
                     <p>That’s why RAAHA is designed as more than a place to eat or drink. It’s a welcoming café where hospitality comes first, people feel at ease, and genuine connection has room to grow.</p>
                     <p>Because when we care for one another and the communities around us, we create places worth returning to.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="section offerings" aria-labelledby="find-title">
+        <section class="section offerings" aria-labelledby="find-title" data-cms-show="show.home.find">
             <div class="section-inner">
                 <div class="offerings-head">
-                    <h2 class="section-title" id="find-title">Crafted with intention</h2>
-                    <p>What you’ll find at RAAHA.</p>
+                    <h2 class="section-title" id="find-title" data-cms="home.find.title">Crafted with intention</h2>
+                    <p data-cms="home.find.intro">What you’ll find at RAAHA.</p>
                 </div>
-                <ul class="offer-list">
+                <ul class="offer-list" data-cms-list="offering">
+                    <template><li><h3 data-f="title"></h3><p data-f="text"></p></li></template>
                     <li><h3>Specialty coffee</h3><p>Thoughtfully sourced and expertly brewed.</p></li>
                     <li><h3>Ceremonial matcha</h3><p>Smooth, vibrant, and carefully whisked.</p></li>
                     <li><h3>Chai</h3><p>A comforting selection of traditional and modern tea experiences.</p></li>
@@ -107,10 +114,11 @@
             </div>
         </section>
 
-        <section class="section" aria-labelledby="drinks-title">
+        <section class="section" aria-labelledby="drinks-title" data-cms-show="show.home.drinks">
             <div class="section-inner">
-                <h2 class="section-title" id="drinks-title">Featured drinks</h2>
-                <div class="drinks-row">
+                <h2 class="section-title" id="drinks-title" data-cms="home.drinks.title">Featured drinks</h2>
+                <div class="drinks-row" data-cms-list="feature_card">
+                    <template><article class="drink"><div class="arch"><img loading="lazy" data-f-img alt=""></div><h3 data-f="title"></h3><p data-f="text"></p></article></template>
                     <article class="drink">
                         <div class="arch"><img loading="lazy" src="/assets/images/web/specialty-coffee.webp" alt="Latte with latte art in a ceramic cup" width="900" height="1205"></div>
                         <h3>Specialty coffee</h3>
@@ -135,13 +143,14 @@
             </div>
         </section>
 
-        <section class="section space on-dark" aria-labelledby="space-title">
+        <section class="section space on-dark" aria-labelledby="space-title" data-cms-show="show.home.space">
             <div class="section-inner">
-                <div class="arch"><img loading="lazy" src="/assets/images/web/the-space.webp" alt="A warm, softly lit café interior with lounge seating" width="1400" height="764"></div>
+                <div class="arch"><img loading="lazy" data-cms-img="home.space.image" src="/assets/images/web/the-space.webp" alt="A warm, softly lit café interior with lounge seating" width="1400" height="764"></div>
                 <div>
-                    <h2 class="section-title" id="space-title">Designed for the way people gather.</h2>
-                    <div class="prose"><p>At RAAHA, every corner is created with intention. Whether you’re catching up with friends, working quietly, reading a book, or sharing a cup of chai, the space is designed to help you feel comfortable, connected, and at ease.</p></div>
-                    <ul class="space-list">
+                    <h2 class="section-title" id="space-title" data-cms="home.space.title">Designed for the way people gather.</h2>
+                    <div class="prose" data-cms-paras="home.space.body"><p>At RAAHA, every corner is created with intention. Whether you’re catching up with friends, working quietly, reading a book, or sharing a cup of chai, the space is designed to help you feel comfortable, connected, and at ease.</p></div>
+                    <ul class="space-list" data-cms-list="space_highlight">
+                        <template><li data-f="text"></li></template>
                         <li>Cozy lounge seating</li>
                         <li>Quiet corners for focus</li>
                         <li>Shared community table</li>
@@ -153,12 +162,13 @@
             </div>
         </section>
 
-        <section class="section cart-band on-dark" aria-labelledby="cart-title">
+        <section class="section cart-band on-dark" aria-labelledby="cart-title" data-cms-show="show.home.cart">
             <div class="section-inner">
                 <div>
-                    <h2 class="section-title" id="cart-title">Bring RAAHA to your gathering</h2>
-                    <p>Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers. Weddings, office events, showers, celebrations, and community gatherings.</p>
-                    <ul class="cart-facts">
+                    <h2 class="section-title" id="cart-title" data-cms="home.cart.title">Bring RAAHA to your gathering</h2>
+                    <p data-cms="home.cart.body">Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers. Weddings, office events, showers, celebrations, and community gatherings.</p>
+                    <ul class="cart-facts" data-cms-list="cart_fact">
+                        <template><li data-f="text"></li></template>
                         <li>Gatherings of 25 guests and up</li>
                         <li>2–3 hour service</li>
                         <li>Greater Houston</li>
@@ -166,17 +176,17 @@
                     </ul>
                     <a class="btn btn-gold" href="/coffee-cart#book">Request a date</a>
                 </div>
-                <div class="cart-photo"><img loading="lazy" src="/assets/images/web/coffee-cart-gathering.webp" alt="The RAAHA coffee cart serving guests at an outdoor gathering" width="1672" height="941"></div>
+                <div class="cart-photo"><img loading="lazy" data-cms-img="home.cart.image" src="/assets/images/web/coffee-cart-gathering.webp" alt="The RAAHA coffee cart serving guests at an outdoor gathering" width="1672" height="941"></div>
             </div>
         </section>
 
-        <section class="section community" aria-labelledby="community-title">
+        <section class="section community" aria-labelledby="community-title" data-cms-show="show.home.community">
             <div class="section-inner">
-                <div class="arch"><img loading="lazy" src="/assets/images/web/community.webp" alt="Friends sharing coffee and conversation" width="1400" height="933"></div>
+                <div class="arch"><img loading="lazy" data-cms-img="home.community.image" src="/assets/images/web/community.webp" alt="Friends sharing coffee and conversation" width="1400" height="933"></div>
                 <div>
-                    <blockquote><p>“The best conversations happen over great coffee.”</p></blockquote>
-                    <h2 class="section-title" id="community-title" style="font-size: clamp(1.8rem, 2.8vw, 2.3rem);">Where every visit tells a story</h2>
-                    <div class="prose" style="margin-top: 18px;">
+                    <blockquote><p data-cms="home.community.quote">“The best conversations happen over great coffee.”</p></blockquote>
+                    <h2 class="section-title" id="community-title" data-cms="home.community.title" style="font-size: clamp(1.8rem, 2.8vw, 2.3rem);">Where every visit tells a story</h2>
+                    <div class="prose" style="margin-top: 18px;" data-cms-paras="home.community.body">
                         <p>At RAAHA, we celebrate meaningful conversations, creativity, hospitality, friendship, and the simple joy of slowing down together.</p>
                         <p>This is a place where old friends reconnect, new friendships begin, ideas are shared, and every visit feels welcoming.</p>
                     </div>
@@ -184,13 +194,23 @@
             </div>
         </section>
 
-        <section class="section events" aria-labelledby="events-title">
+        <section class="section gallery" aria-labelledby="gallery-title" data-cms-show="show.home.gallery" data-cms-needs="gallery" hidden>
+            <div class="section-inner">
+                <h2 class="section-title" id="gallery-title" data-cms="home.gallery.title">Moments at RAAHA</h2>
+                <div class="gallery-grid" data-cms-list="gallery">
+                    <template><figure><img loading="lazy" data-f-img alt=""><figcaption data-f="caption"></figcaption></figure></template>
+                </div>
+            </div>
+        </section>
+
+        <section class="section events" aria-labelledby="events-title" data-cms-show="show.home.events">
             <div class="section-inner">
                 <div class="events-head">
-                    <h2 class="section-title" id="events-title">Events &amp; experiences</h2>
-                    <p>From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
+                    <h2 class="section-title" id="events-title" data-cms="home.events.title">Events &amp; experiences</h2>
+                    <p data-cms="home.events.intro">From thoughtful gatherings to creative collaborations, RAAHA brings people together through experiences that inspire conversation, creativity, learning, and community.</p>
                 </div>
-                <ul class="event-list">
+                <ul class="event-list" data-cms-list="event">
+                    <template><li><h3 data-f="title"></h3><p><span class="event-when" data-f="when"></span><span data-f="description"></span></p></li></template>
                     <li><h3>Book launches</h3><p>Celebrate stories, ideas, and local authors.</p></li>
                     <li><h3>Creative meetups</h3><p>A welcoming space for artists, writers, and makers.</p></li>
                     <li><h3>Pilates &amp; matcha</h3><p>Bringing movement, mindfulness, and community together.</p></li>
@@ -205,13 +225,13 @@
         <section class="section closing" aria-label="Join the team and stay connected">
             <div class="section-inner">
                 <div>
-                    <h2>Passionate about people &amp; hospitality?</h2>
-                    <p>At RAAHA, we believe great hospitality is about more than serving coffee—it’s about making people feel seen, welcomed, and at home. If you enjoy creating meaningful experiences, working with intention, and being part of a community-driven team, we’d love to meet you.</p>
+                    <h2 data-cms="home.team.title">Passionate about people &amp; hospitality?</h2>
+                    <p data-cms="home.team.body">At RAAHA, we believe great hospitality is about more than serving coffee—it’s about making people feel seen, welcomed, and at home. If you enjoy creating meaningful experiences, working with intention, and being part of a community-driven team, we’d love to meet you.</p>
                     <a class="btn btn-line" href="/classic#careers">See open roles</a>
                 </div>
                 <div>
-                    <h2>Stay connected</h2>
-                    <p>Be the first to hear about seasonal drinks, community events, workshops, and thoughtful moments happening at RAAHA.</p>
+                    <h2 data-cms="home.newsletter.title">Stay connected</h2>
+                    <p data-cms="home.newsletter.body">Be the first to hear about seasonal drinks, community events, workshops, and thoughtful moments happening at RAAHA.</p>
                     <form class="newsletter" action="https://formspree.io/f/xykaabdw" method="POST">
                         <input type="hidden" name="form_type" value="Newsletter Subscription">
                         <label class="sr-only" for="nl-email">Email address</label>
@@ -274,6 +294,7 @@
         })();
     </script>
     <script src="/assets/js/config.js" defer></script>
+    <script src="/assets/js/cms.js" defer></script>
     <script src="/assets/js/inquiry.js" defer></script>
     <script src="/assets/js/forms.js" defer></script>
 </body>

@@ -41,8 +41,8 @@
 </head>
 <body>
 
-    <div class="announcement-bar">
-        <p>RAAHA Coffee Cart — Now accepting Houston event bookings. <a href="/coffee-cart#book">Book Now &rarr;</a></p>
+    <div class="announcement-bar" data-cms-show="show.site.announcement">
+        <p><span data-cms="site.announcement.text">RAAHA Coffee Cart — Now accepting Houston event bookings.</span> <a href="/coffee-cart#book">Book Now &rarr;</a></p>
     </div>
 
     <header style="background-color: var(--accent-clay-red); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
@@ -329,7 +329,7 @@
                     <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 650px; margin: 0 auto 32px auto;">Every drink and bite at RAAHA is thoughtfully prepared with thoughtfully sourced ingredients, honoring tradition, embracing creativity, and celebrating everyday rituals.</p>
                 </div>
 
-                <div class="menu-filter-bar">
+                <div class="menu-filter-bar" data-cms-menu-nav>
                     <a href="#cat-espresso" class="filter-pill">Espresso Bar</a>
                     <a href="#cat-siglattes" class="filter-pill">Signature Lattes</a>
                     <a href="#cat-matcha" class="filter-pill">Matcha</a>
@@ -339,6 +339,7 @@
                     <a href="#cat-addons" class="filter-pill">Add-Ons</a>
                 </div>
 
+                <div data-cms-menu>
                 <div id="cat-espresso" class="menu-category-block">
                     <div class="menu-category-title">Espresso Bar</div>
                     <img loading="lazy" decoding="async" src="/assets/images/web/specialty-coffee.webp" alt="Latte with latte art in a ceramic cup" class="internal-page-hero-img" style="height: 240px; margin-bottom: 24px;">
@@ -421,6 +422,7 @@
                         <div class="menu-item-row"><div class="menu-item-name"><h4>Chia Seeds</h4></div><div class="menu-item-line"></div><div class="menu-item-price">+$0.50</div></div>
                     </div>
                 </div>
+                </div>
 
             </div>
         </section>
@@ -446,7 +448,7 @@
                 <h2 class="section-heading-centered" style="font-size: 2.4rem;">Upcoming Events</h2>
                 <p class="events-note">Dates are shared first on <a href="https://www.instagram.com/raahasoulhouse" target="_blank" rel="noopener" style="color: var(--accent-clay-red);">Instagram</a>.</p>
                 
-                <div class="upcoming-matrix-grid">
+                <div class="upcoming-matrix-grid" data-cms-events>
                     <div class="upcoming-event-card">
                         <div class="event-tag-pill">Book Launch</div>
                         <h3 style="margin-bottom: 12px; font-size: 1.4rem;">Book Launch Evening</h3>
@@ -799,6 +801,7 @@
         });
     </script>
     <script src="/assets/js/config.js" defer></script>
+    <script src="/assets/js/cms.js" defer></script>
     <script src="/assets/js/inquiry.js" defer></script>
     <script src="/assets/js/forms.js" defer></script>
 </body>

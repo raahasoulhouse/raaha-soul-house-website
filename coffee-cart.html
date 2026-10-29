@@ -47,8 +47,8 @@
 </head>
 <body>
 
-    <div class="announcement-bar">
-        <p>RAAHA Coffee Cart — Now accepting Houston event bookings. <a href="#book">Book Now &rarr;</a></p>
+    <div class="announcement-bar" data-cms-show="show.site.announcement">
+        <p><span data-cms="site.announcement.text">RAAHA Coffee Cart — Now accepting Houston event bookings.</span> <a href="#book">Book Now &rarr;</a></p>
     </div>
 
     <header style="background-color: var(--accent-clay-red); display: flex; align-items: center; justify-content: space-between; padding: 18px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
@@ -74,8 +74,8 @@
 
         <div class="atoms-hero-container" style="background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('/assets/images/web/coffee-cart-gathering.webp');">
             <div class="atoms-hero-content">
-                <h1>Bring RAAHA to Your Gathering</h1>
-                <p>Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers.</p>
+                <h1 data-cms="cart.hero.title">Bring RAAHA to Your Gathering</h1>
+                <p data-cms="cart.hero.lede">Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers.</p>
                 <div class="hero-btn-group">
                     <a href="#sample-menu" class="btn-solid">Explore Sample Menu &rarr;</a>
                     <a href="#book" class="btn-ghost">Book the Coffee Cart</a>
@@ -85,9 +85,11 @@
 
         <div class="philosophy-section">
             <span class="section-label">RAAHA, ON THE MOVE</span>
-            <h2 class="section-heading-centered">Coffee, Chai & Matcha for Your Event</h2>
+            <h2 class="section-heading-centered" data-cms="cart.intro.title">Coffee, Chai & Matcha for Your Event</h2>
+            <div data-cms-paras="cart.intro.body">
             <p>The RAAHA Coffee Cart brings the same care, craft, and hospitality that define RAAHA Soul House directly to your gathering. Every cup is made to order — specialty espresso, handcrafted chai, and ceremonial matcha — served by a team that treats your guests the way we treat ours.</p>
             <p>Whether it's an intimate celebration or a large community gathering, the Coffee Cart is built to bring people together over something warm, well made, and shared.</p>
+            </div>
             <hr class="premium-divider">
         </div>
 
@@ -111,10 +113,10 @@
                 <div style="text-align: center; margin-bottom: 8px;">
                     <span class="section-label">SAMPLE MENU</span>
                     <h2 class="section-heading-centered" style="font-size: 2.4rem;">Crafted for Your Event</h2>
-                    <p style="color: var(--text-muted); max-width: 650px; margin: 0 auto 8px auto;">A curated selection from the RAAHA menu, built for event service. Full menus are customized to your guest count and event type.</p>
+                    <p style="color: var(--text-muted); max-width: 650px; margin: 0 auto 8px auto;" data-cms="cart.menu.intro">A curated selection from the RAAHA menu, built for event service. Full menus are customized to your guest count and event type.</p>
                 </div>
 
-                <div class="narrow-column" style="padding-top: 24px;">
+                <div class="narrow-column" style="padding-top: 24px;" data-cms-cart-menu>
                     <div class="menu-category-block">
                         <div class="menu-category-title">Coffee & Espresso</div>
                         <div class="menu-items-list">
@@ -149,8 +151,9 @@
         <div class="narrow-column" style="text-align: center; padding-top: 60px; padding-bottom: 40px;">
             <span class="section-label">HOUSTON SERVICE AREA</span>
             <h2 class="section-heading-centered" style="font-size: 2.2rem;">Where We Travel</h2>
-            <p style="color: var(--text-muted);">The RAAHA Coffee Cart currently serves gatherings across the greater Houston area, including:</p>
-            <div class="service-area-pills">
+            <p style="color: var(--text-muted);" data-cms="cart.area.intro">The RAAHA Coffee Cart currently serves gatherings across the greater Houston area, including:</p>
+            <div class="service-area-pills" data-cms-list="service_area">
+                <template><span class="service-area-pill" data-f="name"></span></template>
                 <span class="service-area-pill">The Heights</span>
                 <span class="service-area-pill">Montrose</span>
                 <span class="service-area-pill">EaDo</span>
@@ -160,7 +163,7 @@
                 <span class="service-area-pill">Downtown Houston</span>
                 <span class="service-area-pill">River Oaks</span>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 24px; margin-bottom: 0;">Outside these neighborhoods? Reach out below — we evaluate requests across the greater Houston metro on a case-by-case basis.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 24px; margin-bottom: 0;" data-cms="cart.area.note">Outside these neighborhoods? Reach out below — we evaluate requests across the greater Houston metro on a case-by-case basis.</p>
         </div>
 
         <div class="narrow-column" style="padding-top: 20px; padding-bottom: 60px; border-top: 1px solid var(--border-light);">
@@ -169,7 +172,8 @@
                 <h2 class="section-heading-centered" style="font-size: 2.2rem;">Frequently Asked Questions</h2>
             </div>
 
-            <div style="margin-top: 24px;">
+            <div style="margin-top: 24px;" data-cms-list="faq">
+                <template><details class="faq-item"><summary data-f="question"></summary><p data-f="answer"></p></details></template>
                 <details class="faq-item">
                     <summary>How far in advance should I book?</summary>
                     <p>We recommend booking at least 3–4 weeks ahead of your event date. Peak season and weekend dates fill faster, so earlier requests get first choice of timing.</p>
@@ -343,6 +347,7 @@
     </nav>
 
     <script src="/assets/js/config.js" defer></script>
+    <script src="/assets/js/cms.js" defer></script>
     <script src="/assets/js/inquiry.js" defer></script>
     <script src="/assets/js/forms.js" defer></script>
 </body>
