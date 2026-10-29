@@ -3,8 +3,18 @@
   "redirects": [
     {
       "source": "/careers",
-      "destination": "/#careers",
+      "destination": "/classic#careers",
       "permanent": true
+    },
+    {
+      "source": "/preview",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/preview/",
+      "destination": "/",
+      "permanent": false
     }
   ],
   "headers": [
