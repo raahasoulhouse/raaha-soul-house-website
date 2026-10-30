@@ -183,6 +183,10 @@
       IMG('about.hero.image', 'Header photo', 'general', '/assets/images/web/raaha-community-table.webp'),
       IMG('about.space.image', '“A Space for People” photo', 'general', '/assets/images/web/raaha-interior.webp'),
       IMG('about.experience.image', '“A Modern Community Café” photo', 'general', '/assets/images/web/raaha-chai.webp')] },
+    { name: 'Menu, Events & Contact — header photos', items: [
+      IMG('menu.hero.image', 'Menu header photo (under a burgundy overlay)', 'menu', '/assets/images/web/menu-head-chai.webp'),
+      IMG('events.hero.image', 'Events header photo (under a soft dark overlay)', 'events', '/assets/images/web/events-head-gathering.webp'),
+      IMG('contact.hero.image', 'Contact header photo (under a light ivory wash)', 'general', '/assets/images/web/raaha-interior.webp')] },
     { name: 'Coffee Cart page', items: [
       IMG('cart.hero.image', 'Header photo', 'coffee-cart', '/assets/images/web/coffee-cart-gathering.webp'),
       IMG('cart.intro.image', 'Introduction photo (gold arch)', 'coffee-cart', '/assets/images/web/raaha-coffee.webp'),
