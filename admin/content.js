@@ -14,6 +14,7 @@
       wrap.appendChild(el('span', def.label, 'label'));
       wrap.appendChild(A.photoField(value, def.folder, function (nv) {
         ['media_id', 'alt'].forEach(function (k) { if (k in nv) value[k] = nv[k]; else delete value[k]; });
+        alt.value = value.alt || '';
         onDirty();
       }));
       var alt = A.input('text', value.alt, { maxlength: 300, placeholder: 'Describe the photo (alt text)' });

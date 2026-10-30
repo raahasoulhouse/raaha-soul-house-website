@@ -224,7 +224,7 @@
       M.pick(folderHint).then(function (m) {
         if (!m) return;
         value = Object.assign({}, value, { media_id: m.id });
-        if (m.alt_text && !value.alt) value.alt = m.alt_text;
+        value.alt = m.alt_text || ''; // new photo: use its own description
         show(); onChange(value);
       });
     });
