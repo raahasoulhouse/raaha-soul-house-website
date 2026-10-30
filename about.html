@@ -38,7 +38,7 @@
     </script>
     <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/assets/images/web/raaha-community-table.webp" as="image" fetchpriority="high">
-    <script>document.documentElement.classList.add("cms-wait");setTimeout(function(){document.documentElement.classList.remove("cms-wait")},2500)</script>
+    <script>(function(){var d=document.documentElement,c=null,ok=[],i="[data-cms-img]",L=["[data-cms-menu] img","[data-cms-list] img","[data-cms-events] img"],s;try{c=JSON.parse(localStorage.getItem("raaha-cms-photos"))}catch(e){}if(c&&c.v===2&&c.same instanceof Array)c.same.forEach(function(k){if(/^[a-z0-9._-]+$/.test(k))ok.push(":not([data-cms-img=\""+k+"\"])")});s=[i+ok.join("")].concat(c&&c.v===2&&c.lists===false?[]:L);var t=document.createElement("style");t.textContent=s.map(function(x){return"html.cms-wait "+x}).join(",")+"{opacity:0}";document.head.appendChild(t);d.classList.add("cms-wait");setTimeout(function(){d.classList.remove("cms-wait")},2500)})()</script>
     <link rel="stylesheet" href="/assets/css/home.css?v=20261030i">
 </head>
 <body>

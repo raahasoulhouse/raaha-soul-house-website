@@ -122,12 +122,14 @@
         var p = document.createElement('p'); p.textContent = para.trim(); el.appendChild(p);
       });
     });
+    var swaps = [];
     document.querySelectorAll('[data-cms-img]').forEach(function (img) {
       var v = single['image:' + img.getAttribute('data-cms-img')];
       var url = imageUrl(v);
       if (!url) return;
       img.removeAttribute('srcset');
       if (img.getAttribute('src') !== url) {
+        swaps.push(img.getAttribute('data-cms-img'));
         // a different photo: keep this spot hidden until the new photo has loaded, then fade it in
         img.classList.add('cms-swap');
         var shown = function () { img.classList.remove('cms-swap'); };
@@ -138,6 +140,23 @@
       if (v.alt) img.alt = v.alt;
       if (v.w && v.h) { img.width = v.w; img.height = v.h; }
     });
+    // Remember which page photos are the same as the built-in ones, so on later visits only photos
+    // that change (or that this browser has not seen yet) wait for the published content (see <head>).
+    if (!wantDraft) {
+      try {
+        var memo = JSON.parse(localStorage.getItem('raaha-cms-photos') || 'null');
+        var same = (memo && memo.v === 2 && memo.same) || [];
+        document.querySelectorAll('[data-cms-img]').forEach(function (img) {
+          var k = img.getAttribute('data-cms-img'), at = same.indexOf(k);
+          if (swaps.indexOf(k) === -1) { if (at === -1) same.push(k); }
+          else if (at !== -1) same.splice(at, 1);
+        });
+        var listPhotos = ['menu_category', 'event', 'feature_card', 'gallery'].some(function (col) {
+          return (lists[col] || []).some(function (v) { return v && v.src; });
+        });
+        localStorage.setItem('raaha-cms-photos', JSON.stringify({ v: 2, same: same, lists: listPhotos }));
+      } catch (e) { /* storage unavailable: every managed photo simply waits for the published content */ }
+    }
     document.querySelectorAll('[data-cms-link]').forEach(function (a) {
       var v = single['link:' + a.getAttribute('data-cms-link')];
       if (!v) return;

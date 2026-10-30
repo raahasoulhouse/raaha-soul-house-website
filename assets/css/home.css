@@ -747,7 +747,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* Photo loading: no flash of the built-in photo before the published one (see cms.js) */
-html.cms-wait [data-cms-img], html.cms-wait [data-cms-menu] img, html.cms-wait [data-cms-list] img, html.cms-wait [data-cms-events] img { opacity: 0; }
+/* (the hide-while-loading rule is inline in each page <head>, so it applies before this stylesheet) */
 [data-cms-img], [data-cms-menu] img, [data-cms-list] img, [data-cms-events] img { transition: opacity .3s ease; }
 img.cms-swap { opacity: 0 !important; }
 @media (prefers-reduced-motion: reduce) { [data-cms-img], [data-cms-menu] img, [data-cms-list] img, [data-cms-events] img { transition: none; } }
