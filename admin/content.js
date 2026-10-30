@@ -138,7 +138,7 @@
       SHOW('show.site.announcement', 'Show the announcement bar'),
       T('site.announcement.text', 'Announcement text', 'text', { max: 160 }),
       LINK('site.announcement.link', 'Announcement button'),
-      LINK('site.header.cta', 'Header button (homepage)')] },
+      LINK('site.header.cta', 'Header button (all pages)')] },
     { name: 'Homepage — hero', items: [
       IMG('home.hero.image', 'Hero photo', 'homepage'),
       T('home.hero.line1', 'Headline line 1'), T('home.hero.line2', 'Headline line 2'), T('home.hero.line3', 'Headline line 3'),
@@ -185,6 +185,7 @@
       IMG('about.experience.image', '“A Modern Community Café” photo', 'general', '/assets/images/web/raaha-chai.webp')] },
     { name: 'Coffee Cart page', items: [
       IMG('cart.hero.image', 'Header photo', 'coffee-cart', '/assets/images/web/coffee-cart-gathering.webp'),
+      IMG('cart.intro.image', 'Introduction photo (gold arch)', 'coffee-cart', '/assets/images/web/raaha-coffee.webp'),
       T('cart.hero.title', 'Page heading'), T('cart.hero.lede', 'Intro', 'textarea'),
       T('cart.intro.title', 'Section heading'), T('cart.intro.body', 'Paragraphs', 'textarea', { rows: 6 }),
       T('cart.menu.intro', 'Menu intro', 'textarea'),

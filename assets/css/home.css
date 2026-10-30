@@ -655,3 +655,12 @@ p:last-child { margin-bottom: 0; }
   .primary-nav a { font-size: 0.9rem; }
   .primary-nav .btn { padding: 11px 20px; }
 }
+
+/* Menu header in tonal burgundy (approved Oct 30) */
+.page-head.tone-brick h1 { color: #F4EDE4; }
+.page-head.tone-brick p { color: rgba(244,237,228,0.88); }
+/* Coffee Cart introduction: latte in a gold arch (approved Oct 30) */
+.split .cart-intro-photo .arch { max-width: 420px; aspect-ratio: 4 / 5; }
+.split .cart-intro-photo .arch img { object-position: 50% 45%; }
+.split .cart-intro-photo + div .prose { margin-top: 18px; }
+@media (max-width: 860px) { .split .cart-intro-photo .arch { max-width: 300px; aspect-ratio: 4 / 4.2; } }
