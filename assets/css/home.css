@@ -692,6 +692,17 @@ p:last-child { margin-bottom: 0; }
     linear-gradient(90deg, rgba(94,37,34,0.86) 0%, rgba(118,47,43,0.74) 42%, rgba(118,47,43,0.83) 58%, rgba(118,47,43,0.83) 100%),
     var(--paper-grain);
   background-size: auto, auto, 240px; }
+/* Desktop (approved Oct 30): photo shows clearly between the two text columns; text panels stay dark (WCAG AA) */
+@media (min-width: 861px) {
+  .photo-head-brick > .head-photo { object-position: 50% 55%; }
+  .photo-head-brick::after {
+    background:
+      radial-gradient(30% 50% at 50% 0%, rgba(201,168,106,0.16) 0%, rgba(201,168,106,0) 100%),
+      linear-gradient(90deg, rgba(94,37,34,0.76) 0%, rgba(94,37,34,0.7) 34%, rgba(94,37,34,0.3) 42%, rgba(94,37,34,0.3) 48%, rgba(94,37,34,0.82) 54%, rgba(94,37,34,0.82) 100%),
+      linear-gradient(180deg, rgba(118,47,43,0.12) 0%, rgba(118,47,43,0.44) 24%, rgba(118,47,43,0.44) 82%, rgba(118,47,43,0.25) 100%),
+      var(--paper-grain);
+    background-size: auto, auto, auto, 240px; }
+}
 /* Events: subtle warm espresso overlay, ivory text */
 .photo-head-dark { background: var(--espresso); }
 .photo-head-dark > .head-photo { object-position: 50% 40%; }
@@ -703,6 +714,11 @@ p:last-child { margin-bottom: 0; }
 .photo-head-light { background: var(--limewash); }
 .photo-head-light > .head-photo { object-position: 50% 55%; }
 .photo-head-light::after { background: linear-gradient(90deg, rgba(244,237,228,0.95) 0%, rgba(244,237,228,0.9) 50%, rgba(244,237,228,0.88) 100%); }
+@media (min-width: 861px) {
+  .photo-head-light::after { background:
+    linear-gradient(90deg, rgba(244,237,228,0.86) 0%, rgba(244,237,228,0.8) 34%, rgba(244,237,228,0.3) 42%, rgba(244,237,228,0.3) 48%, rgba(244,237,228,0.92) 54%, rgba(244,237,228,0.92) 100%),
+    linear-gradient(180deg, rgba(244,237,228,0.1) 0%, rgba(244,237,228,0.44) 24%, rgba(244,237,228,0.44) 82%, rgba(244,237,228,0.2) 100%); }
+}
 @media (max-width: 860px) {
   .photo-head-brick::after { background: linear-gradient(180deg, rgba(94,37,34,0.86) 0%, rgba(118,47,43,0.9) 50%, rgba(94,37,34,0.94) 100%), var(--paper-grain); background-size: auto, 240px; }
   .photo-head-dark::after { background: linear-gradient(180deg, rgba(34,24,19,0.72) 0%, rgba(34,24,19,0.76) 50%, rgba(34,24,19,0.84) 100%); }
