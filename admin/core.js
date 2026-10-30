@@ -149,7 +149,8 @@
   //   Unpublished draft — saved changes visible only in "Preview drafts"
   store.liveState = function (row) {
     if (!row) return 'builtin';
-    if (row.published_source == null) return row.live_source == null ? 'none' : 'preview';
+    // a named slot (page photo, heading…) that was never published still shows its built-in content live
+    if (row.published_source == null) return row.live_source != null ? 'preview' : (row.key ? 'builtin' : 'none');
     return same(row.published_source, row.live_source) ? 'live' : 'preview';
   };
   A.draftBadge = function (row) {
@@ -160,6 +161,7 @@
     else if (store.isChanged(row)) b('Unpublished draft', 'draft', 'Saved changes that only you can see (Preview drafts). Publish to preview, then to live.');
     var st = store.liveState(row);
     if (st === 'live') b('Live', 'ok', 'This version is on the live website.');
+    else if (st === 'builtin') b('Live', 'ok', 'The live website still shows the photo or text built into the page.');
     else if (st === 'preview') b('Preview only', 'preview', 'Published to the preview site but not yet to the live website.');
     else if (!row.draft_deleted) b('Not on website', 'muted', 'Not published anywhere yet.');
     return box;
