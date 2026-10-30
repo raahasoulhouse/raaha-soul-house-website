@@ -607,3 +607,4 @@ p:last-child { margin-bottom: 0; }
   .tone-brick.with-arch::after { display: none; }
   .arch-frame::before { inset: 12px -10px -12px 10px; }
 }
+@media (max-width: 860px) { .page-hero-photo.about-hero > img { object-position: 88% 40%; } }
