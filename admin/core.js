@@ -143,11 +143,26 @@
       row.sort = b; other.sort = a;
     });
   };
+  // Publishing status of one item. Shows what is on the live website now, plus any unpublished draft.
+  //   Live — the live website shows this version
+  //   Preview only — published to the preview site, not yet to the live website
+  //   Unpublished draft — saved changes visible only in "Preview drafts"
+  store.liveState = function (row) {
+    if (!row) return 'builtin';
+    if (row.published_source == null) return row.live_source == null ? 'none' : 'preview';
+    return same(row.published_source, row.live_source) ? 'live' : 'preview';
+  };
   A.draftBadge = function (row) {
-    if (!row) return A.el('span', 'Not saved yet', 'badge draft');
-    if (row.published_source == null) return A.el('span', 'New — not published', 'badge draft');
-    if (store.isChanged(row)) return A.el('span', 'Draft — not published', 'badge draft');
-    return A.el('span', 'Published', 'badge ok');
+    var box = A.el('span', null, 'status-badges');
+    function b(text, cls, tip) { var s = A.el('span', text, 'badge ' + cls); s.title = tip; box.appendChild(s); }
+    if (!row) { b('Live', 'ok', 'The live website shows the photo or text built into the page. Nothing has been changed here.'); return box; }
+    if (row.draft_deleted) b('Removal not published', 'draft', 'You removed this item. It stays on the website until you publish.');
+    else if (store.isChanged(row)) b('Unpublished draft', 'draft', 'Saved changes that only you can see (Preview drafts). Publish to preview, then to live.');
+    var st = store.liveState(row);
+    if (st === 'live') b('Live', 'ok', 'This version is on the live website.');
+    else if (st === 'preview') b('Preview only', 'preview', 'Published to the preview site but not yet to the live website.');
+    else if (!row.draft_deleted) b('Not on website', 'muted', 'Not published anywhere yet.');
+    return box;
   };
 
   // ---------- publish bar ----------
@@ -155,8 +170,10 @@
     var changed = store.rows.filter(store.isChanged).length;
     var s = A.$('pub-status');
     if (!s) return;
-    s.textContent = changed ? changed + ' unpublished change' + (changed === 1 ? '' : 's') + ' (drafts are private)'
-                            : 'Everything is published to the preview site.';
+    var previewOnly = store.rows.filter(function (r) { return store.liveState(r) === 'preview'; }).length;
+    s.textContent = (changed ? changed + ' unpublished draft' + (changed === 1 ? '' : 's') + ' (private)'
+                             : 'No unpublished drafts.') +
+      (previewOnly ? ' · ' + previewOnly + ' item' + (previewOnly === 1 ? '' : 's') + ' on preview only (not live yet)' : ' · Preview and live match.');
     A.$('publish-bar').classList.toggle('has-changes', changed > 0);
     A.$('pub-publish').disabled = changed === 0;
     A.$('pub-discard').disabled = changed === 0;

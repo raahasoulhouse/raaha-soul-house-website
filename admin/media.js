@@ -151,6 +151,7 @@
       uses.forEach(function (r) { ul.appendChild(el('li', describeUse(r, m.id))); });
       c.appendChild(ul);
     }
+    if (!m.alt_text) c.appendChild(el('p', 'Needs a photo description (add it below and Save).', 'small needs-alt'));
     var msg = el('p', null, 'small usage-msg'); msg.hidden = true;
     var alt = A.input('text', m.alt_text, { maxlength: 300, placeholder: 'Describe the photo for screen readers' });
     var desc = A.input('text', m.description, { maxlength: 1000, placeholder: 'Private note (optional)' });
@@ -229,6 +230,25 @@
         b.addEventListener('click', function () { dlg.close(); resolve(m); });
         grid.appendChild(b);
       });
+      // Upload a new photo right here (same library, same upload as the Photos tab)
+      var form = $('picker-upload'), fileIn = $('pu-file'), altIn = $('pu-alt'), msg = $('pu-msg'), go = $('pu-go');
+      form.reset(); $('pu-folder').value = folderHint || 'general'; go.disabled = false;
+      msg.textContent = 'The photo is saved to your Photos library. Nothing changes on the website until you save and publish.'; msg.classList.remove('error');
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        var f = fileIn.files[0], alt = altIn.value.trim();
+        function fail(t) { msg.textContent = t; msg.classList.add('error'); }
+        if (!f) return fail('Choose a photo file first.');
+        if (alt.length < 8) { altIn.focus(); return fail('Please describe what the photo shows (at least a few words) — it is read aloud to visitors using screen readers.'); }
+        go.disabled = true; msg.classList.remove('error'); msg.textContent = 'Uploading…';
+        M.upload(f, $('pu-folder').value).then(function (m) {
+          return db.from('media').update({ alt_text: alt }).eq('id', m.id).then(function (res) {
+            if (res.error) throw res.error;
+            m.alt_text = alt; dlg.close(); resolve(m);
+            A.toast('Photo uploaded to your library and placed here. Save draft to keep it.');
+          });
+        }).catch(function (err) { go.disabled = false; fail(err.message || String(err)); });
+      };
       $('picker-cancel').onclick = function () { dlg.close(); resolve(null); };
       dlg.onclose = function () { resolve(null); };
       dlg.showModal();

@@ -173,7 +173,7 @@
       $('live-dialog').close();
       if (res.error) { A.toast('Not published to live: ' + res.error.message, true); return; }
       A.toast('Published to the live website: ' + res.data.changed + ' item(s) updated.');
-      loadHistory(); loadProd();
+      reloadAll().then(function () { loadHistory(); loadProd(); });
     });
   });
 

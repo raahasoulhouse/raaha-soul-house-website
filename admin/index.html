@@ -226,6 +226,16 @@
     <!-- Photo picker -->
     <dialog id="picker" aria-labelledby="picker-title">
         <h2 id="picker-title">Choose a photo</h2>
+        <form id="picker-upload" class="picker-upload" novalidate>
+            <h3>Upload a new photo</h3>
+            <div class="grid">
+                <label class="field wide"><span class="label">Photo (JPG, PNG or WebP)</span><input type="file" id="pu-file" accept="image/jpeg,image/png,image/webp"></label>
+                <label class="field wide"><span class="label">Photo description (required)</span><input type="text" id="pu-alt" maxlength="300" placeholder="Describe what the photo shows, e.g. A barista pouring milk into a latte"></label>
+                <label class="field"><span class="label">Folder</span><select id="pu-folder"><option value="homepage">homepage</option><option value="menu">menu</option><option value="events">events</option><option value="gallery">gallery</option><option value="coffee-cart">coffee-cart</option><option value="general">general</option></select></label>
+            </div>
+            <div class="row-actions"><button type="submit" class="primary" id="pu-go">Upload and use this photo</button><span class="muted small" id="pu-msg">The photo is saved to your Photos library. Nothing changes on the website until you save and publish.</span></div>
+        </form>
+        <h3 class="picker-or">Or choose from your Photos library</h3>
         <div class="media-grid compact" id="picker-grid"></div>
         <div class="dialog-actions"><button type="button" id="picker-cancel">Cancel</button></div>
     </dialog>
