@@ -608,3 +608,23 @@ p:last-child { margin-bottom: 0; }
   .arch-frame::before { inset: 12px -10px -12px 10px; }
 }
 @media (max-width: 860px) { .page-hero-photo.about-hero > img { object-position: 88% 40%; } }
+
+/* Muted-gold glow (approved Oct 29): warm light reflection on selected burgundy sections */
+.tone-brick.gold-glow {
+  background:
+    radial-gradient(48% 62% at 80% 34%, rgba(201,168,106,0.30) 0%, rgba(201,168,106,0.12) 38%, rgba(201,168,106,0) 72%),
+    linear-gradient(118deg, rgba(201,168,106,0) 38%, rgba(201,168,106,0.09) 50%, rgba(244,237,228,0.05) 53%, rgba(201,168,106,0) 66%),
+    radial-gradient(120% 90% at 12% 0%, #86362F 0%, rgba(134,54,47,0) 55%),
+    radial-gradient(90% 80% at 100% 100%, #5E2522 0%, rgba(94,37,34,0) 60%),
+    #762F2B;
+}
+@media (max-width: 860px) {
+  .tone-brick.gold-glow {
+    background:
+      radial-gradient(90% 40% at 70% 82%, rgba(201,168,106,0.30) 0%, rgba(201,168,106,0.12) 40%, rgba(201,168,106,0) 75%),
+      linear-gradient(160deg, rgba(201,168,106,0) 40%, rgba(201,168,106,0.08) 55%, rgba(201,168,106,0) 70%),
+      radial-gradient(120% 60% at 10% 0%, #86362F 0%, rgba(134,54,47,0) 55%),
+      radial-gradient(100% 50% at 100% 100%, #5E2522 0%, rgba(94,37,34,0) 60%),
+      #762F2B;
+  }
+}
