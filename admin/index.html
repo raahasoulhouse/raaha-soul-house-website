@@ -204,6 +204,17 @@
                 <p><strong>Preview website:</strong> updated by "Publish to preview site".</p>
                 <p><strong>Production website (raahasoulhouse.com):</strong> <span id="prod-status">checking…</span></p>
             </section>
+            <section class="panel" id="live-panel">
+                <h2>Publish to live website</h2>
+                <p class="muted">Copies what is on the preview website now (text, menu, prices, events, photos) to raahasoulhouse.com. Unpublished drafts are not included. Check the preview site first.</p>
+                <p id="live-diff" class="muted">Checking…</p>
+                <button type="button" class="primary" id="live-open" disabled>Publish to live website…</button>
+            </section>
+            <section class="panel">
+                <h2>Backup</h2>
+                <p class="muted">Downloads one file with all website content, photo details, publish history, bookings and private notes. It contains customer details: keep it in a private folder (for example Google Drive), never in GitHub. Photos themselves are not included; keep your original photo files.</p>
+                <button type="button" id="backup">Download backup</button>
+            </section>
             <section class="panel">
                 <h2>Publish history</h2>
                 <p class="muted">Each publish saves what was visible before it. "Undo" restores that version on the preview website (your drafts are kept).</p>
@@ -219,9 +230,19 @@
         <div class="dialog-actions"><button type="button" id="picker-cancel">Cancel</button></div>
     </dialog>
 
+    <!-- Live publish confirmation -->
+    <dialog id="live-dialog" aria-labelledby="live-title">
+        <h2 id="live-title">Publish to the live website?</h2>
+        <p id="live-summary"></p>
+        <p>Visitors to raahasoulhouse.com will see these changes immediately. To continue, type <strong>PUBLISH</strong> below.</p>
+        <label for="live-confirm" class="sr-only">Type PUBLISH to confirm</label>
+        <input id="live-confirm" type="text" autocomplete="off" spellcheck="false" placeholder="PUBLISH">
+        <div class="dialog-actions"><button type="button" id="live-cancel">Cancel</button> <button type="button" class="primary" id="live-go" disabled>Publish to live website</button></div>
+    </dialog>
+
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-    <script src="/assets/js/config.js?v=20261030c"></script>
+    <script src="/assets/js/config.js?v=20261030d"></script>
     <script src="/assets/vendor/supabase-js-2.118.0.js"></script>
     <script src="/admin/core.js"></script>
     <script src="/admin/bookings.js"></script>

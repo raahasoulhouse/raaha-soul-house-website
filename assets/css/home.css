@@ -15,7 +15,7 @@
     --brick: #762F2B;
     --brick-deep: #5E2522;
     --gold: #C9A86A;
-    --gold-text: #85652A;
+    --gold-text: #76581F; /* AA on ivory and limewash */
     --espresso: #2E2A27;
     --ink-soft: #5F5652;
     --rule: #DCCFBD;
@@ -628,3 +628,7 @@ p:last-child { margin-bottom: 0; }
       #762F2B;
   }
 }
+
+/* WCAG AA contrast for small gold text on burgundy (approved Oct 29) */
+.announcement a { color: #D8BB83; }
+.on-dark .gold-rule, .tone-brick .eyebrow { color: #E0C793; }

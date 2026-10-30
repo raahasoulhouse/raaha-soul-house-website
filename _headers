@@ -1,4 +1,5 @@
-# Cloudflare Pages equivalent of vercel.json headers (ignored by Vercel)
+# Cloudflare Pages headers (same rules as vercel.json; ignored by Vercel).
+# Paths must not overlap: Cloudflare combines headers from every matching rule.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -9,7 +10,13 @@
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
 
-/assets/*
+/assets/images/*
+  Cache-Control: public, max-age=604800
+
+/assets/fonts/*
+  Cache-Control: public, max-age=604800
+
+/assets/vendor/*
   Cache-Control: public, max-age=604800
 
 /assets/js/*

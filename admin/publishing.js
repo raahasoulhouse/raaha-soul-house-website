@@ -135,13 +135,63 @@
     });
   }
 
+  // ---------- live (production) publishing ----------
+  // The database decides: only an admin can publish live, and only after the production switch
+  // has been turned on (site_settings.production_publishing_enabled). This screen adds a typed confirmation.
+  var liveCount = 0, liveEnabled = false;
+  function same(a, b) { return JSON.stringify(a == null ? null : a) === JSON.stringify(b == null ? null : b); }
   function loadProd() {
-    return db.from('site_settings').select('production_publishing_enabled').maybeSingle().then(function (res) {
-      $('prod-status').textContent = res.data && res.data.production_publishing_enabled
-        ? 'enabled.'
-        : 'locked — publishing to the live website stays off until the launch is approved. The live site keeps its current built-in content.';
+    return Promise.all([
+      db.from('site_settings').select('production_publishing_enabled').maybeSingle(),
+      db.from('cms_entries').select('id,published,live')
+    ]).then(function (res) {
+      liveEnabled = !!(res[0].data && res[0].data.production_publishing_enabled);
+      var rows = res[1].data || [];
+      liveCount = rows.filter(function (r) { return !same(r.published, r.live); }).length;
+      $('prod-status').textContent = liveEnabled
+        ? 'live publishing is ON. Use “Publish to live website” below.'
+        : 'locked — live publishing stays off until the launch is approved. The live site keeps its built-in content.';
+      var drafts = C.rows.filter(C.isChanged).length;
+      $('live-diff').textContent = (liveCount ? liveCount + ' item(s) differ between the preview and the live website.' : 'The live website matches the preview website.') +
+        (drafts ? ' ' + drafts + ' unpublished draft(s) will not be included.' : '');
+      $('live-open').disabled = !liveEnabled || liveCount === 0;
+      $('live-open').title = liveEnabled ? '' : 'Locked until the launch is approved';
     });
   }
+  $('live-open').addEventListener('click', function () {
+    $('live-summary').textContent = liveCount + ' item(s) on the preview website will be copied to raahasoulhouse.com.';
+    $('live-confirm').value = ''; $('live-go').disabled = true;
+    $('live-dialog').showModal(); $('live-confirm').focus();
+  });
+  $('live-confirm').addEventListener('input', function () { $('live-go').disabled = $('live-confirm').value.trim() !== 'PUBLISH'; });
+  $('live-cancel').addEventListener('click', function () { $('live-dialog').close(); });
+  $('live-go').addEventListener('click', function () {
+    if ($('live-confirm').value.trim() !== 'PUBLISH') return;
+    $('live-go').disabled = true; $('live-go').textContent = 'Publishing…';
+    db.rpc('publish_production').then(function (res) {
+      $('live-go').textContent = 'Publish to live website';
+      $('live-dialog').close();
+      if (res.error) { A.toast('Not published to live: ' + res.error.message, true); return; }
+      A.toast('Published to the live website: ' + res.data.changed + ' item(s) updated.');
+      loadHistory(); loadProd();
+    });
+  });
+
+  // ---------- backup ----------
+  $('backup').addEventListener('click', function () {
+    var tables = ['site_settings', 'cms_entries', 'media', 'publish_log', 'inquiries', 'inquiry_notes'];
+    Promise.all(tables.map(function (t) { return db.from(t).select('*'); })).then(function (res) {
+      var out = { app: 'RAAHA website backup', created_at: new Date().toISOString(), tables: {} };
+      for (var i = 0; i < tables.length; i++) {
+        if (res[i].error) { A.toast('Backup failed (' + tables[i] + '): ' + res[i].error.message, true); return; }
+        out.tables[tables[i]] = res[i].data;
+      }
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], { type: 'application/json' }));
+      a.download = 'raaha-backup-' + A.today() + '.json'; document.body.appendChild(a); a.click(); a.remove();
+      A.toast('Backup downloaded. Store it in a private folder.');
+    });
+  });
 
   A.modules.push({ tab: 'publishing', onShow: function () { loadHistory(); loadProd(); } });
 })();
