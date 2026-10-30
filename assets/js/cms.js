@@ -8,7 +8,10 @@
 (function () {
   'use strict';
   var cfg = window.RAAHA_CONFIG;
-  if (!cfg || !window.fetch) return;
+  // Page photos stay invisible (class set in <head>) until the published content has been applied,
+  // so visitors never see the built-in photo flash before the published one. Safety timeout in <head>.
+  function reveal() { document.documentElement.classList.remove('cms-wait'); }
+  if (!cfg || !window.fetch) { reveal(); return; }
 
   var MEDIA_BASE = cfg.supabaseUrl + '/storage/v1/object/public/site-media/';
   var params = new URLSearchParams(location.search);
@@ -81,7 +84,7 @@
   Promise.all([load, loadMedia]).then(function (res) {
     var rows = res[0], media = {};
     res[1].forEach(function (m) { media[m.id] = m; });
-    if (!rows.length) return; // nothing published yet: keep built-in content
+    if (!rows.length) { reveal(); return; } // nothing published yet: keep built-in content
     var single = {}, lists = {};
     rows.forEach(function (r) {
       var v;
@@ -98,8 +101,10 @@
       else (lists[r.collection] = lists[r.collection] || []).push(v);
     });
     apply(single, lists);
+    reveal();
     if (wantDraft) previewBar(token ? 'Previewing unpublished drafts. Visitors still see the published version.' : null);
   }).catch(function () {
+    reveal();
     if (wantDraft) previewBar(null);
   });
 
@@ -122,7 +127,14 @@
       var url = imageUrl(v);
       if (!url) return;
       img.removeAttribute('srcset');
-      if (img.getAttribute('src') !== url) img.src = url;
+      if (img.getAttribute('src') !== url) {
+        // a different photo: keep this spot hidden until the new photo has loaded, then fade it in
+        img.classList.add('cms-swap');
+        var shown = function () { img.classList.remove('cms-swap'); };
+        img.addEventListener('load', shown, { once: true });
+        img.addEventListener('error', shown, { once: true });
+        img.src = url;
+      }
       if (v.alt) img.alt = v.alt;
       if (v.w && v.h) { img.width = v.w; img.height = v.h; }
     });
