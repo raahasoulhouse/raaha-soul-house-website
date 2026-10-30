@@ -128,7 +128,7 @@
   // ---------- single named fields ----------
   function T(key, label, type, extra) { return Object.assign({ collection: 'text', key: key, k: 'value', label: label, type: type || 'text' }, extra); }
   function SHOW(key, label) { return { collection: 'toggle', key: key, k: 'visible', label: label, type: 'check' }; }
-  function IMG(key, label, folder) { return { collection: 'image', key: key, k: 'media_id', label: label, type: 'photo', folder: folder }; }
+  function IMG(key, label, folder, builtIn) { return { collection: 'image', key: key, k: 'media_id', label: label, type: 'photo', folder: folder, builtIn: builtIn }; }
   function LINK(key, label) { return { collection: 'link', key: key, label: label, type: 'link' }; }
   function LIST(collection, label, fields, title, defaults) { return { list: true, collection: collection, label: label, fields: fields, title: title, defaults: defaults }; }
   var titleText = [{ k: 'title', label: 'Title', required: true }, { k: 'text', label: 'Text', type: 'textarea', rows: 2 }];
@@ -161,6 +161,7 @@
       LIST('space_highlight', 'Highlights', [{ k: 'text', label: 'Highlight', required: true }], function (v) { return v.text; })] },
     { name: 'Homepage — Coffee Cart', items: [
       SHOW('show.home.cart', 'Show this section'), IMG('home.cart.image', 'Photo', 'coffee-cart'),
+      IMG('home.cart.inset', 'Small overlapping photo', 'coffee-cart', '/assets/images/web/raaha-chai.webp'),
       T('home.cart.title', 'Heading'), T('home.cart.body', 'Description', 'textarea'),
       LIST('cart_fact', 'Key facts', [{ k: 'text', label: 'Fact', required: true }], function (v) { return v.text; }),
       LINK('home.cart.cta', 'Button')] },
@@ -177,7 +178,12 @@
     { name: 'Homepage — team & newsletter', items: [
       T('home.team.title', 'Team heading'), T('home.team.body', 'Team text', 'textarea'),
       T('home.newsletter.title', 'Newsletter heading'), T('home.newsletter.body', 'Newsletter text', 'textarea')] },
+    { name: 'About page', help: 'Photos on the About page. The text on this page is fixed for now.', items: [
+      IMG('about.hero.image', 'Header photo', 'general', '/assets/images/web/raaha-community-table.webp'),
+      IMG('about.space.image', '“A Space for People” photo', 'general', '/assets/images/web/raaha-interior.webp'),
+      IMG('about.experience.image', '“A Modern Community Café” photo', 'general', '/assets/images/web/raaha-chai.webp')] },
     { name: 'Coffee Cart page', items: [
+      IMG('cart.hero.image', 'Header photo', 'coffee-cart', '/assets/images/web/coffee-cart-gathering.webp'),
       T('cart.hero.title', 'Page heading'), T('cart.hero.lede', 'Intro', 'textarea'),
       T('cart.intro.title', 'Section heading'), T('cart.intro.body', 'Paragraphs', 'textarea', { rows: 6 }),
       T('cart.menu.intro', 'Menu intro', 'textarea'),
@@ -200,6 +206,7 @@
       singles.forEach(function (def) {
         var row = C.byKey(def.collection, def.key);
         var value = Object.assign({}, row && row.draft || {});
+        if (!row && def.builtIn) value.static_src = def.builtIn; // show the photo built into the page
         var holder = el('div', null, def.type === 'textarea' || def.type === 'photo' || def.type === 'link' ? 'wide' : '');
         var head = el('div', null, 'field-head'); head.appendChild(A.draftBadge(row)); holder.appendChild(head);
         var dirty = function () { save.disabled = false; if (pending.indexOf(entry) === -1) pending.push(entry); };

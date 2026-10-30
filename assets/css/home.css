@@ -558,3 +558,52 @@ p:last-child { margin-bottom: 0; }
     .openings li { grid-template-columns: 1fr; }
 }
 .on-dark .service-area-pill { background: transparent; border-color: rgba(201,168,106,0.6); color: var(--ivory); }
+
+/* =====================================================================
+   Visual refinements (approved Oct 29, 2026)
+   Primary #762F2B · deep #5E2522 · ivory #F4EDE4 · gold #C9A86A · espresso #2E2A27
+   Use at most one of each per page. Menus, forms and FAQs stay clean.
+   ===================================================================== */
+:root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  --plaster: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.33 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23p)'/%3E%3C/svg%3E");
+}
+/* 1. Textured ivory: soft plaster clouds + fine paper grain */
+.texture-ivory { position: relative; isolation: isolate; }
+.texture-ivory:not(.limewash):not(.page-head) { background-color: #F4EDE4; }
+.texture-ivory::before { content: ""; position: absolute; inset: 0; z-index: -1; background-image: var(--paper-grain), var(--plaster); background-size: 240px, 600px; opacity: 0.16; mix-blend-mode: multiply; pointer-events: none; }
+
+/* 2. Tonal burgundy: one shade, layered light, fine grain, optional arch watermark */
+.tone-brick { position: relative; isolation: isolate; overflow: hidden;
+  background: radial-gradient(120% 90% at 12% 0%, #86362F 0%, rgba(134,54,47,0) 55%),
+              radial-gradient(90% 80% at 100% 100%, #5E2522 0%, rgba(94,37,34,0) 60%),
+              #762F2B; }
+.tone-brick::before { content: ""; position: absolute; inset: 0; z-index: -1; background-image: var(--paper-grain); background-size: 240px; opacity: 0.22; mix-blend-mode: soft-light; pointer-events: none; }
+.tone-brick.with-arch::after { content: ""; position: absolute; z-index: -1; width: 34vw; max-width: 500px; aspect-ratio: 3 / 4; right: 9vw; top: 8%; border: 1px solid rgba(201,168,106,0.22); border-radius: 999px 999px 0 0; pointer-events: none; }
+.tone-brick .cart-facts li { border-color: rgba(201,168,106,0.75); background: rgba(46,42,39,0.18); }
+
+/* 3. Overlapping photography */
+.photo-stack { position: relative; padding: 0 0 56px 56px; }
+.photo-stack .cart-photo { box-shadow: 0 24px 60px rgba(30,12,10,0.35); }
+.inset-photo { position: absolute; left: 0; bottom: 0; width: 34%; aspect-ratio: 3 / 4; border: 6px solid #F4EDE4; box-shadow: 0 16px 40px rgba(30,12,10,0.35); }
+
+/* 4. Muted gold details */
+.gold-rule { display: flex; align-items: center; gap: 12px; }
+.gold-rule::before { content: ""; width: 32px; height: 1px; background: currentColor; flex: none; }
+.on-dark .gold-rule, .tone-brick .eyebrow { color: #C9A86A; }
+.arch-frame { position: relative; isolation: isolate; }
+.arch-frame::before { content: ""; position: absolute; inset: 18px -18px -18px 18px; border: 1px solid #C9A86A; border-radius: 999px 999px 6px 6px; z-index: -1; }
+.quote-rule { position: relative; padding-top: 22px; }
+.quote-rule::before { content: ""; position: absolute; top: 0; left: 0; width: 48px; height: 1px; background: #C9A86A; }
+
+/* Focal points for the new photographs (also apply when replaced in the admin) */
+.community .arch img { object-position: 62% 50%; }
+.split .arch img { object-position: 50% 60%; }
+.page-hero-photo.about-hero > img { object-position: 60% 40%; }
+
+@media (max-width: 860px) {
+  .photo-stack { padding: 0 0 36px 28px; }
+  .inset-photo { width: 32%; border-width: 4px; }
+  .tone-brick.with-arch::after { display: none; }
+  .arch-frame::before { inset: 12px -10px -12px 10px; }
+}
