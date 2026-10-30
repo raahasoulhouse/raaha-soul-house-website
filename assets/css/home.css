@@ -671,8 +671,8 @@ p:last-child { margin-bottom: 0; }
 .site-header .header-inner { padding-top: 11px; padding-bottom: 11px; }
 .brand-logo-footer img { height: 64px; }
 @media (max-width: 860px) {
-  .brand-logo img { height: 42px; }
-  .site-header .header-inner { padding-top: 12px; padding-bottom: 12px; }
+  .brand-logo img { height: 46px; }
+  .site-header .header-inner { padding-top: 10px; padding-bottom: 10px; }
   .brand-logo-footer img { height: 56px; }
 }
 .menu-nav { top: 75px; }
