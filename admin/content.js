@@ -199,6 +199,23 @@
       LIST('faq', 'FAQs', [{ k: 'question', label: 'Question', required: true, wide: true }, { k: 'answer', label: 'Answer', type: 'textarea', required: true }], function (v) { return v.question; })] }
   ];
 
+  // Readable "where is this used" names for the photo library
+  var PLACES = {};
+  GROUPS.forEach(function (g) {
+    g.items.forEach(function (it) {
+      if (it.collection === 'image') PLACES['image:' + it.key] = g.name + ' → ' + it.label;
+      else if (it.list) PLACES['list:' + it.collection] = g.name + ' → ' + it.label;
+    });
+  });
+  C.describe = function (r) {
+    var v = r.draft || r.published_source || r.live_source || {};
+    if (r.collection === 'image') return PLACES['image:' + r.key] || ('Photo slot ' + r.key);
+    if (r.collection === 'menu_category') return 'Menu tab → ' + (v.name || 'category') + ' (category photo)';
+    if (r.collection === 'event') return 'Events tab → ' + (v.title || 'event');
+    var base = PLACES['list:' + r.collection] || r.collection;
+    return base + (v.title || v.caption ? ' → ' + (v.title || v.caption) : '');
+  };
+
   function render() {
     var box = $('content-groups'); box.textContent = '';
     GROUPS.forEach(function (g) {

@@ -77,7 +77,7 @@
   store.isChanged = function (r) { return r.draft_deleted || !same(r.draft, r.published_source); };
   store.load = function () {
     return db.from('cms_entries')
-      .select('id,collection,key,sort,draft,draft_deleted,published,published_source,updated_at')
+      .select('id,collection,key,sort,draft,draft_deleted,published,published_source,live_source,updated_at')
       .order('sort').order('id')
       .then(function (res) {
         if (res.error) throw res.error;

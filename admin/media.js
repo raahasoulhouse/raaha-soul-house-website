@@ -28,15 +28,28 @@
 
   // ---------- where a photo is used ----------
   function refsIn(v, id) { return v && v.media_id === id; }
+  function inUse(r, id) { return (!r.draft_deleted && refsIn(r.draft, id)) || refsIn(r.published_source, id) || refsIn(r.live_source, id); }
   M.usage = function (id) {
-    return A.content.rows.filter(function (r) { return refsIn(r.draft, id) || refsIn(r.published_source, id); });
+    return A.content.rows.filter(function (r) { return inUse(r, id); });
   };
-  function usedAnywhere(id) {
-    // checks the database directly, including the production copy
-    return db.from('cms_entries').select('id', { count: 'exact', head: true })
-      .or('draft->>media_id.eq.' + id + ',published_source->>media_id.eq.' + id + ',live_source->>media_id.eq.' + id)
-      .then(function (res) { if (res.error) throw res.error; return res.count; });
+  // Readable list of places: "Contact header photo (live, preview)"
+  function describeUse(r, id) {
+    var where = [];
+    if (refsIn(r.live_source, id)) where.push('live');
+    if (refsIn(r.published_source, id)) where.push('preview');
+    if (!r.draft_deleted && refsIn(r.draft, id) && !refsIn(r.published_source, id)) where.push('unpublished draft');
+    var name = A.content.describe ? A.content.describe(r) : r.collection;
+    return name + (where.length ? ' (' + where.join(', ') + ')' : '');
   }
+  M.whereUsed = function (id) {
+    // checks the database directly (draft, preview and live), not just what this screen has loaded
+    return db.from('cms_entries').select('id,collection,key,draft,draft_deleted,published_source,live_source')
+      .or('draft->>media_id.eq.' + id + ',published_source->>media_id.eq.' + id + ',live_source->>media_id.eq.' + id)
+      .then(function (res) {
+        if (res.error) throw res.error;
+        return res.data.filter(function (r) { return inUse(r, id); }).map(function (r) { return describeUse(r, id); });
+      });
+  };
 
   // ---------- resize in the browser ----------
   function toBlob(canvas, type, q) {
@@ -108,8 +121,8 @@
   };
 
   M.remove = function (m) {
-    return usedAnywhere(m.id).then(function (n) {
-      if (n) throw new Error('This photo is still used in ' + n + ' place(s). Choose a different photo there first.');
+    return M.whereUsed(m.id).then(function (places) {
+      if (places.length) throw new Error('This photo is still used in ' + places.length + ' place(s): ' + places.join('; ') + '. Choose a different photo there and publish first.');
       var files = [m.path, m.thumb_path].filter(Boolean);
       return db.storage.from(PRIVATE).remove(files)
         .then(function () { return db.storage.from('site-media').remove(files); })
@@ -132,7 +145,13 @@
     c.appendChild(img);
     var uses = M.usage(m.id);
     c.appendChild(el('p', (m.width ? m.width + '×' + m.height + ' · ' : '') + Math.round((m.bytes || 0) / 1024) + ' KB · ' +
-      (uses.length ? 'used in ' + uses.length + ' place(s)' : 'not used') + (m.public_copy ? ' · public' : ' · private'), 'muted small'));
+      (uses.length ? 'used in ' + uses.length + ' place(s)' : 'not used on the website') + (m.public_copy ? ' · public' : ' · private'), 'muted small'));
+    if (uses.length) {
+      var ul = el('ul', null, 'usage small');
+      uses.forEach(function (r) { ul.appendChild(el('li', describeUse(r, m.id))); });
+      c.appendChild(ul);
+    }
+    var msg = el('p', null, 'small usage-msg'); msg.hidden = true;
     var alt = A.input('text', m.alt_text, { maxlength: 300, placeholder: 'Describe the photo for screen readers' });
     var desc = A.input('text', m.description, { maxlength: 1000, placeholder: 'Private note (optional)' });
     var folder = el('select');
@@ -150,7 +169,8 @@
         A.toast('Photo details saved. Alt text reaches the website at the next publish.');
       });
     });
-    var rep = el('label', 'Replace', 'btn-like');
+    var rep = el('label', 'Replace file', 'btn-like');
+    rep.title = 'Upload a new version of this same photo. Every place using it updates at the next publish.';
     var file = A.input('file', null, { accept: 'image/jpeg,image/png,image/webp' }); file.hidden = true; rep.appendChild(file);
     file.addEventListener('change', function () {
       if (!file.files[0]) return;
@@ -160,11 +180,20 @@
     });
     var del = el('button', 'Delete'); del.type = 'button';
     del.addEventListener('click', function () {
-      if (!confirm('Delete this photo permanently?')) return;
-      M.remove(m).then(function () { A.toast('Photo deleted.'); render(); }).catch(function (e) { A.toast(e.message, true); });
+      del.disabled = true; msg.hidden = true;
+      M.whereUsed(m.id).then(function (places) {
+        del.disabled = false;
+        if (places.length) {
+          msg.textContent = 'Can’t delete: this photo is used in ' + places.join('; ') + '. Choose a different photo in those places and publish first.';
+          msg.hidden = false; return;
+        }
+        if (!confirm('Delete this photo from the library permanently?\n\nIt is not used on the website (draft, preview or live). This cannot be undone. Older versions in Publishing history that used it will no longer show it if restored.')) return;
+        return M.remove(m).then(function () { A.toast('Photo deleted.'); render(); });
+      }).catch(function (e) { del.disabled = false; A.toast(e.message, true); });
     });
     row.appendChild(save); row.appendChild(rep); row.appendChild(del);
     c.appendChild(row);
+    c.appendChild(msg);
     return c;
   }
 
