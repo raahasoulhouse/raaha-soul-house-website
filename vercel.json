@@ -2,11 +2,6 @@
   "cleanUrls": true,
   "redirects": [
     {
-      "source": "/careers",
-      "destination": "/classic#careers",
-      "permanent": true
-    },
-    {
       "source": "/preview",
       "destination": "/",
       "permanent": false

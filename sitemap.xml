@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.raahasoulhouse.com/</loc></url>
+  <url><loc>https://www.raahasoulhouse.com/about</loc></url>
+  <url><loc>https://www.raahasoulhouse.com/menu</loc></url>
   <url><loc>https://www.raahasoulhouse.com/coffee-cart</loc></url>
-  <url><loc>https://www.raahasoulhouse.com/classic</loc></url>
+  <url><loc>https://www.raahasoulhouse.com/events</loc></url>
+  <url><loc>https://www.raahasoulhouse.com/careers</loc></url>
+  <url><loc>https://www.raahasoulhouse.com/contact</loc></url>
 </urlset>

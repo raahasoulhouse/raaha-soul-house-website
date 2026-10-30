@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/web/favicon-32.png">
     <link rel="apple-touch-icon" href="/assets/images/web/apple-touch-icon.png">
     <link rel="canonical" href="https://www.raahasoulhouse.com/">
-    <meta name="theme-color" content="#892F20">
+    <meta name="theme-color" content="#762F2B">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="RAAHA Soul House">
     <meta property="og:title" content="RAAHA Soul House — Pause. Connect. Belong.">
@@ -37,7 +37,7 @@
     }
     </script>
     <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/assets/css/home.css?v=20261029">
+    <link rel="stylesheet" href="/assets/css/home.css?v=20261030">
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -56,10 +56,10 @@
             </a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
             <nav class="primary-nav" id="primary-nav" aria-label="Main">
-                <a href="/classic#about">About</a>
-                <a href="/classic#menu">Menu</a>
-                <a href="/classic#events">Events</a>
-                <a href="/classic#contact">Contact</a>
+                <a href="/about">About</a>
+                <a href="/menu">Menu</a>
+                <a href="/events">Events</a>
+                <a href="/contact">Contact</a>
                 <a class="btn btn-brick" href="/coffee-cart" data-cms-link="site.header.cta">Book the Coffee Cart</a>
             </nav>
         </div>
@@ -74,7 +74,7 @@
                 <p class="hero-lede" data-cms="home.hero.lede">A space for people, built for connection. Specialty coffee, handcrafted chai, ceremonial matcha, and memories worth sharing.</p>
                 <div class="hero-actions">
                     <a class="btn btn-ivory" href="/coffee-cart#book" data-cms-link="home.hero.cta_primary">Book the Coffee Cart</a>
-                    <a class="btn btn-line-light" href="/classic#menu" data-cms-link="home.hero.cta_secondary">Explore the menu</a>
+                    <a class="btn btn-line-light" href="/menu" data-cms-link="home.hero.cta_secondary">Explore the menu</a>
                 </div>
                 </div>
             </div>
@@ -227,7 +227,7 @@
                 <div>
                     <h2 data-cms="home.team.title">Passionate about people &amp; hospitality?</h2>
                     <p data-cms="home.team.body">At RAAHA, we believe great hospitality is about more than serving coffee—it’s about making people feel seen, welcomed, and at home. If you enjoy creating meaningful experiences, working with intention, and being part of a community-driven team, we’d love to meet you.</p>
-                    <a class="btn btn-line" href="/classic#careers">See open roles</a>
+                    <a class="btn btn-line" href="/careers">See open roles</a>
                 </div>
                 <div>
                     <h2 data-cms="home.newsletter.title">Stay connected</h2>
@@ -252,12 +252,12 @@
             <div>
                 <h2>Explore</h2>
                 <ul>
-                    <li><a href="/classic#about">About</a></li>
-                    <li><a href="/classic#menu">Menu</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/menu">Menu</a></li>
                     <li><a href="/coffee-cart">Coffee Cart</a></li>
-                    <li><a href="/classic#events">Events &amp; Experiences</a></li>
-                    <li><a href="/classic#careers">Careers</a></li>
-                    <li><a href="/classic#contact">Contact</a></li>
+                    <li><a href="/events">Events &amp; Experiences</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>
             <div>
@@ -274,28 +274,16 @@
     </footer>
 
     <script>
+        // Old single-page links such as raahasoulhouse.com/#menu go to the new pages
         (function () {
-            var toggle = document.querySelector('.nav-toggle');
-            var nav = document.getElementById('primary-nav');
-            toggle.addEventListener('click', function () {
-                var open = nav.classList.toggle('is-open');
-                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-                toggle.textContent = open ? 'Close' : 'Menu';
-            });
-        })();
-    </script>
-    <script>
-        (function () {
-            // Old links such as raahasoulhouse.com/#menu keep working
             var h = location.hash.replace('#', '');
-            if (['about', 'menu', 'events', 'careers', 'contact'].indexOf(h) !== -1) location.replace('/classic#' + h);
-            var hosts = ['www.raahasoulhouse.com', 'raahasoulhouse.com'];
-            if (hosts.indexOf(location.hostname) === -1) document.getElementById('preview-notice').hidden = false;
+            if (['about', 'menu', 'events', 'careers', 'contact'].indexOf(h) !== -1) location.replace('/' + h);
         })();
     </script>
-    <script src="/assets/js/config.js?v=20261029" defer></script>
-    <script src="/assets/js/cms.js?v=20261029" defer></script>
-    <script src="/assets/js/inquiry.js?v=20261029" defer></script>
-    <script src="/assets/js/forms.js?v=20261029" defer></script>
+    <script src="/assets/js/site.js?v=20261030" defer></script>
+    <script src="/assets/js/config.js?v=20261030" defer></script>
+    <script src="/assets/js/cms.js?v=20261030" defer></script>
+    <script src="/assets/js/inquiry.js?v=20261030" defer></script>
+    <script src="/assets/js/forms.js?v=20261030" defer></script>
 </body>
 </html>
