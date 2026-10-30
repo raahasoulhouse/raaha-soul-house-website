@@ -736,18 +736,20 @@ p:last-child { margin-bottom: 0; }
    Tone-on-tone burgundy lines with a slight emboss, one muted-gold line; kept to the edges. */
 .arch-band { position: relative; isolation: isolate; overflow: hidden; }
 .arch-band::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 1000' fill='none'%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%234E1D1A' stroke-opacity='.55' stroke-width='3' transform='translate(5 5)'/%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%23A3534A' stroke-opacity='.62' stroke-width='1.5'/%3E%3Cpath d='M110 1000 V320.0 A190.0 190.0 0 0 1 490 320.0 V1000' stroke='%23A3534A' stroke-opacity='.28' stroke-width='1.2'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 1000' fill='none'%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%234E1D1A' stroke-opacity='.5' stroke-width='3' transform='translate(5 5)'/%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%23A3534A' stroke-opacity='.58' stroke-width='1.5'/%3E%3Cpath d='M120 1000 V330.0 A180.0 180.0 0 0 1 480 330.0 V1000' stroke='%23C9A86A' stroke-opacity='.38' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 1000' fill='none'%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%234E1D1A' stroke-opacity='.55' stroke-width='3' transform='translate(5 5)'/%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%23A3534A' stroke-opacity='.62' stroke-width='1.5'/%3E%3Cpath d='M110 1000 V320.0 A190.0 190.0 0 0 1 490 320.0 V1000' stroke='%23A3534A' stroke-opacity='.28' stroke-width='1.2'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 1000' fill='none'%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%234E1D1A' stroke-opacity='.5' stroke-width='3' transform='translate(5 5)'/%3E%3Cpath d='M40 1000 V300.0 A260.0 260.0 0 0 1 560 300.0 V1000' stroke='%23A3534A' stroke-opacity='.58' stroke-width='1.5'/%3E%3Cpath d='M120 1000 V330.0 A180.0 180.0 0 0 1 480 330.0 V1000' stroke='%23C9A86A' stroke-opacity='.28' stroke-width='2'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: auto 200%, auto 165%;
   background-position: left -310px top -30%, right -230px top 18%; }
 .arch-band .section-inner { position: relative; }
 @media (min-width: 861px) and (max-width: 1240px) { .arch-band::after { background-position: left -350px top -30%, right -250px top 18%; } }
 @media (max-width: 860px) {
-  .arch-band::after { background-size: auto 95%, auto 80%; background-position: left -230px top -6%, right -180px top 30%; }
+  .arch-band::after { background-size: auto 95%, auto 105%; background-position: left -260px top -6%, right -185px top 22%; }
 }
 
 /* Photo loading: no flash of the built-in photo before the published one (see cms.js) */
 /* (the hide-while-loading rule is inline in each page <head>, so it applies before this stylesheet) */
+/* While a photo loads, its space shows warm deep burgundy instead of near-black */
+.hero-immersive, .page-hero-photo, .photo-head-dark { background-color: #5E2522; }
 [data-cms-img], [data-cms-menu] img, [data-cms-list] img, [data-cms-events] img { transition: opacity .3s ease; }
 img.cms-swap { opacity: 0 !important; }
 @media (prefers-reduced-motion: reduce) { [data-cms-img], [data-cms-menu] img, [data-cms-list] img, [data-cms-events] img { transition: none; } }
