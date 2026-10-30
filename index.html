@@ -37,7 +37,7 @@
     }
     </script>
     <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/assets/css/home.css?v=20261030d">
+    <link rel="stylesheet" href="/assets/css/home.css?v=20261030e">
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -58,9 +58,10 @@
             <nav class="primary-nav" id="primary-nav" aria-label="Main">
                 <a href="/about">About</a>
                 <a href="/menu">Menu</a>
+                <a href="/coffee-cart">Coffee Cart</a>
                 <a href="/events">Events</a>
                 <a href="/contact">Contact</a>
-                <a class="btn btn-brick" href="/coffee-cart" data-cms-link="site.header.cta">Book the Coffee Cart</a>
+                <a class="btn btn-brick" href="/coffee-cart#book" data-cms-link="site.header.cta">Book Now</a>
             </nav>
         </div>
     </header>
@@ -95,7 +96,8 @@
             </div>
         </section>
 
-        <section class="section offerings" aria-labelledby="find-title" data-cms-show="show.home.find">
+        <section class="section offerings photo-band" aria-labelledby="find-title" data-cms-show="show.home.find">
+            <img class="band-photo" data-cms-img="home.find.image" src="/assets/images/web/raaha-matcha-chai-band.webp" alt="" width="900" height="1600" loading="lazy">
             <div class="section-inner">
                 <div class="offerings-head">
                     <h2 class="section-title" id="find-title" data-cms="home.find.title">Crafted with intention</h2>
@@ -284,10 +286,10 @@
             if (['about', 'menu', 'events', 'careers', 'contact'].indexOf(h) !== -1) location.replace('/' + h);
         })();
     </script>
-    <script src="/assets/js/site.js?v=20261030d" defer></script>
-    <script src="/assets/js/config.js?v=20261030d" defer></script>
-    <script src="/assets/js/cms.js?v=20261030d" defer></script>
-    <script src="/assets/js/inquiry.js?v=20261030d" defer></script>
-    <script src="/assets/js/forms.js?v=20261030d" defer></script>
+    <script src="/assets/js/site.js?v=20261030e" defer></script>
+    <script src="/assets/js/config.js?v=20261030e" defer></script>
+    <script src="/assets/js/cms.js?v=20261030e" defer></script>
+    <script src="/assets/js/inquiry.js?v=20261030e" defer></script>
+    <script src="/assets/js/forms.js?v=20261030e" defer></script>
 </body>
 </html>

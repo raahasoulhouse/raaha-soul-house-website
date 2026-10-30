@@ -150,6 +150,7 @@
       T('home.idea.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 8 })] },
     { name: 'Homepage — what you’ll find', items: [
       SHOW('show.home.find', 'Show this section'), T('home.find.title', 'Heading'), T('home.find.intro', 'Intro'),
+      IMG('home.find.image', 'Background photo (shown under a burgundy overlay)', 'homepage', '/assets/images/web/raaha-matcha-chai-band.webp'),
       LIST('offering', 'Offerings', titleText, function (v) { return v.title; })] },
     { name: 'Homepage — featured drinks', items: [
       SHOW('show.home.drinks', 'Show this section'), T('home.drinks.title', 'Heading'),
