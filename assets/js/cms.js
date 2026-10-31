@@ -264,6 +264,12 @@
   }
   function renderMenu(box, cats, items) {
     var visibleCats = cats.filter(function (c) { return c.visible !== false; });
+    // Built-in category photos (in the page HTML) stay in place when a category has no photo set in Admin
+    var builtIn = {};
+    Array.prototype.forEach.call(box.querySelectorAll('.menu-category-block[id]'), function (b) {
+      var im = b.querySelector('img.internal-page-hero-img');
+      if (im) builtIn[b.id] = { src: im.getAttribute('src'), alt: im.getAttribute('alt') || '' };
+    });
     box.textContent = '';
     visibleCats.forEach(function (c) {
       var its = items.filter(function (i) { return i.category === c.slug && i.visible !== false; });
@@ -271,10 +277,11 @@
       var block = document.createElement('div'); block.className = 'menu-category-block'; block.id = 'cat-' + c.slug;
       var title = document.createElement('div'); title.className = 'menu-category-title'; title.textContent = c.name;
       block.appendChild(title);
-      var url = imageUrl(c);
+      var url = imageUrl(c), alt = c.alt || '';
+      if (!url && builtIn[block.id]) { url = builtIn[block.id].src; alt = builtIn[block.id].alt; }
       if (url) {
         var img = document.createElement('img'); img.className = 'internal-page-hero-img'; img.loading = 'lazy';
-        img.src = url; img.alt = c.alt || ''; img.style.marginBottom = '24px'; block.appendChild(img);
+        img.src = url; img.alt = alt; img.style.marginBottom = '24px'; block.appendChild(img);
       }
       var list = document.createElement('div'); list.className = 'menu-items-list';
       its.forEach(function (i) { list.appendChild(menuRow(i.name, i.price, c.price_prefix, i.description, i.available, i.featured)); });

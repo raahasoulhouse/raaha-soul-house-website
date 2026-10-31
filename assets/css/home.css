@@ -707,20 +707,20 @@ p:last-child { margin-bottom: 0; }
 .photo-head-dark h1 { color: #F4EDE4; }
 .photo-head-dark .eyebrow { color: #E8D3A5; }
 .photo-head-dark p { color: rgba(244,237,228,0.92); }
-/* Contact: light ivory wash, existing dark text */
+/* Contact (Oct 31): photo in natural colours, no overlay or wash. Text sits over the light upper wall;
+   heading, paragraph and label in dark espresso (measured contrast 3.9:1+ heading, 6:1+ paragraph) */
 .photo-head-light { background: var(--limewash); }
-.photo-head-light > .head-photo { object-position: 50% 55%; }
-.photo-head-light::after { background: linear-gradient(90deg, rgba(244,237,228,0.95) 0%, rgba(244,237,228,0.9) 50%, rgba(244,237,228,0.88) 100%); }
-@media (min-width: 861px) {
-  .photo-head-light::after { background:
-    linear-gradient(90deg, rgba(244,237,228,0.86) 0%, rgba(244,237,228,0.8) 34%, rgba(244,237,228,0.3) 42%, rgba(244,237,228,0.3) 48%, rgba(244,237,228,0.52) 54%, rgba(244,237,228,0.52) 100%),
-    linear-gradient(180deg, rgba(244,237,228,0.1) 0%, rgba(244,237,228,0.44) 24%, rgba(244,237,228,0.44) 82%, rgba(244,237,228,0.2) 100%); }
-  .photo-head-light p { color: var(--espresso); }
+.photo-head-light > .head-photo { object-position: 50% 0%; }
+.photo-head-light .section-inner { align-items: start; }
+.photo-head-light .eyebrow, .photo-head-light p { color: var(--espresso); }
+@media (min-width: 1600px) { .photo-head-light { padding-top: 150px; } }
+@media (max-width: 860px) {
+  .photo-head-light > .head-photo { height: 215%; bottom: auto; object-position: 46% 0%; }
 }
+@media (min-width: 600px) and (max-width: 860px) { .photo-head-light > .head-photo { object-position: 58% 0%; } }
 @media (max-width: 860px) {
   .photo-head-brick::after { background: linear-gradient(180deg, rgba(94,37,34,0.86) 0%, rgba(118,47,43,0.9) 50%, rgba(94,37,34,0.94) 100%), var(--paper-grain); background-size: auto, 240px; }
   .photo-head-dark::after { background: linear-gradient(180deg, rgba(34,24,19,0.72) 0%, rgba(34,24,19,0.76) 50%, rgba(34,24,19,0.84) 100%); }
-  .photo-head-light::after { background: linear-gradient(180deg, rgba(244,237,228,0.88) 0%, rgba(244,237,228,0.91) 55%, rgba(244,237,228,0.94) 100%); }
   .photo-head-dark > .head-photo { object-position: 45% 40%; }
 }
 
@@ -750,3 +750,9 @@ p:last-child { margin-bottom: 0; }
 [data-cms-img], [data-cms-menu] img, [data-cms-list] img, [data-cms-events] img { transition: opacity .3s ease; }
 img.cms-swap { opacity: 0 !important; }
 @media (prefers-reduced-motion: reduce) { [data-cms-img], [data-cms-menu] img, [data-cms-list] img, [data-cms-events] img { transition: none; } }
+
+/* Champagne-gold CTA button (approved Oct 31): richer, more present gold; dark text; no shine or animation */
+.btn-gold.btn-champagne { background: #D6B26A; color: var(--espresso); border-color: #E6CB92; box-shadow: 0 10px 24px -14px rgba(20,8,6,0.7); transition: none; }
+.btn-gold.btn-champagne:hover, .btn-gold.btn-champagne:focus-visible { background: #DFBF7E; border-color: #EDD6A4; }
+/* Coffee Cart · Where We Travel: booking button under the service-area note */
+.cart-band .area-book { margin-top: 30px; }
