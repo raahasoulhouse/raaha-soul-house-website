@@ -314,8 +314,7 @@ p:last-child { margin-bottom: 0; }
     max-width: 11ch;
 }
 .hero-immersive h1 span { display: block; }
-.hero-immersive h1 span:nth-child(2) { padding-left: 0.5em; }
-.hero-immersive h1 span:nth-child(3) { padding-left: 1em; color: var(--gold); }
+.hero-immersive h1 span:nth-child(3) { color: var(--gold); }
 .hero-immersive .hero-lede {
     margin-top: clamp(22px, 3vw, 34px);
     max-width: 30rem;
@@ -336,8 +335,6 @@ p:last-child { margin-bottom: 0; }
         background: linear-gradient(180deg, rgba(34, 24, 19, 0) 0%, rgba(34, 24, 19, 0.1) 30%, rgba(34, 24, 19, 0.72) 62%, rgba(34, 24, 19, 0.9) 100%);
     }
     .hero-copy { padding-bottom: 36px; }
-    .hero-immersive h1 span:nth-child(2) { padding-left: 0.35em; }
-    .hero-immersive h1 span:nth-child(3) { padding-left: 0.7em; }
     .hero-immersive .hero-lede { font-size: 1.05rem; }
     .hero-immersive .hero-actions .btn { flex: 1 1 100%; text-align: center; }
 }
