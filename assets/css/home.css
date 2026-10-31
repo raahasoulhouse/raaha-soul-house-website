@@ -710,11 +710,14 @@ p:last-child { margin-bottom: 0; }
 /* Contact: café photo stays clearly visible; ivory only as a soft glow directly behind the text (WCAG AA) */
 .photo-head-light { background: var(--limewash); }
 .photo-head-light > .head-photo { object-position: 50% 55%; }
-.photo-head-light::after { background: linear-gradient(180deg, rgba(244,237,228,0.16) 0%, rgba(244,237,228,0.08) 100%); }
-.photo-head-light .section-inner > * { position: relative; z-index: 0; }
-.photo-head-light .section-inner > *::before { content: ""; position: absolute; inset: -30px -40px; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side, rgba(244,237,228,0.9) 72%, rgba(244,237,228,0.82) 86%, rgba(244,237,228,0) 100%);
-  filter: blur(14px); border-radius: 50%; transform: scale(1.18, 1.32); }
+.photo-head-light::after { background: none; }
+/* Contact (Oct 31): no overlay on the photo; only a compact soft ivory card hugs each piece of text (WCAG AA) */
+.photo-head-light .eyebrow, .photo-head-light h1, .photo-head-light p { position: relative; z-index: 0; width: fit-content; }
+.photo-head-light .eyebrow::before, .photo-head-light h1::before, .photo-head-light p::before { content: ""; position: absolute; z-index: -1; pointer-events: none;
+  inset: -6px -14px; background: rgba(244,237,228,0.82); filter: blur(7px); border-radius: 16px; }
+.photo-head-light h1::before { inset: 2px -16px -6px; background: rgba(244,237,228,0.7); }
+.photo-head-light .eyebrow::before { background: rgba(244,237,228,0.9); }
+@media (min-width: 861px) { .photo-head-light h1::before { right: calc(17% - 18px); } } /* heading lines fill ~83% of the column */
 .photo-head-light p { color: var(--espresso); }
 @media (max-width: 860px) {
   .photo-head-brick::after { background: linear-gradient(180deg, rgba(94,37,34,0.86) 0%, rgba(118,47,43,0.9) 50%, rgba(94,37,34,0.94) 100%), var(--paper-grain); background-size: auto, 240px; }
