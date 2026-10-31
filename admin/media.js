@@ -167,17 +167,31 @@
       db.from('media').update({ alt_text: alt.value.trim(), description: desc.value.trim(), folder: folder.value }).eq('id', m.id).select().then(function (res) {
         if (res.error) { A.toast('Not saved: ' + res.error.message, true); return; }
         Object.assign(m, res.data[0]);
-        A.toast('Photo details saved. Alt text reaches the website at the next publish.');
+        var users = M.usage(m.id);
+        if (!users.length) { A.toast('Photo details saved.'); return; }
+        A.saveLive(users, null).then(function (r2) { if (!(r2 && r2.cancelled)) A.toast('Photo details saved and live.'); })
+          .catch(function (e) { A.toast('Saved, but not live yet: ' + e.message, true); });
       });
     });
-    var rep = el('label', 'Replace file', 'btn-like');
-    rep.title = 'Upload a new version of this same photo. Every place using it updates at the next publish.';
+    var rep = el('label', 'Replace everywhere…', 'btn-like');
+    rep.title = 'Swap this library photo for a new file in EVERY place that uses it. To change one page only, use Upload in that page’s section instead.';
     var file = A.input('file', null, { accept: 'image/jpeg,image/png,image/webp' }); file.hidden = true; rep.appendChild(file);
+    file.addEventListener('click', function (e) {
+      var places = M.usage(m.id).map(function (r) { return A.content.describe(r); });
+      var msg = places.length
+        ? 'This photo is used in ' + places.length + ' place(s):\n\n• ' + places.join('\n• ') + '\n\nReplacing it changes ALL of them on the live website.\nTo change one page only, cancel and use “Upload new photo” in that page’s section.'
+        : 'This photo is not used on the website. Replace its file in the library?';
+      if (!confirm(msg)) e.preventDefault();
+    });
     file.addEventListener('change', function () {
       if (!file.files[0]) return;
       A.toast('Replacing…');
-      M.replace(m, file.files[0]).then(function () { A.toast('Photo replaced. Publish to show it on the website.'); render(); })
-        .catch(function (e) { A.toast(e.message, true); });
+      var users = M.usage(m.id);
+      A.saveLive(users, function () { return M.replace(m, file.files[0]); }).then(function (res) {
+        if (res && res.cancelled) return;
+        A.toast(users.length ? 'Photo replaced — live in ' + users.length + ' place(s).' : 'Photo replaced in the library.'); render();
+      }).catch(function (e) { A.toast(e.message, true); render(); });
+      file.value = '';
     });
     var del = el('button', 'Delete'); del.type = 'button';
     del.addEventListener('click', function () {
@@ -233,7 +247,7 @@
       // Upload a new photo right here (same library, same upload as the Photos tab)
       var form = $('picker-upload'), fileIn = $('pu-file'), altIn = $('pu-alt'), msg = $('pu-msg'), go = $('pu-go');
       form.reset(); $('pu-folder').value = folderHint || 'general'; go.disabled = false;
-      msg.textContent = 'The photo is saved to your Photos library. Nothing changes on the website until you save and publish.'; msg.classList.remove('error');
+      msg.textContent = 'The photo is added to your Photos library. The website changes when you click Save in the section.'; msg.classList.remove('error');
       form.onsubmit = function (e) {
         e.preventDefault();
         var f = fileIn.files[0], alt = altIn.value.trim();
@@ -245,7 +259,7 @@
           return db.from('media').update({ alt_text: alt }).eq('id', m.id).then(function (res) {
             if (res.error) throw res.error;
             m.alt_text = alt; dlg.close(); resolve(m);
-            A.toast('Photo uploaded to your library and placed here. Save draft to keep it.');
+            A.toast('Photo placed here. Click Save in this section to put it on the website.');
           });
         }).catch(function (err) { go.disabled = false; fail(err.message || String(err)); });
       };
@@ -255,36 +269,187 @@
     });
   };
 
+  // ---------- photo framing (display only; the uploaded file is never cropped) ----------
+  // fx/fy/fz = desktop focus point (%) and zoom; mx/my/mz = phone. Stored in the content entry.
+  A.POS_KEYS = ['fx', 'fy', 'fz', 'mx', 'my', 'mz'];
+  // Size of each photo spot on the website (measured at 1440px desktop and 390px phone) and the
+  // framing the site uses today, so the editor starts exactly where the website is. vh = visible height.
+  var F = function (dw, dh, dx, dy, mw, mh, mx, my, o) { return Object.assign({ d: { w: dw, h: dh, x: dx, y: dy }, m: { w: mw, h: mh, x: mx, y: my } }, o || {}); };
+  A.FRAMES = {
+    'home.hero.image': F(1440, 788, 62, 58, 390, 740, 56, 88),
+    'home.find.image': F(1440, 808, 50, 40, 390, 1153, 50, 30),
+    'home.space.image': F(519, 649, 50, 50, 350, 438, 50, 50, { arch: true }),
+    'home.cart.image': F(436, 273, 50, 50, 322, 201, 50, 50),
+    'home.cart.inset': F(155, 211, 50, 50, 104, 141, 50, 50, { arch: true }),
+    'home.community.image': F(492, 615, 62, 50, 350, 438, 62, 50, { arch: true }),
+    'about.hero.image': F(1440, 648, 60, 40, 390, 608, 88, 40),
+    'about.space.image': F(492, 615, 50, 60, 350, 385, 50, 60, { arch: true }),
+    'about.experience.image': F(512, 640, 50, 60, 350, 385, 50, 60, { arch: true }),
+    'menu.hero.image': F(1440, 397, 50, 55, 390, 326, 50, 45),
+    'events.hero.image': F(1440, 397, 50, 40, 390, 402, 45, 40),
+    'contact.hero.image': F(1440, 397, 50, 0, 390, 736, 46, 0, { mvh: 342 }),
+    'cart.hero.image': F(1440, 648, 40, 50, 390, 608, 40, 50),
+    'cart.intro.image': F(420, 525, 50, 45, 300, 315, 50, 45, { arch: true }),
+    'menu': F(340, 425, 50, 50, 350, 197, 50, 50, { arch: true, marchOff: true })
+  };
+  function hasPos(v) { return A.POS_KEYS.some(function (k) { return v[k] != null; }); }
+
   // A photo field: value is {media_id} for library photos, or {static_src} for the photo built into the site.
-  // onChange receives the new partial value.
-  A.photoField = function (value, folderHint, onChange) {
+  // onChange receives the new value. opts: {frame, builtIn, label}
+  A.photoField = function (value, folderHint, onChange, opts) {
+    opts = opts || {};
     var box = el('div', null, 'photo-field');
     var img = el('img'); img.alt = '';
     var note = el('span', null, 'muted small');
-    function show() {
+    var frame = A.FRAMES[opts.frame];
+    function src() {
       var m = value.media_id && M.byId(value.media_id);
-      if (m) { img.src = M.thumbUrl(m) || ''; note.textContent = 'From photo library'; }
-      else if (value.static_src) { img.src = value.static_src; note.textContent = 'Current website photo'; }
+      if (m) return { url: M.thumbUrl(m), path: m.path, label: 'Your photo' };
+      if (value.static_src) return { url: value.static_src, label: 'Photo built into the website' };
+      if (opts.builtIn) return { url: opts.builtIn, label: 'Photo built into the website' };
+      return null;
+    }
+    function show() {
+      var s0 = src();
+      if (s0 && s0.url) { img.src = s0.url; note.textContent = s0.label + (hasPos(value) ? ' · custom position' : ''); }
       else { img.removeAttribute('src'); note.textContent = 'No photo'; }
       img.hidden = !img.getAttribute('src');
+      adjust.hidden = !frame || !(s0 && s0.url);
+      clear.hidden = !value.media_id;
     }
-    var choose = el('button', 'Choose photo'); choose.type = 'button';
+    function set(nv, focusAlt) { value = nv; show(); var out = Object.assign({}, value); if (focusAlt) out._focusAlt = true; onChange(out); }
+    function noPos(v) { var o = Object.assign({}, v); A.POS_KEYS.forEach(function (k) { delete o[k]; }); return o; }
+
+    // 1. Upload a new photo straight into this spot (also added to the library for reuse)
+    var up = el('label', 'Upload new photo', 'btn-like primary-like');
+    var file = A.input('file', null, { accept: 'image/jpeg,image/png,image/webp' }); file.hidden = true; up.appendChild(file);
+    file.addEventListener('change', function () {
+      var f = file.files[0]; if (!f) return;
+      note.textContent = 'Uploading…';
+      M.upload(f, folderHint || 'general').then(function (m) {
+        var nv = noPos(value); nv.media_id = m.id; nv.alt = '';
+        set(nv, true);
+        A.toast('Uploaded. Add a short description of the photo, then click Save.');
+      }).catch(function (e) { show(); A.toast(e.message || String(e), true); });
+      file.value = '';
+    });
+    // 2. Choose one already in the library
+    var choose = el('button', 'Choose from library'); choose.type = 'button';
     choose.addEventListener('click', function () {
       M.pick(folderHint).then(function (m) {
         if (!m) return;
-        value = Object.assign({}, value, { media_id: m.id });
-        value.alt = m.alt_text || ''; // new photo: use its own description
-        show(); onChange(value);
+        var nv = noPos(value); nv.media_id = m.id; nv.alt = m.alt_text || '';
+        set(nv, !nv.alt);
       });
     });
-    var clear = el('button', 'Remove photo', 'link'); clear.type = 'button';
-    clear.addEventListener('click', function () {
-      value = Object.assign({}, value); delete value.media_id;
-      show(); onChange(value);
+    // 3. Position / zoom
+    var adjust = el('button', 'Adjust position'); adjust.type = 'button';
+    adjust.addEventListener('click', function () {
+      var s0 = src();
+      A.positionEditor(frame, s0, value, opts.label).then(function (pos) {
+        if (!pos) return;
+        var nv = noPos(value);
+        if (!pos.reset) A.POS_KEYS.forEach(function (k) { nv[k] = pos[k]; });
+        set(nv);
+      });
     });
-    box.appendChild(img); box.appendChild(note); box.appendChild(choose); box.appendChild(clear);
+    // 4. Back to the photo built into the website
+    var clear = el('button', 'Use original website photo', 'link'); clear.type = 'button';
+    clear.addEventListener('click', function () { set(noPos(Object.assign({}, value, { media_id: undefined, alt: '' }))); });
+    box.appendChild(img); box.appendChild(note);
+    var acts = el('div', null, 'photo-actions');
+    [up, choose, adjust, clear].forEach(function (b) { acts.appendChild(b); });
+    box.appendChild(acts);
     show();
     return box;
+  };
+
+  // ---------- position editor (drag to move, slider to zoom; desktop and phone separately) ----------
+  A.positionEditor = function (frame, s0, value, label) {
+    return new Promise(function (resolve) {
+      var dlg = $('pos-dialog'), wrap = $('pos-previews');
+      $('pos-title').textContent = 'Adjust position' + (label ? ' — ' + label : '');
+      wrap.textContent = '';
+      var state = {
+        d: { x: num(value.fx, frame.d.x), y: num(value.fy, frame.d.y), z: num(value.fz, 1) },
+        m: { x: num(value.mx, frame.m.x), y: num(value.my, frame.m.y), z: num(value.mz, 1) }
+      };
+      function num(v, d) { return v == null || v === '' || isNaN(Number(v)) ? d : Number(v); }
+      var views = {};
+      var urlP = s0.path ? db.storage.from(PRIVATE).createSignedUrl(s0.path, 3600).then(function (r) { return (r.data && r.data.signedUrl) || s0.url; }) : Promise.resolve(s0.url);
+      urlP.then(function (url) {
+        ['d', 'm'].forEach(function (k) { views[k] = view(k, url); wrap.appendChild(views[k].box); });
+      });
+      function view(k, url) {
+        var fr = frame[k], maxW = k === 'd' ? 560 : 200, maxH = k === 'd' ? 320 : 380;
+        var vh = k === 'm' && frame.mvh ? frame.mvh : fr.h;
+        var sc = Math.min(maxW / fr.w, maxH / vh, 1);
+        var box = el('div', null, 'pos-view');
+        box.appendChild(el('h3', k === 'd' ? 'Desktop' : 'Phone'));
+        var win = el('div', null, 'pos-frame' + (frame.arch && !(k === 'm' && frame.marchOff) ? ' arch' : ''));
+        win.style.width = Math.round(fr.w * sc) + 'px'; win.style.height = Math.round(vh * sc) + 'px';
+        var im = el('img'); im.src = url; im.alt = ''; im.draggable = false;
+        im.style.width = Math.round(fr.w * sc) + 'px'; im.style.height = Math.round(fr.h * sc) + 'px';
+        win.appendChild(im); box.appendChild(win);
+        var zl = el('label', null, 'pos-zoom'); zl.appendChild(document.createTextNode('Zoom '));
+        var z = A.input('range', state[k].z, { min: 1, max: 2.5, step: 0.05 }); zl.appendChild(z); box.appendChild(zl);
+        var hint = el('p', 'Drag the photo to move it.', 'muted small'); box.appendChild(hint);
+        function paint() {
+          var p = state[k];
+          im.style.objectPosition = p.x + '% ' + p.y + '%';
+          im.style.transform = 'scale(' + p.z + ')';
+          im.style.transformOrigin = p.x + '% ' + p.y + '%';
+          z.value = p.z;
+        }
+        z.addEventListener('input', function () { state[k].z = Number(z.value); paint(); });
+        var drag = null;
+        win.addEventListener('pointerdown', function (e) {
+          if (!im.naturalWidth) return;
+          var W = fr.w * sc, H = fr.h * sc, cover = Math.max(W / im.naturalWidth, H / im.naturalHeight);
+          var p = state[k];
+          drag = { x: e.clientX, y: e.clientY, sx: p.x, sy: p.y,
+            panX: p.z * (im.naturalWidth * cover - W) + (p.z - 1) * W,
+            panY: p.z * (im.naturalHeight * cover - H) + (p.z - 1) * H };
+          win.setPointerCapture(e.pointerId); win.classList.add('dragging');
+        });
+        win.addEventListener('pointermove', function (e) {
+          if (!drag) return;
+          var p = state[k];
+          if (drag.panX > 1) p.x = clamp(drag.sx - (e.clientX - drag.x) / drag.panX * 100);
+          if (drag.panY > 1) p.y = clamp(drag.sy - (e.clientY - drag.y) / drag.panY * 100);
+          paint();
+        });
+        function end() { drag = null; win.classList.remove('dragging'); }
+        win.addEventListener('pointerup', end); win.addEventListener('pointercancel', end);
+        // keyboard: arrows move, +/- zoom
+        win.tabIndex = 0; win.setAttribute('aria-label', (k === 'd' ? 'Desktop' : 'Phone') + ' photo position. Use arrow keys to move.');
+        win.addEventListener('keydown', function (e) {
+          var p = state[k], d = e.shiftKey ? 10 : 2;
+          if (e.key === 'ArrowLeft') p.x = clamp(p.x - d); else if (e.key === 'ArrowRight') p.x = clamp(p.x + d);
+          else if (e.key === 'ArrowUp') p.y = clamp(p.y - d); else if (e.key === 'ArrowDown') p.y = clamp(p.y + d);
+          else return;
+          e.preventDefault(); paint();
+        });
+        paint();
+        return { box: box, paint: paint };
+      }
+      function clamp(n) { return Math.round(Math.min(100, Math.max(0, n)) * 10) / 10; }
+      function close(v) { dlg.onclose = null; dlg.close(); resolve(v); }
+      $('pos-reset').onclick = function () {
+        state.d = { x: frame.d.x, y: frame.d.y, z: 1 }; state.m = { x: frame.m.x, y: frame.m.y, z: 1 };
+        Object.keys(views).forEach(function (k) { views[k].paint(); });
+        $('pos-reset').dataset.reset = '1';
+      };
+      $('pos-cancel').onclick = function () { close(null); };
+      $('pos-ok').onclick = function () {
+        var d = state.d, m = state.m;
+        var untouched = d.x === frame.d.x && d.y === frame.d.y && d.z === 1 && m.x === frame.m.x && m.y === frame.m.y && m.z === 1;
+        if (untouched) return close({ reset: true });
+        close({ fx: d.x, fy: d.y, fz: d.z, mx: m.x, my: m.y, mz: m.z });
+      };
+      dlg.onclose = function () { resolve(null); };
+      dlg.showModal();
+    });
   };
 
   A.modules.push({ tab: 'media', start: M.load, onShow: render });

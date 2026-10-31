@@ -4,11 +4,13 @@
 (function () {
   'use strict';
   var cfg = window.RAAHA_CONFIG;
+  // Read before the sign-in library processes (and clears) a password-reset link
+  var initialHash = location.hash || '';
   var db = window.supabase.createClient(cfg.supabaseUrl, cfg.supabasePublishableKey, {
     auth: { persistSession: true, storageKey: 'raaha-admin-auth' }
   });
 
-  var A = window.RAAHA_ADMIN = { db: db, cfg: cfg, modules: [] };
+  var A = window.RAAHA_ADMIN = { db: db, cfg: cfg, modules: [], initialHash: initialHash };
 
   // ---------- helpers ----------
   A.$ = function (id) { return document.getElementById(id); };
@@ -157,28 +159,76 @@
     var box = A.el('span', null, 'status-badges');
     function b(text, cls, tip) { var s = A.el('span', text, 'badge ' + cls); s.title = tip; box.appendChild(s); }
     if (!row) { b('Live', 'ok', 'The live website shows the photo or text built into the page. Nothing has been changed here.'); return box; }
-    if (row.draft_deleted) b('Removal not published', 'draft', 'You removed this item. It stays on the website until you publish.');
-    else if (store.isChanged(row)) b('Unpublished draft', 'draft', 'Saved changes that only you can see (Preview drafts). Publish to preview, then to live.');
+    if (row.draft_deleted) b('Removal not live yet', 'draft', 'You removed this item, but the removal has not reached the website yet. Use “Make them live” in the bar above, or Save again.');
+    else if (store.isChanged(row)) b('Saved, not live yet', 'draft', 'This change was saved earlier but has not reached the website. Use “Make them live” in the bar above, or Save again.');
     var st = store.liveState(row);
     if (st === 'live') b('Live', 'ok', 'This version is on the live website.');
     else if (st === 'builtin') b('Live', 'ok', 'The live website still shows the photo or text built into the page.');
-    else if (st === 'preview') b('Preview only', 'preview', 'Published to the preview site but not yet to the live website.');
+    else if (st === 'preview') b('Not live yet', 'preview', 'Not on the live website yet. Use “Make them live” in the bar above, or Save again.');
     else if (!row.draft_deleted) b('Not on website', 'muted', 'Not published anywhere yet.');
     return box;
   };
 
-  // ---------- publish bar ----------
+  // ---------- status bar ----------
+  // Save = live. The bar only appears when something saved earlier has not reached the live website.
+  store.pending = function () {
+    return store.rows.filter(function (r) { return store.isChanged(r) || store.liveState(r) === 'preview'; });
+  };
   A.refreshPublishBar = function () {
-    var changed = store.rows.filter(store.isChanged).length;
     var s = A.$('pub-status');
     if (!s) return;
-    var previewOnly = store.rows.filter(function (r) { return store.liveState(r) === 'preview'; }).length;
-    s.textContent = (changed ? changed + ' unpublished draft' + (changed === 1 ? '' : 's') + ' (private)'
-                             : 'No unpublished drafts.') +
-      (previewOnly ? ' · ' + previewOnly + ' item' + (previewOnly === 1 ? '' : 's') + ' on preview only (not live yet)' : ' · Preview and live match.');
-    A.$('publish-bar').classList.toggle('has-changes', changed > 0);
-    A.$('pub-publish').disabled = changed === 0;
-    A.$('pub-discard').disabled = changed === 0;
+    var waiting = store.pending().length;
+    s.textContent = waiting
+      ? waiting + ' saved change' + (waiting === 1 ? ' is' : 's are') + ' not on the live website yet.'
+      : 'Every saved change is live on raahasoulhouse.com.';
+    A.$('publish-bar').classList.toggle('has-changes', waiting > 0);
+    A.$('pub-publish').hidden = A.$('pub-discard').hidden = waiting === 0;
+  };
+
+  // ---------- Save → live ----------
+  // targets: the content rows this save is about (may include undefined for slots never saved before).
+  // Other rows with changes that are not live yet are never published silently: they are listed first,
+  // and you choose to discard them, include them, or cancel.
+  A.saveLive = function (targets, saveFn) {
+    targets = (targets || []).filter(Boolean);
+    var others = store.pending().filter(function (r) { return targets.indexOf(r) === -1; });
+    var first = others.length ? A.resolveOthers(others) : Promise.resolve('none');
+    return first.then(function (choice) {
+      if (choice === 'cancel') return { cancelled: true };
+      return Promise.resolve(saveFn ? saveFn() : null).then(function () {
+        return A.publishLive();
+      }).then(function (r) { return r; }, function (e) {
+        // the change is saved but not live: the bar offers “Make them live”
+        return store.load().then(function () { throw e; });
+      });
+    });
+  };
+  A.resolveOthers = function (rows) {
+    return new Promise(function (resolve) {
+      var dlg = A.$('others-dialog'), ul = A.$('others-list');
+      ul.textContent = '';
+      rows.forEach(function (r) { ul.appendChild(A.el('li', store.describe ? store.describe(r) : r.collection)); });
+      function done(v) { dlg.onclose = null; dlg.close(); resolve(v); }
+      A.$('others-cancel').onclick = function () { done('cancel'); };
+      A.$('others-include').onclick = function () { done('include'); };
+      A.$('others-discard').onclick = function () {
+        A.$('others-discard').disabled = true;
+        store.discardRows(rows).then(function () { A.$('others-discard').disabled = false; done('discarded'); },
+          function (e) { A.$('others-discard').disabled = false; A.toast('Could not discard: ' + e.message, true); });
+      };
+      dlg.onclose = function () { resolve('cancel'); };
+      dlg.showModal();
+    });
+  };
+  // Discard only these rows' unsaved-to-live changes (back to what the live website shows)
+  store.discardRows = function (rows) {
+    return Promise.all(rows.map(function (r) {
+      if (r.published_source == null && r.live_source == null) {
+        return db.from('cms_entries').delete().eq('id', r.id).then(function (res) { if (res.error) throw res.error; });
+      }
+      return db.from('cms_entries').update({ draft: r.live_source != null ? r.live_source : r.published_source, draft_deleted: false })
+        .eq('id', r.id).then(function (res) { if (res.error) throw res.error; });
+    })).then(function () { return store.load(); });
   };
 
   // ---------- tabs ----------

@@ -13,10 +13,11 @@
       wrap = el('div', null, 'wide field');
       wrap.appendChild(el('span', def.label, 'label'));
       wrap.appendChild(A.photoField(value, def.folder, function (nv) {
-        ['media_id', 'alt'].forEach(function (k) { if (k in nv) value[k] = nv[k]; else delete value[k]; });
+        ['media_id', 'alt'].concat(A.POS_KEYS).forEach(function (k) { if (k in nv) value[k] = nv[k]; else delete value[k]; });
         alt.value = value.alt || '';
         onDirty();
-      }));
+        if (nv._focusAlt) { alt.focus(); }
+      }, { frame: def.frame || def.key, builtIn: typeof def.builtIn === 'function' ? def.builtIn(value) : null, label: def.label }));
       var alt = A.input('text', value.alt, { maxlength: 300, placeholder: 'Describe the photo (alt text)' });
       alt.addEventListener('input', function () { value.alt = alt.value; onDirty(); });
       wrap.appendChild(A.field('Photo description (alt text)', alt));
@@ -54,6 +55,7 @@
       var d = defs[i], v = value[d.k];
       if (d.required && (v == null || String(v).trim() === '')) return d.label + ' is required.';
       if (d.type === 'price' && v != null && (isNaN(v) || v < 0)) return d.label + ' must be a positive amount.';
+      if (d.type === 'photo' && value.media_id && !String(value.alt || '').trim()) return d.label + ': please add a short photo description (alt text).';
     }
     return null;
   }
@@ -74,7 +76,7 @@
     var add = el('button', opts.addLabel || 'Add'); add.type = 'button';
     add.addEventListener('click', function () {
       var d = Object.assign({}, opts.defaults || {});
-      C.add(opts.collection, d).then(function () { A.listEditor(box, opts); A.toast('Added as a draft — fill it in and save.'); })
+      C.add(opts.collection, d).then(function () { A.listEditor(box, opts); A.toast('Added — fill it in, then Save to put it on the website.'); })
         .catch(function (e) { A.toast(e.message, true); });
     });
     box.appendChild(add);
@@ -88,7 +90,8 @@
       if (opts.note) { var n = opts.note(value); if (n) sum.appendChild(el('span', n, 'badge')); }
       d.appendChild(sum);
       var grid = el('div', null, 'grid');
-      var save = el('button', 'Save draft', 'primary'); save.type = 'button'; save.disabled = true;
+      var save = el('button', 'Save', 'primary'); save.type = 'button'; save.disabled = true;
+      save.title = 'Saves and updates the live website.';
       opts.fields.forEach(function (f) { grid.appendChild(A.buildField(f, value, function () { save.disabled = false; })); });
       d.appendChild(grid);
       var acts = el('div', null, 'row-actions');
@@ -96,8 +99,12 @@
         trimAll(value);
         var err = validate(opts.fields, value) || (opts.check && opts.check(value, r));
         if (err) { A.toast(err, true); return; }
-        C.saveDraft(r, value).then(function () { A.toast('Draft saved (not public yet).'); A.listEditor(box, opts); })
-          .catch(function (e) { A.toast('Not saved: ' + e.message, true); });
+        save.disabled = true; save.textContent = 'Saving…';
+        A.saveLive([r], function () { return C.saveDraft(r, value); }).then(function (res) {
+          save.textContent = 'Save';
+          if (res && res.cancelled) { save.disabled = false; return; }
+          A.toast('Saved — live on the website.'); A.listEditor(box, opts);
+        }).catch(function (e) { save.textContent = 'Save'; save.disabled = false; A.toast('Saved, but not live yet: ' + e.message, true); A.listEditor(box, opts); });
       });
       var up = el('button', '↑'); up.type = 'button'; up.title = 'Move up'; up.disabled = i === 0;
       var dn = el('button', '↓'); dn.type = 'button'; dn.title = 'Move down'; dn.disabled = i === all.length - 1;
@@ -108,16 +115,18 @@
                      A.db.from('cms_entries').update({ sort: a }).eq('id', other.id)]).then(function (res) {
           if (res[0].error || res[1].error) { A.toast('Could not reorder.', true); return; }
           r.sort = b; other.sort = a; A.listEditor(box, opts);
-          A.toast('Order changed — this goes live with the next publish.');
+          A.toast('Order updated on the website.');
         });
       }
       up.addEventListener('click', function () { move(-1); });
       dn.addEventListener('click', function () { move(1); });
       var rm = el('button', 'Remove', 'link'); rm.type = 'button';
       rm.addEventListener('click', function () {
-        if (!confirm('Remove "' + (opts.title(value) || 'this item') + '"? It disappears from the website at the next publish.')) return;
-        C.remove(r).then(function () { A.listEditor(box, opts); A.toast('Marked for removal at the next publish.'); })
-          .catch(function (e) { A.toast(e.message, true); });
+        if (!confirm('Remove "' + (opts.title(value) || 'this item') + '" from the website now?\n\nYou can bring it back with Undo in History.')) return;
+        A.saveLive([r], function () { return C.remove(r); }).then(function (res) {
+          if (res && res.cancelled) return;
+          A.listEditor(box, opts); A.toast('Removed from the website.');
+        }).catch(function (e) { A.listEditor(box, opts); A.toast('Removed, but not live yet: ' + e.message, true); });
       });
       acts.appendChild(save); acts.appendChild(up); acts.appendChild(dn); acts.appendChild(rm);
       d.appendChild(acts);
@@ -186,7 +195,7 @@
     { name: 'Menu, Events & Contact — header photos', items: [
       IMG('menu.hero.image', 'Menu header photo (under a burgundy overlay)', 'menu', '/assets/images/web/menu-head-chai.webp'),
       IMG('events.hero.image', 'Events header photo (under a soft dark overlay)', 'events', '/assets/images/web/events-head-gathering.webp'),
-      IMG('contact.hero.image', 'Contact header photo (under a light ivory wash)', 'general', '/assets/images/web/raaha-interior.webp')] },
+      IMG('contact.hero.image', 'Contact header photo (dark text sits directly on the photo; choose a light, calm photo)', 'general', '/assets/images/web/raaha-interior.webp')] },
     { name: 'Coffee Cart page', items: [
       IMG('cart.hero.image', 'Header photo', 'coffee-cart', '/assets/images/web/coffee-cart-gathering.webp'),
       IMG('cart.intro.image', 'Introduction photo (gold arch)', 'coffee-cart', '/assets/images/web/raaha-coffee.webp'),
@@ -203,17 +212,19 @@
   var PLACES = {};
   GROUPS.forEach(function (g) {
     g.items.forEach(function (it) {
-      if (it.collection === 'image') PLACES['image:' + it.key] = g.name + ' → ' + it.label;
-      else if (it.list) PLACES['list:' + it.collection] = g.name + ' → ' + it.label;
+      if (it.list) PLACES['list:' + it.collection] = g.name + ' → ' + it.label;
+      else PLACES[it.collection + ':' + it.key] = g.name + ' → ' + it.label;
     });
   });
   C.describe = function (r) {
     var v = r.draft || r.published_source || r.live_source || {};
-    if (r.collection === 'image') return PLACES['image:' + r.key] || ('Photo slot ' + r.key);
-    if (r.collection === 'menu_category') return 'Menu tab → ' + (v.name || 'category') + ' (category photo)';
+    if (r.key) return PLACES[r.collection + ':' + r.key] || (r.collection + ' ' + r.key);
+    if (r.collection === 'menu_category') return 'Menu → category ' + (v.name || '(new)');
+    if (r.collection === 'menu_item') return 'Menu → ' + (v.name || '(new item)');
     if (r.collection === 'event') return 'Events tab → ' + (v.title || 'event');
     var base = PLACES['list:' + r.collection] || r.collection;
-    return base + (v.title || v.caption ? ' → ' + (v.title || v.caption) : '');
+    var t = v.title || v.caption || v.question || v.name || v.text;
+    return base + (t ? ' → ' + String(t).slice(0, 60) : '');
   };
 
   function render() {
@@ -225,7 +236,8 @@
       var singles = g.items.filter(function (x) { return !x.list; });
       var pending = [];
       var grid = el('div', null, 'grid');
-      var save = el('button', 'Save draft', 'primary'); save.type = 'button'; save.disabled = true;
+      var save = el('button', 'Save', 'primary'); save.type = 'button'; save.disabled = true;
+      save.title = 'Saves and updates the live website.';
       singles.forEach(function (def) {
         var row = C.byKey(def.collection, def.key);
         var value = Object.assign({}, row && row.draft || {});
@@ -255,10 +267,17 @@
               if (!A.safeHref(p.value.href)) { A.toast(p.def.label + ': the link must start with /, #, https://, mailto: or tel:', true); return; }
             }
             if (p.def.collection === 'text' && !p.value.value) { A.toast(p.def.label + ' cannot be empty (hide the section instead).', true); return; }
+            if (p.def.type === 'photo' && p.value.media_id && !String(p.value.alt || '').trim()) { A.toast(p.def.label + ': please add a short photo description.', true); return; }
           }
-          Promise.all(pending.map(function (p) { return C.saveNamed(p.def.collection, p.def.key, p.value); }))
-            .then(function () { A.toast('Draft saved (not public yet).'); render(); reopen(g.name); })
-            .catch(function (e) { A.toast('Not saved: ' + e.message, true); });
+          var targets = pending.map(function (p) { return C.byKey(p.def.collection, p.def.key); });
+          save.disabled = true; save.textContent = 'Saving…';
+          A.saveLive(targets, function () {
+            return Promise.all(pending.map(function (p) { return C.saveNamed(p.def.collection, p.def.key, p.value); }));
+          }).then(function (res) {
+            save.textContent = 'Save';
+            if (res && res.cancelled) { save.disabled = false; return; }
+            A.toast('Saved — live on the website.'); render(); reopen(g.name);
+          }).catch(function (e) { save.textContent = 'Save'; save.disabled = false; A.toast('Saved, but not live yet: ' + e.message, true); render(); reopen(g.name); });
         });
         var acts = el('div', null, 'row-actions'); acts.appendChild(save); sec.appendChild(acts);
       }

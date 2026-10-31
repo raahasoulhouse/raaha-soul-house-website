@@ -27,6 +27,24 @@
             <input id="login-password" type="password" autocomplete="current-password" required>
             <button class="primary" type="submit">Sign in</button>
             <p class="msg" id="login-msg" role="alert"></p>
+            <p class="forgot"><button class="link" type="button" id="forgot-open">Forgot password?</button></p>
+        </form>
+        <form id="forgot-form" hidden>
+            <p class="muted">Enter the admin email address. If it belongs to an admin account, a reset link is emailed to it.</p>
+            <label for="forgot-email">Email</label>
+            <input id="forgot-email" type="email" autocomplete="username" required>
+            <button class="primary" type="submit">Email me a reset link</button>
+            <p class="msg" id="forgot-msg" role="status"></p>
+            <p class="forgot"><button class="link" type="button" id="forgot-back">Back to sign in</button></p>
+        </form>
+        <form id="reset-form" hidden>
+            <h2>Choose a new password</h2>
+            <label for="reset-pass">New password (at least 10 characters)</label>
+            <input id="reset-pass" type="password" autocomplete="new-password" minlength="10" required>
+            <label for="reset-pass2">Type it again</label>
+            <input id="reset-pass2" type="password" autocomplete="new-password" minlength="10" required>
+            <button class="primary" type="submit">Save new password</button>
+            <p class="msg" id="reset-msg" role="alert"></p>
         </form>
     </main>
 
@@ -38,16 +56,15 @@
             <button type="button" data-tab="menu">Menu</button>
             <button type="button" data-tab="events">Events</button>
             <button type="button" data-tab="media">Photos</button>
-            <button type="button" data-tab="publishing">Publishing</button>
+            <button type="button" data-tab="publishing">History</button>
         </nav>
 
-        <!-- Draft / publish bar: visible on every content tab -->
+        <!-- Status bar: Save updates the live website; this only offers actions if something saved is not live -->
         <section class="publish-bar" id="publish-bar" aria-live="polite">
-            <span id="pub-status">Checking for unpublished changes…</span>
+            <span id="pub-status">Checking…</span>
             <span class="bar-spacer"></span>
-            <a class="btn-like" id="pub-preview" href="/?preview=draft" target="_blank" rel="noopener">Preview drafts</a>
-            <button type="button" id="pub-discard">Discard drafts</button>
-            <button type="button" class="primary" id="pub-publish">Publish to preview site</button>
+            <button type="button" id="pub-discard" hidden>Discard them</button>
+            <button type="button" class="primary" id="pub-publish" hidden>Make them live</button>
         </section>
 
         <!-- ============ BOOKINGS ============ -->
@@ -155,13 +172,13 @@
 
         <!-- ============ WEBSITE CONTENT ============ -->
         <main class="tab-panel" id="tab-content" hidden>
-            <p class="muted">Edit text, photos, buttons and which sections appear. <strong>Save draft</strong> keeps changes private; use <strong>Preview drafts</strong> to check them, then <strong>Publish</strong>.</p>
+            <p class="muted">Edit text, photos, buttons and which sections appear. <strong>Save</strong> updates the live website straight away. Every change is kept in <strong>History</strong>, where you can undo it.</p>
             <div id="content-groups"></div>
         </main>
 
         <!-- ============ MENU ============ -->
         <main class="tab-panel" id="tab-menu" hidden>
-            <p class="muted">Prices here are used everywhere the item appears, including the Coffee Cart sample menu.</p>
+            <p class="muted">Prices here are used everywhere the item appears, including the Coffee Cart sample menu. <strong>Save</strong> updates the live website; undo any change in <strong>History</strong>. Category photos are under <strong>Categories</strong> below.</p>
             <div id="menu-editor"></div>
         </main>
 
@@ -175,7 +192,7 @@
         <main class="tab-panel" id="tab-media" hidden>
             <section class="upload-box">
                 <h2>Upload photos</h2>
-                <p class="muted">Photos are resized and compressed for the web before upload. They stay private until content using them is published.</p>
+                <p class="muted">Optional: a library of reusable photos. To change a photo on a page, use <strong>Upload new photo</strong> in that page’s section instead. Photos are resized for the web and stay private until used on the website.</p>
                 <div class="grid">
                     <label>Folder
                         <select id="m-folder">
@@ -197,28 +214,17 @@
             <div class="media-grid" id="media-grid"></div>
         </main>
 
-        <!-- ============ PUBLISHING ============ -->
+        <!-- ============ HISTORY ============ -->
         <main class="tab-panel" id="tab-publishing" hidden>
             <section class="panel">
-                <h2>Where publishing goes</h2>
-                <p><strong>Preview website:</strong> updated by "Publish to preview site".</p>
-                <p><strong>Production website (raahasoulhouse.com):</strong> <span id="prod-status">checking…</span></p>
-            </section>
-            <section class="panel" id="live-panel">
-                <h2>Publish to live website</h2>
-                <p class="muted">Copies what is on the preview website now (text, menu, prices, events, photos) to raahasoulhouse.com. Unpublished drafts are not included. Check the preview site first.</p>
-                <p id="live-diff" class="muted">Checking…</p>
-                <button type="button" class="primary" id="live-open" disabled>Publish to live website…</button>
+                <h2>History of live changes</h2>
+                <p class="muted">Every Save is recorded here automatically. <strong>Undo</strong> puts the live website back to how it was just before that change; an undo is recorded too, so it can be undone.</p>
+                <table id="pub-history"><thead><tr><th>When</th><th>What changed</th><th></th></tr></thead><tbody></tbody></table>
             </section>
             <section class="panel">
                 <h2>Backup</h2>
-                <p class="muted">Downloads one file with all website content, photo details, publish history, bookings and private notes. It contains customer details: keep it in a private folder (for example Google Drive), never in GitHub. Photos themselves are not included; keep your original photo files.</p>
+                <p class="muted">Downloads one file with all website content, photo details, history, bookings and private notes. It contains customer details: keep it in a private folder (for example Google Drive), never in GitHub. Photos themselves are not included; keep your original photo files.</p>
                 <button type="button" id="backup">Download backup</button>
-            </section>
-            <section class="panel">
-                <h2>Publish history</h2>
-                <p class="muted">Each publish saves what was visible before it. "Undo" restores that version on the preview website (your drafts are kept).</p>
-                <table id="pub-history"><thead><tr><th>When</th><th>What</th><th>Changes</th><th></th></tr></thead><tbody></tbody></table>
             </section>
         </main>
     </div>
@@ -240,14 +246,30 @@
         <div class="dialog-actions"><button type="button" id="picker-cancel">Cancel</button></div>
     </dialog>
 
-    <!-- Live publish confirmation -->
-    <dialog id="live-dialog" aria-labelledby="live-title">
-        <h2 id="live-title">Publish to the live website?</h2>
-        <p id="live-summary"></p>
-        <p>Visitors to raahasoulhouse.com will see these changes immediately. To continue, type <strong>PUBLISH</strong> below.</p>
-        <label for="live-confirm" class="sr-only">Type PUBLISH to confirm</label>
-        <input id="live-confirm" type="text" autocomplete="off" spellcheck="false" placeholder="PUBLISH">
-        <div class="dialog-actions"><button type="button" id="live-cancel">Cancel</button> <button type="button" class="primary" id="live-go" disabled>Publish to live website</button></div>
+    <!-- Other changes that are not live yet (shown before a Save, so nothing unrelated is published silently) -->
+    <dialog id="others-dialog" aria-labelledby="others-title">
+        <h2 id="others-title">Other changes are waiting</h2>
+        <p>These changes were saved earlier but are not on the live website. Saving now would publish them too.</p>
+        <ul id="others-list"></ul>
+        <div class="dialog-actions">
+            <button type="button" id="others-cancel">Cancel</button>
+            <button type="button" id="others-discard">Discard those, save mine</button>
+            <button type="button" class="primary" id="others-include">Publish them too</button>
+        </div>
+    </dialog>
+
+    <!-- Photo position -->
+    <dialog id="pos-dialog" class="wide-dialog" aria-labelledby="pos-title">
+        <h2 id="pos-title">Adjust position</h2>
+        <p class="muted small">Drag each photo to choose what shows. Desktop and phone are set separately. Your original photo is not changed.</p>
+        <div class="pos-previews" id="pos-previews"></div>
+        <div class="dialog-actions">
+            <button type="button" id="pos-reset">Reset to original position</button>
+            <span class="bar-spacer"></span>
+            <button type="button" id="pos-cancel">Cancel</button>
+            <button type="button" class="primary" id="pos-ok">Use this position</button>
+        </div>
+        <p class="muted small">Then click <strong>Save</strong> in the section to put it on the website.</p>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>

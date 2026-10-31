@@ -756,3 +756,15 @@ img.cms-swap { opacity: 0 !important; }
 .btn-gold.btn-champagne:hover, .btn-gold.btn-champagne:focus-visible { background: #DFBF7E; border-color: #EDD6A4; }
 /* Coffee Cart · Where We Travel: booking button under the service-area note */
 .cart-band .area-book { margin-top: 30px; }
+
+/* Photo framing set in Admin (focus point + zoom, separate desktop and phone). Display only. */
+img.cms-pos { object-position: var(--px) var(--py) !important; transform: scale(var(--pz)); transform-origin: var(--px) var(--py); }
+@media (max-width: 860px) {
+  img.cms-pos { object-position: var(--mpx) var(--mpy) !important; transform: scale(var(--mpz)); transform-origin: var(--mpx) var(--mpy); }
+}
+/* Zoomed menu category photo: frame with the same size and shape as the normal photo */
+.menu-category-block > .cat-photo { display: block; overflow: hidden; grid-column: 1; grid-row: 2; width: 100%; max-width: 340px; aspect-ratio: 4 / 5; border-radius: 999px 999px 6px 6px; margin: 20px 0 0; }
+.menu-category-block > .cat-photo > img.internal-page-hero-img { display: block; width: 100%; max-width: none; height: 100% !important; max-height: none; aspect-ratio: auto; margin: 0 !important; border-radius: 0; object-fit: cover; }
+@media (max-width: 860px) {
+  .menu-category-block > .cat-photo { grid-row: auto; max-width: none; aspect-ratio: 16 / 9; border-radius: 6px; margin: 0; }
+}

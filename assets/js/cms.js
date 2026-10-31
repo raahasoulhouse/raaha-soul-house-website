@@ -62,6 +62,20 @@
     return v.static_src || null;
   }
 
+  // Photo framing chosen in Admin (display only; the uploaded photo itself is never cropped).
+  // fx/fy = desktop focus point (%), fz = desktop zoom; mx/my/mz = phone. Returns true when zoomed.
+  function clampNum(n, lo, hi, d) { n = Number(n); return (n === n && isFinite(n)) ? Math.min(hi, Math.max(lo, n)) : d; }
+  function hasPos(v) { return !!v && ['fx', 'fy', 'fz', 'mx', 'my', 'mz'].some(function (k) { return v[k] != null && v[k] !== ''; }); }
+  function applyPos(img, v) {
+    if (!hasPos(v)) { img.classList.remove('cms-pos'); return false; }
+    var fx = clampNum(v.fx, 0, 100, 50), fy = clampNum(v.fy, 0, 100, 50), fz = clampNum(v.fz, 1, 3, 1);
+    var mx = clampNum(v.mx, 0, 100, fx), my = clampNum(v.my, 0, 100, fy), mz = clampNum(v.mz, 1, 3, fz);
+    img.style.setProperty('--px', fx + '%'); img.style.setProperty('--py', fy + '%'); img.style.setProperty('--pz', String(fz));
+    img.style.setProperty('--mpx', mx + '%'); img.style.setProperty('--mpy', my + '%'); img.style.setProperty('--mpz', String(mz));
+    img.classList.add('cms-pos');
+    return fz > 1 || mz > 1;
+  }
+
   // ---------- load ----------
   // Published content: the small script in each page's <head> starts this request early (no draft
   // preview); reuse it so photos can be shown sooner. Otherwise fetch it here.
@@ -128,6 +142,7 @@
       var v = single['image:' + img.getAttribute('data-cms-img')];
       var url = imageUrl(v);
       if (!url) return;
+      applyPos(img, v);
       img.removeAttribute('srcset');
       if (img.getAttribute('src') !== url) {
         // a different photo: keep this spot hidden until the new photo has loaded, then fade it in
@@ -281,7 +296,11 @@
       if (!url && builtIn[block.id]) { url = builtIn[block.id].src; alt = builtIn[block.id].alt; }
       if (url) {
         var img = document.createElement('img'); img.className = 'internal-page-hero-img'; img.loading = 'lazy';
-        img.src = url; img.alt = alt; img.style.marginBottom = '24px'; block.appendChild(img);
+        img.src = url; img.alt = alt; img.style.marginBottom = '24px';
+        if (applyPos(img, c)) {
+          // zoomed: a frame the same shape as the photo keeps the enlarged photo inside its arch
+          var frame = document.createElement('span'); frame.className = 'cat-photo'; frame.appendChild(img); block.appendChild(frame);
+        } else block.appendChild(img);
       }
       var list = document.createElement('div'); list.className = 'menu-items-list';
       its.forEach(function (i) { list.appendChild(menuRow(i.name, i.price, c.price_prefix, i.description, i.available, i.featured)); });

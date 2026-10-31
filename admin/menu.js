@@ -3,6 +3,11 @@
   'use strict';
   var A = window.RAAHA_ADMIN, $ = A.$, el = A.el, C = A.content;
   var current = null;
+  var BUILT_IN = {
+    espresso: '/assets/images/web/raaha-coffee.webp', siglattes: '/assets/images/web/signature-latte.webp',
+    matcha: '/assets/images/web/ceremonial-matcha.webp', tea: '/assets/images/web/raaha-matcha-chai.webp',
+    refreshers: '/assets/images/web/refreshers-strawberry-lemonade.webp', bites: '/assets/images/web/pastries.webp'
+  };
 
   function cats() { return C.list('menu_category').map(function (r) { return r.draft || {}; }); }
 
@@ -61,7 +66,9 @@
         { k: 'nav_label', label: 'Menu tab label', max: 40 },
         { k: 'slug', label: 'Short code (used for links; avoid changing)', max: 40 },
         { k: 'price_prefix', label: 'Price prefix (e.g. “+” for add-ons)', max: 4 },
-        { k: 'media_id', label: 'Category photo', type: 'photo', folder: 'menu' },
+        { k: 'media_id', label: 'Category photo', type: 'photo', folder: 'menu', frame: 'menu',
+          // photos built into the menu page (shown on the website when no photo is chosen here)
+          builtIn: function (v) { return BUILT_IN[v.slug] || null; } },
         { k: 'visible', label: 'Show on website', type: 'check' }
       ]
     });

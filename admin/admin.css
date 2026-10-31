@@ -170,3 +170,24 @@ dialog::backdrop { background: rgba(38, 33, 31, 0.45); }
 .picker-upload h3, .picker-or { font-size: 1rem; margin: 0 0 8px; }
 #pu-msg.error, .needs-alt { color: #8A2A22; }
 .needs-alt { margin: 4px 0; font-weight: 500; }
+
+/* Forgot password */
+.login .forgot { margin: 14px 0 0; text-align: center; }
+.login .forgot button { width: auto; margin: 0; }
+.login h2 { margin-top: 0; }
+
+/* Photo field: upload / choose / adjust */
+.photo-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.btn-like.primary-like { background: var(--brick); border-color: var(--brick); color: #fff; }
+
+/* Position editor */
+dialog.wide-dialog { max-width: min(900px, 96vw); width: 900px; }
+.pos-previews { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; margin: 12px 0; }
+.pos-view h3 { margin: 0 0 8px; font-size: 0.95rem; }
+.pos-frame { position: relative; overflow: hidden; background: #2B1D18; border-radius: 4px; cursor: grab; touch-action: none; box-shadow: 0 0 0 1px var(--rule); }
+.pos-frame.arch { border-radius: 999px 999px 4px 4px; }
+.pos-frame.dragging { cursor: grabbing; }
+.pos-frame img { display: block; object-fit: cover; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.pos-zoom { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 0.9rem; }
+.pos-zoom input { width: 160px; padding: 0; }
+.publish-bar[hidden] { display: none; }
