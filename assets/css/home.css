@@ -314,8 +314,7 @@ p:last-child { margin-bottom: 0; }
     max-width: 11ch;
 }
 .hero-immersive h1 span { display: block; }
-.hero-immersive h1 span:nth-child(2) { padding-left: 0.5em; }
-.hero-immersive h1 span:nth-child(3) { padding-left: 1em; color: var(--gold); }
+.hero-immersive h1 span:nth-child(3) { color: var(--gold); }
 .hero-immersive .hero-lede {
     margin-top: clamp(22px, 3vw, 34px);
     max-width: 30rem;
@@ -336,8 +335,6 @@ p:last-child { margin-bottom: 0; }
         background: linear-gradient(180deg, rgba(34, 24, 19, 0) 0%, rgba(34, 24, 19, 0.1) 30%, rgba(34, 24, 19, 0.72) 62%, rgba(34, 24, 19, 0.9) 100%);
     }
     .hero-copy { padding-bottom: 36px; }
-    .hero-immersive h1 span:nth-child(2) { padding-left: 0.35em; }
-    .hero-immersive h1 span:nth-child(3) { padding-left: 0.7em; }
     .hero-immersive .hero-lede { font-size: 1.05rem; }
     .hero-immersive .hero-actions .btn { flex: 1 1 100%; text-align: center; }
 }
@@ -710,20 +707,18 @@ p:last-child { margin-bottom: 0; }
 .photo-head-dark h1 { color: #F4EDE4; }
 .photo-head-dark .eyebrow { color: #E8D3A5; }
 .photo-head-dark p { color: rgba(244,237,228,0.92); }
-/* Contact: light ivory wash, existing dark text */
+/* Contact: café photo stays clearly visible; ivory only as a soft glow directly behind the text (WCAG AA) */
 .photo-head-light { background: var(--limewash); }
 .photo-head-light > .head-photo { object-position: 50% 55%; }
-.photo-head-light::after { background: linear-gradient(90deg, rgba(244,237,228,0.95) 0%, rgba(244,237,228,0.9) 50%, rgba(244,237,228,0.88) 100%); }
-@media (min-width: 861px) {
-  .photo-head-light::after { background:
-    linear-gradient(90deg, rgba(244,237,228,0.86) 0%, rgba(244,237,228,0.8) 34%, rgba(244,237,228,0.3) 42%, rgba(244,237,228,0.3) 48%, rgba(244,237,228,0.52) 54%, rgba(244,237,228,0.52) 100%),
-    linear-gradient(180deg, rgba(244,237,228,0.1) 0%, rgba(244,237,228,0.44) 24%, rgba(244,237,228,0.44) 82%, rgba(244,237,228,0.2) 100%); }
-  .photo-head-light p { color: var(--espresso); }
-}
+.photo-head-light::after { background: linear-gradient(180deg, rgba(244,237,228,0.16) 0%, rgba(244,237,228,0.08) 100%); }
+.photo-head-light .section-inner > * { position: relative; z-index: 0; }
+.photo-head-light .section-inner > *::before { content: ""; position: absolute; inset: -30px -40px; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(244,237,228,0.9) 72%, rgba(244,237,228,0.82) 86%, rgba(244,237,228,0) 100%);
+  filter: blur(14px); border-radius: 50%; transform: scale(1.18, 1.32); }
+.photo-head-light p { color: var(--espresso); }
 @media (max-width: 860px) {
   .photo-head-brick::after { background: linear-gradient(180deg, rgba(94,37,34,0.86) 0%, rgba(118,47,43,0.9) 50%, rgba(94,37,34,0.94) 100%), var(--paper-grain); background-size: auto, 240px; }
   .photo-head-dark::after { background: linear-gradient(180deg, rgba(34,24,19,0.72) 0%, rgba(34,24,19,0.76) 50%, rgba(34,24,19,0.84) 100%); }
-  .photo-head-light::after { background: linear-gradient(180deg, rgba(244,237,228,0.88) 0%, rgba(244,237,228,0.91) 55%, rgba(244,237,228,0.94) 100%); }
   .photo-head-dark > .head-photo { object-position: 45% 40%; }
 }
 
