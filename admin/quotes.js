@@ -276,7 +276,7 @@
     var bev = (q.beverages || []).length ? '<h2>Beverage selection</h2><p class="bev">' + q.beverages.map(esc).join(' · ') + '</p>' : '';
     var dep = Number(r.deposit_amount) > 0 ? '<p class="dep">Deposit to reserve your date: <strong>' + A.money(r.deposit_amount) + '</strong>' +
       (r.deposit_due_on ? ' by ' + A.fmtDate(r.deposit_due_on) : '') + '. Your date is confirmed once the deposit is received.</p>' : '';
-    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>RAAHA quote ' + esc(O.quoteNo(q)) + '</title>' +
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>RAAHA quote ' + esc(q.quote_number || '') + (q.version > 1 ? ' rev ' + q.version : '') + '</title>' +
       '<style>@page{margin:18mm}body{font-family:Georgia,"Times New Roman",serif;color:#2E2A27;margin:0;font-size:11pt;line-height:1.45}' +
       '.top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #762F2B;padding-bottom:14px;margin-bottom:18px}' +
       '.top img{height:64px}.brand{font-size:9pt;letter-spacing:.18em;color:#762F2B;text-transform:uppercase;margin-top:6px}' +
@@ -289,7 +289,7 @@
       '.notes{white-space:pre-wrap}.dep{background:#F4EDE4;padding:10px 12px;border-left:3px solid #C9A86A}.foot{margin-top:28px;font-size:9pt;color:#7a6f66;border-top:1px solid #eadfce;padding-top:10px}' +
       '.bev{margin:0}</style></head><body>' +
       '<div class="top"><div><img src="' + location.origin + '/assets/images/brand/raaha-logo-burgundy.png" alt="RAAHA Soul House"><div class="brand">RAAHA Soul House · Coffee Cart</div></div>' +
-      '<div class="meta"><h1>Quote</h1>' + esc(O.quoteNo(q)) + '<br>Prepared ' + A.fmtDate(q.sent_on || A.today()) +
+      '<div class="meta"><h1>Quote</h1>' + esc(q.quote_number || '') + (q.version > 1 ? '<br>Revision ' + q.version : '') + '<br>Prepared ' + A.fmtDate(q.sent_on || A.today()) +
       (q.valid_until ? '<br>Valid until ' + A.fmtDate(q.valid_until) : '') + '</div></div>' +
       '<h2>Prepared for</h2><p>' + esc(r.name) + (r.email ? '<br>' + esc(r.email) : '') + (r.phone ? '<br>' + esc(r.phone) : '') + '</p>' +
       (ev ? '<h2>Event</h2><dl>' + ev + '</dl>' : '') + bev +

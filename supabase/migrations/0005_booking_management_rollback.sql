@@ -1,9 +1,11 @@
 -- Rollback of 0005_booking_management. Run only after downloading the Admin backup:
--- it removes all quotes, calendar blocks and the 7 new booking fields. Existing booking records, notes and content are untouched.
+-- it removes all quotes, quote numbers, calendar blocks and the 7 new booking fields. Existing booking records, notes and content are untouched.
 begin;
 drop function if exists public.accept_quote(uuid);
 drop table if exists public.booking_quotes;
 drop table if exists public.calendar_blocks;
+drop table if exists private.quote_counters;
+drop function if exists private.assign_quote_number();
 drop function if exists private.compute_quote_totals();
 alter table public.inquiries
   drop column if exists event_start_time,

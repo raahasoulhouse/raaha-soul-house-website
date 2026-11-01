@@ -16,6 +16,7 @@ alter table public.inquiries
 create table public.booking_quotes (
   id uuid primary key default gen_random_uuid(),
   inquiry_id uuid not null references public.inquiries(id) on delete cascade,
+  quote_number text not null,   -- RAAHA-2026-001; every revision of a quote keeps its number (assigned by the database)
   version integer not null check (version >= 1),
   status text not null default 'draft'
     check (status in ('draft', 'sent', 'accepted', 'declined', 'expired', 'superseded')),
@@ -35,9 +36,54 @@ create table public.booking_quotes (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   created_by uuid default auth.uid(),
-  unique (inquiry_id, version)
+  unique (inquiry_id, version),
+  unique (quote_number, version)
 );
 create index booking_quotes_inquiry_idx on public.booking_quotes (inquiry_id);
+
+-- Sequential quote numbers: RAAHA-<year>-001, 002 … (test inquiries use TEST-<year>-001 so tests never use a real number).
+-- The counter is private (not reachable through the website's API). The first quote for an inquiry takes the next
+-- number atomically; every later revision for that inquiry reuses it. Numbers can never be chosen or changed by the browser.
+create table private.quote_counters (
+  prefix text not null,
+  year integer not null,
+  last_number integer not null default 0 check (last_number >= 0),
+  primary key (prefix, year)
+);
+revoke all on private.quote_counters from public, anon, authenticated;
+
+create function private.assign_quote_number() returns trigger
+language plpgsql security definer set search_path = '' as $$
+declare
+  existing text;
+  pfx text;
+  yr integer := extract(year from (now() at time zone 'America/Chicago'))::integer;
+  n integer;
+begin
+  if tg_op = 'UPDATE' then
+    new.quote_number := old.quote_number;   -- a quote keeps its number for life
+    new.inquiry_id := old.inquiry_id;
+    return new;
+  end if;
+  -- one numbering decision per inquiry at a time (two quick clicks cannot create two numbers)
+  perform 1 from public.inquiries where id = new.inquiry_id for update;
+  select q.quote_number into existing from public.booking_quotes q
+   where q.inquiry_id = new.inquiry_id order by q.version limit 1;
+  if existing is not null then
+    new.quote_number := existing;
+  else
+    select case when i.is_test then 'TEST' else 'RAAHA' end into pfx from public.inquiries i where i.id = new.inquiry_id;
+    insert into private.quote_counters as c (prefix, year, last_number) values (coalesce(pfx, 'RAAHA'), yr, 1)
+      on conflict (prefix, year) do update set last_number = c.last_number + 1
+      returning c.last_number into n;
+    new.quote_number := coalesce(pfx, 'RAAHA') || '-' || yr || '-' || lpad(n::text, 3, '0');
+  end if;
+  return new;
+end;
+$$;
+revoke execute on function private.assign_quote_number() from public, anon, authenticated;
+create trigger booking_quotes_number before insert or update on public.booking_quotes
+  for each row execute function private.assign_quote_number();
 
 -- Totals are always computed by the database from the typed lines (never trusted from the browser)
 create function private.compute_quote_totals() returns trigger

@@ -39,7 +39,8 @@
   };
   O.CAL_LABEL = { inquiry: 'Inquiry', tentative: 'Tentative', confirmed: 'Confirmed' };
   O.QUOTE_LABEL = { draft: 'Draft', sent: 'Sent', accepted: 'Accepted', declined: 'Declined', expired: 'Expired', superseded: 'Replaced' };
-  O.quoteNo = function (q) { return 'Q-' + String(q.inquiry_id || '').slice(0, 4).toUpperCase() + '-v' + q.version; };
+  // RAAHA-2026-001, assigned by the database; revisions keep the number
+  O.quoteNo = function (q) { return (q.quote_number || 'Quote') + (q.version > 1 ? ' · rev. ' + q.version : ''); };
   O.quotesFor = function (inquiryId) {
     return O.quotes.filter(function (q) { return q.inquiry_id === inquiryId; }).sort(function (a, b) { return b.version - a.version; });
   };
