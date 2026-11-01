@@ -1,5 +1,5 @@
 -- 0005_booking_management.sql — additive only; no existing row, column, policy or history entry is changed.
--- NOT YET APPLIED. Runs only with the owner's separate approval. Rollback: 0005_booking_management_rollback.sql
+-- Approved by the owner and applied 2026-10-31 as migration "booking_management". Rollback: 0005_booking_management_rollback.sql
 begin;
 
 -- 1. Event times and manual payment tracking on existing booking records (all optional, all empty to start)
