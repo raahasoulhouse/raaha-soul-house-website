@@ -12,8 +12,12 @@
   };
   var ACTIVE = ['new', 'contacted', 'quoted', 'confirmed'];
   var BOOKED = A.BOOKED = ['confirmed', 'completed'];
-  var FIELDS = ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on',
-                'payment_reference', 'confirmation_exception', 'closed_reason'];
+  var BASE_FIELDS = ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on',
+                'payment_reference', 'confirmation_exception', 'closed_reason', 'event_date', 'guest_count', 'venue_address'];
+  // available after the booking database update (0005)
+  var OPS_FIELDS = ['event_start_time', 'event_end_time', 'deposit_due_on', 'balance_amount', 'balance_due_on',
+                    'balance_received_on', 'balance_reference'];
+  function fields() { return BASE_FIELDS.concat(A.ops && A.ops.ready ? OPS_FIELDS : []); }
 
   var B = A.bookings = { rows: [] };
   var current = null;
@@ -31,7 +35,9 @@
       B.rows = res.data || [];
       fillSources();
       render();
+      if (current) B.reopen();
       if (A.reports) A.reports.render();
+      if (A.ops) A.ops.changed();
     });
   };
 
@@ -121,12 +127,21 @@
       if (clash.length) { dl.appendChild(el('dt', 'Heads up')); dl.appendChild(el('dd', clash.length + ' confirmed booking(s) already on this date.', 'due')); }
     }
     var f = $('d-form');
-    FIELDS.forEach(function (k) { f.elements[k].value = r[k] == null ? '' : r[k]; });
+    fields().forEach(function (k) {
+      var v = r[k] == null ? '' : String(r[k]);
+      if (/_time$/.test(k)) v = v.slice(0, 5);
+      f.elements[k].value = v;
+    });
+    if (A.bookingDetailExtras) A.bookingDetailExtras(r);
     $('d-msg').textContent = '';
     loadNotes();
     render();
     $('detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
+  B.open = open;
+  B.currentId = function () { return current && current.id; };
+  B.reopen = function () { if (current) open(current.id); };
 
   $('close-detail').addEventListener('click', function () { current = null; $('detail').hidden = true; render(); });
 
@@ -134,7 +149,7 @@
     e.preventDefault();
     if (!current) return;
     var f = e.target, patch = {};
-    FIELDS.forEach(function (k) { var v = f.elements[k].value.trim(); patch[k] = v === '' ? null : v; });
+    fields().forEach(function (k) { var v = f.elements[k].value.trim(); patch[k] = v === '' ? null : v; });
     if (BOOKED.indexOf(patch.status) !== -1 && !patch.confirmation_exception &&
         !(Number(patch.deposit_amount) > 0 && patch.deposit_received_on && patch.payment_reference)) {
       $('d-msg').textContent = 'To confirm, record the deposit amount, date received and payment reference — or write an approved exception.';
@@ -152,7 +167,9 @@
       current = updated;
       $('d-msg').textContent = 'Saved.';
       render();
+      if (A.bookingDetailExtras) A.bookingDetailExtras(updated);
       if (A.reports) A.reports.render();
+      if (A.ops) A.ops.changed();
     });
   });
 

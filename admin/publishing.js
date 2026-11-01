@@ -177,7 +177,8 @@
 
   // ---------- backup ----------
   $('backup').addEventListener('click', function () {
-    var tables = ['site_settings', 'cms_entries', 'media', 'publish_log', 'inquiries', 'inquiry_notes'];
+    var tables = ['site_settings', 'cms_entries', 'media', 'publish_log', 'inquiries', 'inquiry_notes']
+      .concat(A.ops && A.ops.ready ? ['booking_quotes', 'calendar_blocks'] : []);
     Promise.all(tables.map(function (t) { return db.from(t).select('*'); })).then(function (res) {
       var out = { app: 'RAAHA website backup', created_at: new Date().toISOString(), tables: {} };
       for (var i = 0; i < tables.length; i++) {

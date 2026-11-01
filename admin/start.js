@@ -23,7 +23,7 @@
     }).then(function () {
       var tab = A.tabFromHash();
       if (!tab) { try { tab = sessionStorage.getItem('raaha-admin-tab'); } catch (e) {} }
-      if (!tab || !A.tabExists(tab)) tab = 'bookings';
+      if (!tab || !A.tabExists(tab)) tab = 'overview';
       A.showTab(tab);
     });
   }

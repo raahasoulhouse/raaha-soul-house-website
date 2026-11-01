@@ -232,11 +232,11 @@
   };
 
   // ---------- navigation: left sidebar (Operations, Website, Reports, History, Settings) ----------
-  var TITLES = { bookings: 'Bookings', content: 'Pages', menu: 'Menu', cart: 'Coffee Cart selection', events: 'Events',
+  var TITLES = { overview: 'Booking dashboard', bookings: 'Bookings', calendar: 'Calendar', quotes: 'Quotes', content: 'Pages', menu: 'Menu', cart: 'Coffee Cart selection', events: 'Events',
     media: 'Photo library', reports: 'Reports', publishing: 'History', settings: 'Settings' };
   A.tabExists = function (name) { return !!document.querySelector('.side-nav [data-tab="' + name + '"]'); };
   A.showTab = function (name, opts) {
-    if (!A.tabExists(name)) name = 'bookings';
+    if (!A.tabExists(name)) name = 'overview';
     document.querySelectorAll('.side-nav [data-tab]').forEach(function (b) {
       var on = b.getAttribute('data-tab') === name;
       b.classList.toggle('is-active', on);
@@ -245,7 +245,7 @@
     document.querySelectorAll('.tab-panel').forEach(function (p) { p.hidden = p.id !== 'tab-' + name; });
     A.$('screen-title').textContent = TITLES[name] || '';
     // the live-status bar belongs to the website screens
-    A.$('publish-bar').hidden = ['bookings', 'reports', 'settings'].indexOf(name) !== -1;
+    A.$('publish-bar').hidden = ['overview', 'bookings', 'calendar', 'quotes', 'reports', 'settings'].indexOf(name) !== -1;
     A.modules.forEach(function (m) { if (m.tab === name && m.onShow) m.onShow(); });
     try { sessionStorage.setItem('raaha-admin-tab', name); } catch (e) {}
     if (!(opts && opts.fromHash) && location.hash !== '#/' + name) {

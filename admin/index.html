@@ -54,7 +54,10 @@
         <aside class="side" id="side">
             <nav class="side-nav" aria-label="Admin sections">
                 <p class="side-group">Operations</p>
-                <button type="button" data-tab="bookings" class="is-active">Bookings</button>
+                <button type="button" data-tab="overview" class="is-active">Dashboard</button>
+                <button type="button" data-tab="bookings">Bookings</button>
+                <button type="button" data-tab="calendar">Calendar</button>
+                <button type="button" data-tab="quotes">Quotes</button>
                 <p class="side-group">Website</p>
                 <button type="button" data-tab="content">Pages</button>
                 <button type="button" data-tab="menu">Menu</button>
@@ -157,9 +160,35 @@
                                 <input type="text" name="confirmation_exception" maxlength="500"></label>
                             <label class="wide">Reason (declined / lost) <input type="text" name="closed_reason" maxlength="500"></label>
                         </div>
+                        <h3>Event details</h3>
+                        <div class="grid">
+                            <label>Event date <input type="date" name="event_date"></label>
+                            <label>Guests <input type="number" name="guest_count" min="1" max="5000" step="1"></label>
+                            <label class="ops-only">Start time <input type="time" name="event_start_time"></label>
+                            <label class="ops-only">End time <input type="time" name="event_end_time"></label>
+                            <label class="wide">Venue / location <input type="text" name="venue_address" maxlength="240"></label>
+                        </div>
+                        <div class="ops-only">
+                            <h3>Payments <span class="muted small">(recorded by hand — nothing is charged online)</span></h3>
+                            <p class="pay-status" id="d-pay-status"></p>
+                            <div class="grid">
+                                <label>Deposit due by <input type="date" name="deposit_due_on"></label>
+                                <label>Remaining balance ($) <input type="number" name="balance_amount" min="0" step="0.01"></label>
+                                <label>Balance due by <input type="date" name="balance_due_on"></label>
+                                <label>Balance received <input type="date" name="balance_received_on"></label>
+                                <label class="wide">Balance payment reference <input type="text" name="balance_reference" maxlength="120" placeholder="Receipt / transfer reference"></label>
+                            </div>
+                            <p class="muted small" id="d-balance-hint"></p>
+                        </div>
                         <button class="primary" type="submit">Save changes</button>
                         <p class="msg" id="d-msg" role="status"></p>
                     </form>
+
+                    <section class="ops-only" id="d-quotes-box">
+                        <h3>Quotes</h3>
+                        <div id="d-quotes"></div>
+                        <button type="button" id="d-new-quote">Create a quote for this inquiry</button>
+                    </section>
 
                     <h3>Private notes</h3>
                     <ol class="notes" id="d-notes"></ol>
@@ -169,6 +198,77 @@
                         <button type="submit">Add note</button>
                     </form>
                 </aside>
+            </div>
+        </main>
+
+        <!-- ============ BOOKING DASHBOARD ============ -->
+        <main class="tab-panel" id="tab-overview" hidden>
+            <div class="ops-bar">
+                <label class="check"><input type="checkbox" id="o-tests"> Include test inquiries</label>
+                <button type="button" id="o-refresh">Refresh</button>
+            </div>
+            <p class="ops-wait" hidden>Quotes, event times, payment due dates and blocked days start working after the booking database update is approved and applied.</p>
+            <div class="dash" id="dash"></div>
+        </main>
+
+        <!-- ============ CALENDAR ============ -->
+        <main class="tab-panel" id="tab-calendar" hidden>
+            <div class="cal-bar">
+                <div class="cal-nav">
+                    <button type="button" id="cal-prev" aria-label="Previous">‹</button>
+                    <button type="button" id="cal-today">Today</button>
+                    <button type="button" id="cal-next" aria-label="Next">›</button>
+                    <h2 id="cal-title"></h2>
+                </div>
+                <div class="cal-modes" role="group" aria-label="Calendar view">
+                    <button type="button" data-mode="month" class="is-on">Month</button>
+                    <button type="button" data-mode="week">Week</button>
+                </div>
+                <label class="check"><input type="checkbox" id="cal-tests"> Include test inquiries</label>
+            </div>
+            <p class="cal-legend"><span class="ev inquiry">Inquiry</span> <span class="ev tentative">Tentative (quote provided)</span> <span class="ev confirmed">Confirmed</span> <span class="blk">Unavailable</span> <span class="ev conflict">Conflict</span></p>
+            <div id="cal-warn" class="cal-warn" hidden></div>
+            <div id="cal-grid"></div>
+            <section class="panel ops-only" id="cal-blocks">
+                <h2>Unavailable dates</h2>
+                <form id="blk-form" class="grid">
+                    <label>From <input type="date" id="blk-from" required></label>
+                    <label>To <input type="date" id="blk-to" required></label>
+                    <label class="wide">Reason (private) <input type="text" id="blk-label" maxlength="120" required placeholder="e.g. Family travel, equipment service"></label>
+                    <button class="primary" type="submit">Block these dates</button>
+                </form>
+                <ul class="blk-list" id="blk-list"></ul>
+            </section>
+            <p class="ops-wait" hidden>Event times and blocked dates appear after the booking database update. Inquiries with an event date are already shown.</p>
+        </main>
+
+        <!-- ============ QUOTES ============ -->
+        <main class="tab-panel" id="tab-quotes" hidden>
+            <p class="ops-wait" hidden>Quotes are ready to use as soon as the booking database update is approved and applied.</p>
+            <div class="ops-only">
+                <section class="toolbar" aria-label="Quote filters">
+                    <label>Status
+                        <select id="q-status">
+                            <option value="open">Open (draft or sent)</option>
+                            <option value="all">All</option>
+                            <option value="draft">Draft</option>
+                            <option value="sent">Sent</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="declined">Declined</option>
+                            <option value="expired">Expired</option>
+                            <option value="superseded">Replaced by a newer version</option>
+                        </select>
+                    </label>
+                    <label class="check"><input type="checkbox" id="q-tests"> Include test inquiries</label>
+                    <label class="grow">New quote for
+                        <select id="q-for"><option value="">Choose an inquiry…</option></select>
+                    </label>
+                    <button type="button" class="primary" id="q-new">Create quote</button>
+                </section>
+                <table class="list" id="q-list">
+                    <thead><tr><th>Quote</th><th>Client</th><th>Event date</th><th>Total</th><th>Status</th><th>Sent</th><th>Valid until</th></tr></thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </main>
 
@@ -315,12 +415,67 @@
         <p class="muted small">Then click <strong>Save</strong> in the section to put it on the website.</p>
     </dialog>
 
+    <dialog id="quote-dialog" class="wide-dialog quote-dialog" aria-labelledby="qd-title">
+        <div class="qd-head">
+            <div>
+                <h2 id="qd-title">Quote</h2>
+                <p class="muted" id="qd-meta"></p>
+            </div>
+            <span class="pill" id="qd-status"></span>
+        </div>
+        <dl class="qd-event" id="qd-event"></dl>
+        <form id="qd-form" novalidate>
+            <fieldset id="qd-fields">
+                <div class="grid">
+                    <label>Guests <input type="number" id="qd-guests" min="1" max="5000" step="1"></label>
+                    <label>Service duration <input type="text" id="qd-duration" maxlength="80" placeholder="e.g. 3 hours"></label>
+                    <label>Valid until <input type="date" id="qd-valid"></label>
+                </div>
+                <h3>Beverage selection</h3>
+                <p class="muted small">Chosen from the RAAHA menu. Menu prices are not used here — price the service in the lines below.</p>
+                <div class="qd-bev" id="qd-bev"></div>
+                <h3>Charges</h3>
+                <p class="muted small">Every line and amount is typed by you. Nothing is pre-filled.</p>
+                <table class="qd-lines" id="qd-lines">
+                    <thead><tr><th>Description</th><th>Qty</th><th>Unit price ($)</th><th>Amount</th><th><span class="sr-only">Remove</span></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+                <button type="button" id="qd-add-line">Add a line</button>
+                <div class="qd-totals">
+                    <div><span>Subtotal</span><strong id="qd-subtotal">$0.00</strong></div>
+                    <label><span>Travel fee ($)</span><input type="number" id="qd-travel" min="0" step="0.01" value="0"></label>
+                    <label><span>Discount ($)</span><input type="number" id="qd-discount" min="0" step="0.01" value="0"></label>
+                    <div class="qd-total"><span>Total</span><strong id="qd-total">$0.00</strong></div>
+                </div>
+                <label class="field wide"><span class="label">Notes for the client (printed on the quote)</span><textarea id="qd-client-notes" rows="3" maxlength="4000"></textarea></label>
+                <label class="field wide"><span class="label">Internal notes (never printed)</span><textarea id="qd-internal-notes" rows="2" maxlength="4000"></textarea></label>
+            </fieldset>
+            <p class="msg" id="qd-msg" role="status"></p>
+            <div class="qd-actions">
+                <button type="submit" class="primary" id="qd-save">Save draft</button>
+                <button type="button" id="qd-sent">Mark sent</button>
+                <button type="button" id="qd-accept">Mark accepted</button>
+                <button type="button" id="qd-decline">Mark declined</button>
+                <button type="button" id="qd-expire">Mark expired</button>
+                <button type="button" id="qd-version">New version</button>
+                <button type="button" id="qd-print">Print / save as PDF</button>
+                <button type="button" class="link" id="qd-delete">Delete draft</button>
+                <span class="bar-spacer"></span>
+                <button type="button" id="qd-close">Close</button>
+            </div>
+        </form>
+    </dialog>
+
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
     <script src="/assets/js/config.js?v=20261030h"></script>
     <script src="/assets/vendor/supabase-js-2.118.0.js"></script>
     <script src="/admin/core.js"></script>
     <script src="/admin/bookings.js"></script>
+    <script src="/admin/ops.js"></script>
+    <script src="/admin/quotes.js"></script>
+    <script src="/admin/calendar.js"></script>
+    <script src="/admin/dashboard.js"></script>
     <script src="/admin/reports.js"></script>
     <script src="/admin/media.js"></script>
     <script src="/admin/content.js"></script>
