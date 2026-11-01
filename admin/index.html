@@ -10,6 +10,7 @@
 </head>
 <body>
     <header class="bar">
+        <button class="side-toggle" id="side-toggle" type="button" aria-controls="side" aria-expanded="false" hidden><span aria-hidden="true">&#9776;</span><span class="sr-only">Open sections</span></button>
         <span class="brand">RAAHA <small>Admin</small></span>
         <span class="env" id="env-badge" hidden></span>
         <span class="bar-spacer"></span>
@@ -49,15 +50,28 @@
     </main>
 
     <div id="app-view" hidden>
-        <nav class="tabs" aria-label="Admin sections">
-            <button type="button" data-tab="bookings" class="is-active">Bookings</button>
-            <button type="button" data-tab="reports">Reports</button>
-            <button type="button" data-tab="content">Website content</button>
-            <button type="button" data-tab="menu">Menu</button>
-            <button type="button" data-tab="events">Events</button>
-            <button type="button" data-tab="media">Photos</button>
-            <button type="button" data-tab="publishing">History</button>
-        </nav>
+      <div class="shell">
+        <aside class="side" id="side">
+            <nav class="side-nav" aria-label="Admin sections">
+                <p class="side-group">Operations</p>
+                <button type="button" data-tab="bookings" class="is-active">Bookings</button>
+                <p class="side-group">Website</p>
+                <button type="button" data-tab="content">Pages</button>
+                <button type="button" data-tab="menu">Menu</button>
+                <button type="button" data-tab="cart">Coffee Cart selection</button>
+                <button type="button" data-tab="events">Events</button>
+                <button type="button" data-tab="media">Photo library</button>
+                <p class="side-group">Reports</p>
+                <button type="button" data-tab="reports">Reports</button>
+                <p class="side-group">History</p>
+                <button type="button" data-tab="publishing">History</button>
+                <p class="side-group">Settings</p>
+                <button type="button" data-tab="settings">Settings</button>
+            </nav>
+        </aside>
+        <div class="side-scrim" id="side-scrim" hidden></div>
+        <div class="main-col">
+        <h1 class="screen-title" id="screen-title">Bookings</h1>
 
         <!-- Status bar: Save updates the live website; this only offers actions if something saved is not live -->
         <section class="publish-bar" id="publish-bar" aria-live="polite">
@@ -172,14 +186,21 @@
 
         <!-- ============ WEBSITE CONTENT ============ -->
         <main class="tab-panel" id="tab-content" hidden>
-            <p class="muted">Edit text, photos, buttons and which sections appear. <strong>Save</strong> updates the live website straight away. Every change is kept in <strong>History</strong>, where you can undo it.</p>
+            <p class="muted">Choose a page, then edit its text, photos and buttons together. <strong>Save</strong> updates the live website straight away; every change is kept in <strong>History</strong>, where you can undo it.</p>
+            <div class="page-picker" id="page-picker" role="group" aria-label="Choose a page"></div>
             <div id="content-groups"></div>
         </main>
 
         <!-- ============ MENU ============ -->
         <main class="tab-panel" id="tab-menu" hidden>
-            <p class="muted">Prices here are used everywhere the item appears, including the Coffee Cart sample menu. <strong>Save</strong> updates the live website; undo any change in <strong>History</strong>. Category photos are under <strong>Categories</strong> below.</p>
+            <p class="muted">Each category holds its photo, its items, prices and availability. One price per item is used on the Menu page and the Coffee Cart. <strong>Save</strong> updates the live website; undo any change in <strong>History</strong>.</p>
             <div id="menu-editor"></div>
+        </main>
+
+        <!-- ============ COFFEE CART SELECTION ============ -->
+        <main class="tab-panel" id="tab-cart" hidden>
+            <p class="muted">The drinks shown on the Coffee Cart page. These are the same items as the full menu (same names and prices); here you choose which ones the cart offers, under which heading, and the name shown on the cart menu.</p>
+            <div id="cart-editor"></div>
         </main>
 
         <!-- ============ EVENTS ============ -->
@@ -221,12 +242,34 @@
                 <p class="muted">Every Save is recorded here automatically. <strong>Undo</strong> puts the live website back to how it was just before that change; an undo is recorded too, so it can be undone.</p>
                 <table id="pub-history"><thead><tr><th>When</th><th>What changed</th><th></th></tr></thead><tbody></tbody></table>
             </section>
+        </main>
+
+        <!-- ============ SETTINGS ============ -->
+        <main class="tab-panel" id="tab-settings" hidden>
+            <section class="panel">
+                <h2>Account</h2>
+                <p>Signed in as <strong id="set-email">…</strong></p>
+                <button type="button" id="set-signout">Sign out</button>
+            </section>
+            <section class="panel">
+                <h2>Change password</h2>
+                <form id="pw-form" class="pw-form">
+                    <label for="pw-new">New password (at least 10 characters)</label>
+                    <input id="pw-new" type="password" autocomplete="new-password" minlength="10" required>
+                    <label for="pw-new2">Type it again</label>
+                    <input id="pw-new2" type="password" autocomplete="new-password" minlength="10" required>
+                    <button class="primary" type="submit">Change password</button>
+                    <p class="msg" id="pw-msg" role="status"></p>
+                </form>
+            </section>
             <section class="panel">
                 <h2>Backup</h2>
                 <p class="muted">Downloads one file with all website content, photo details, history, bookings and private notes. It contains customer details: keep it in a private folder (for example Google Drive), never in GitHub. Photos themselves are not included; keep your original photo files.</p>
                 <button type="button" id="backup">Download backup</button>
             </section>
         </main>
+        </div>
+      </div>
     </div>
 
     <!-- Photo picker -->
@@ -283,6 +326,8 @@
     <script src="/admin/content.js"></script>
     <script src="/admin/menu.js"></script>
     <script src="/admin/events.js"></script>
+    <script src="/admin/cart.js"></script>
+    <script src="/admin/settings.js"></script>
     <script src="/admin/publishing.js"></script>
     <script src="/admin/start.js"></script>
 </body>

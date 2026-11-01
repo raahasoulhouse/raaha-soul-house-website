@@ -231,18 +231,52 @@
     })).then(function () { return store.load(); });
   };
 
-  // ---------- tabs ----------
-  A.showTab = function (name) {
-    document.querySelectorAll('.tabs [data-tab]').forEach(function (b) {
-      b.classList.toggle('is-active', b.getAttribute('data-tab') === name);
-      b.setAttribute('aria-selected', b.getAttribute('data-tab') === name ? 'true' : 'false');
+  // ---------- navigation: left sidebar (Operations, Website, Reports, History, Settings) ----------
+  var TITLES = { bookings: 'Bookings', content: 'Pages', menu: 'Menu', cart: 'Coffee Cart selection', events: 'Events',
+    media: 'Photo library', reports: 'Reports', publishing: 'History', settings: 'Settings' };
+  A.tabExists = function (name) { return !!document.querySelector('.side-nav [data-tab="' + name + '"]'); };
+  A.showTab = function (name, opts) {
+    if (!A.tabExists(name)) name = 'bookings';
+    document.querySelectorAll('.side-nav [data-tab]').forEach(function (b) {
+      var on = b.getAttribute('data-tab') === name;
+      b.classList.toggle('is-active', on);
+      if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
     document.querySelectorAll('.tab-panel').forEach(function (p) { p.hidden = p.id !== 'tab-' + name; });
-    A.$('publish-bar').hidden = ['bookings', 'reports'].indexOf(name) !== -1;
+    A.$('screen-title').textContent = TITLES[name] || '';
+    // the live-status bar belongs to the website screens
+    A.$('publish-bar').hidden = ['bookings', 'reports', 'settings'].indexOf(name) !== -1;
     A.modules.forEach(function (m) { if (m.tab === name && m.onShow) m.onShow(); });
     try { sessionStorage.setItem('raaha-admin-tab', name); } catch (e) {}
+    if (!(opts && opts.fromHash) && location.hash !== '#/' + name) {
+      try { history.replaceState(null, '', '#/' + name); } catch (e) { location.hash = '#/' + name; }
+    }
+    A.closeSide();
   };
-  document.querySelectorAll('.tabs [data-tab]').forEach(function (b) {
-    b.addEventListener('click', function () { A.showTab(b.getAttribute('data-tab')); });
+  A.tabFromHash = function () { var m = /^#\/([a-z]+)/.exec(location.hash || ''); return m && A.tabExists(m[1]) ? m[1] : null; };
+  document.querySelectorAll('.side-nav [data-tab]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var name = b.getAttribute('data-tab');
+      if (location.hash !== '#/' + name) { try { history.pushState(null, '', '#/' + name); } catch (e) {} }
+      A.showTab(name, { fromHash: true });
+    });
   });
+  window.addEventListener('popstate', function () { var t = A.tabFromHash(); if (t && !A.$('app-view').hidden) A.showTab(t, { fromHash: true }); });
+
+  // phones: the sidebar opens as a drawer
+  var side = A.$('side'), scrim = A.$('side-scrim'), toggle = A.$('side-toggle');
+  A.closeSide = function () {
+    document.body.classList.remove('side-open');
+    if (scrim) scrim.hidden = true;
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+  };
+  if (toggle) toggle.addEventListener('click', function () {
+    var open = !document.body.classList.contains('side-open');
+    document.body.classList.toggle('side-open', open);
+    scrim.hidden = !open;
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { var a = side.querySelector('.is-active') || side.querySelector('button'); if (a) a.focus(); }
+  });
+  if (scrim) scrim.addEventListener('click', A.closeSide);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.body.classList.contains('side-open')) { A.closeSide(); toggle.focus(); } });
 })();

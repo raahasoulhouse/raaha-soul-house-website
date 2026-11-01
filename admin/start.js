@@ -9,6 +9,7 @@
     $('app-view').hidden = view !== 'app';
     $('sign-out').hidden = view !== 'app';
     $('view-site').hidden = view !== 'app';
+    $('side-toggle').hidden = view !== 'app';
   }
 
   function start() {
@@ -20,9 +21,9 @@
     )).catch(function (e) {
       A.toast('Some admin data could not load: ' + (e.message || e) + '. Is this account on the admin list?', true);
     }).then(function () {
-      var tab = 'bookings';
-      try { tab = sessionStorage.getItem('raaha-admin-tab') || tab; } catch (e) {}
-      if (!document.querySelector('.tabs [data-tab="' + tab + '"]')) tab = 'bookings';
+      var tab = A.tabFromHash();
+      if (!tab) { try { tab = sessionStorage.getItem('raaha-admin-tab'); } catch (e) {} }
+      if (!tab || !A.tabExists(tab)) tab = 'bookings';
       A.showTab(tab);
     });
   }

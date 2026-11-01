@@ -72,13 +72,13 @@
         <section class="page-hero-photo about-hero" aria-labelledby="about-title">
             <img data-cms-img="about.hero.image" src="/assets/images/web/raaha-community-table.webp" alt="Friends laughing and working together around a shared café table" width="1920" height="1080" fetchpriority="high">
             <div class="hero-copy">
-                <span class="eyebrow">Our story</span>
-                <h1 id="about-title">The Soul Behind RAAHA</h1>
+                <span class="eyebrow" data-cms="about.hero.eyebrow">Our story</span>
+                <h1 id="about-title" data-cms="about.hero.title">The Soul Behind RAAHA</h1>
             </div>
         </section>
 
         <section class="section texture-ivory">
-            <div class="section-inner intro-prose">
+            <div class="section-inner intro-prose" data-cms-paras="about.intro.body">
                 <p>RAAHA Soul House was created from a belief that in a world moving faster every day, people deserve spaces that invite them to slow down, reconnect, and simply be.</p>
                 <p>More than a café, RAAHA is a modern third space where thoughtfully crafted drinks, intentional design, and genuine hospitality come together to create moments of calm and connection.</p>
                 <p>Every detail is guided by one purpose: to make people feel welcomed, valued, and at home.</p>
@@ -89,29 +89,30 @@
             <div class="section-inner">
                 <div class="arch-frame"><div class="arch"><img loading="lazy" data-cms-img="about.space.image" src="/assets/images/web/raaha-interior.webp" alt="A warm café interior with a long wooden table, linen chairs, pendant lights and potted plants" width="1920" height="1080"></div></div>
                 <div>
-                    <h2 class="section-title" id="connection-title">A Space for People, Built for Connection</h2>
-                    <div class="prose">
+                    <h2 class="section-title" id="connection-title" data-cms="about.space.title">A Space for People, Built for Connection</h2>
+                    <div class="prose" data-cms-paras="about.space.body">
                         <p>In today’s fast-paced world, RAAHA offers something increasingly rare: a place to slow down, feel present, and connect.</p>
                         <p>Inspired by the timeless role of gathering spaces throughout history, RAAHA is a welcoming third space where conversations unfold naturally, creativity flourishes, and everyday moments become meaningful.</p>
                         <p>Whether you’re meeting a friend, enjoying a quiet moment alone, working between appointments, or joining a community event, you’ll find shared tables, cozy corners, thoughtfully crafted coffee, chai and matcha, and genuine hospitality designed to make you feel at home.</p>
                     </div>
-                    <p class="pull-quote">“We don’t just serve coffee. We create space for connection.”</p>
+                    <p class="pull-quote" data-cms="about.space.quote">“We don’t just serve coffee. We create space for connection.”</p>
                 </div>
             </div>
         </section>
 
         <section class="section mission on-dark" aria-labelledby="mission-title">
             <div class="section-inner">
-                <span class="eyebrow">Our mission</span>
-                <h2 class="section-title" id="mission-title">Pause. Connect. Belong.</h2>
-                <div class="prose">
+                <span class="eyebrow" data-cms="about.mission.eyebrow">Our mission</span>
+                <h2 class="section-title" id="mission-title" data-cms="about.mission.title">Pause. Connect. Belong.</h2>
+                <div class="prose" data-cms-paras="about.mission.body">
                     <p>Our mission is to care for people through thoughtful hospitality and meaningful everyday experiences.</p>
                     <p>Every decision we make, from the drinks we serve to the spaces we create, is guided by intention, kindness, and a commitment to making people feel welcome. We hope to build a place that guests trust, return to, and are excited to share with others.</p>
                 </div>
-                <ul class="trio">
-                    <li><h3>Pause</h3><p>Create moments of presence in the middle of busy lives.</p></li>
-                    <li><h3>Connect</h3><p>Build meaningful relationships through conversation and shared experiences.</p></li>
-                    <li><h3>Belong</h3><p>Find your place in a community that welcomes you exactly as you are.</p></li>
+                <ul class="trio" data-cms-list="about_pillar">
+                    <template><li><h3 data-f="title"></h3><p data-f="text"></p></li></template>
+                    <li><h3 data-f="title">Pause</h3><p data-f="text">Create moments of presence in the middle of busy lives.</p></li>
+                    <li><h3 data-f="title">Connect</h3><p data-f="text">Build meaningful relationships through conversation and shared experiences.</p></li>
+                    <li><h3 data-f="title">Belong</h3><p data-f="text">Find your place in a community that welcomes you exactly as you are.</p></li>
                 </ul>
             </div>
         </section>
@@ -120,9 +121,9 @@
             <div class="section-inner">
                 <div class="arch"><img loading="lazy" data-cms-img="about.experience.image" src="/assets/images/web/raaha-chai.webp" alt="RAAHA chai with warming spices" width="900" height="675"></div>
                 <div>
-                    <span class="eyebrow">The experience</span>
-                    <h2 class="section-title" id="experience-title">A Modern Community Café</h2>
-                    <div class="prose">
+                    <span class="eyebrow" data-cms="about.experience.eyebrow">The experience</span>
+                    <h2 class="section-title" id="experience-title" data-cms="about.experience.title">A Modern Community Café</h2>
+                    <div class="prose" data-cms-paras="about.experience.body">
                         <p>RAAHA is designed for the rhythms of everyday life. Stop by for your morning coffee, settle into a cozy corner with a book, meet a friend over chai, or gather around a shared table for conversation and connection.</p>
                         <p>Beyond the daily ritual of coffee and conversation, RAAHA brings people together through book launches, creative meetups, Pilates and matcha sessions, community chai nights, workshops, and seasonal gatherings that celebrate learning, creativity, and shared experiences.</p>
                         <p>Whether you’re here for a quiet morning with your thoughts or an evening gathering with friends, you’ll always find a place to pause, connect, and feel at home.</p>
@@ -133,14 +134,15 @@
 
         <section class="section limewash" aria-labelledby="values-title">
             <div class="section-inner">
-                <h2 class="section-title" id="values-title">Our Values</h2>
-                <ul class="index-list">
-                    <li><h3>Hospitality</h3><p>Every guest is welcomed with warmth, presence, and genuine care. We create experiences that make people feel seen, comfortable, and at home.</p></li>
-                    <li><h3>Community</h3><p>RAAHA exists to bring people together through conversation, shared rituals, and meaningful moments that strengthen human connection.</p></li>
-                    <li><h3>Stewardship</h3><p>We believe in caring for people, our spaces, and our shared future with responsibility and intention. Every thoughtful choice helps create lasting positive impact.</p></li>
-                    <li><h3>Craftsmanship</h3><p>From every espresso shot to every cup of chai, we value quality, consistency, and attention to detail in everything we serve.</p></li>
-                    <li><h3>Inclusivity</h3><p>Everyone is welcome here. We celebrate different backgrounds, perspectives, and stories while creating a space where everyone can belong.</p></li>
-                    <li><h3>Creativity</h3><p>We encourage curiosity, learning, and new ideas through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p></li>
+                <h2 class="section-title" id="values-title" data-cms="about.values.title">Our Values</h2>
+                <ul class="index-list" data-cms-list="about_value">
+                    <template><li><h3 data-f="title"></h3><p data-f="text"></p></li></template>
+                    <li><h3 data-f="title">Hospitality</h3><p data-f="text">Every guest is welcomed with warmth, presence, and genuine care. We create experiences that make people feel seen, comfortable, and at home.</p></li>
+                    <li><h3 data-f="title">Community</h3><p data-f="text">RAAHA exists to bring people together through conversation, shared rituals, and meaningful moments that strengthen human connection.</p></li>
+                    <li><h3 data-f="title">Stewardship</h3><p data-f="text">We believe in caring for people, our spaces, and our shared future with responsibility and intention. Every thoughtful choice helps create lasting positive impact.</p></li>
+                    <li><h3 data-f="title">Craftsmanship</h3><p data-f="text">From every espresso shot to every cup of chai, we value quality, consistency, and attention to detail in everything we serve.</p></li>
+                    <li><h3 data-f="title">Inclusivity</h3><p data-f="text">Everyone is welcome here. We celebrate different backgrounds, perspectives, and stories while creating a space where everyone can belong.</p></li>
+                    <li><h3 data-f="title">Creativity</h3><p data-f="text">We encourage curiosity, learning, and new ideas through food, drinks, books, workshops, art, and shared experiences that inspire connection.</p></li>
                 </ul>
             </div>
         </section>
@@ -148,10 +150,10 @@
         <section class="section cta-band on-dark tone-brick arch-band" aria-labelledby="about-cta">
             <div class="section-inner">
                 <div>
-                    <h2 id="about-cta">Bring RAAHA to your gathering</h2>
-                    <p>Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers.</p>
+                    <h2 id="about-cta" data-cms="about.cta.title">Bring RAAHA to your gathering</h2>
+                    <p data-cms="about.cta.body">Specialty coffee, handcrafted chai, and ceremonial matcha — served fresh, on-site, wherever Houston gathers.</p>
                 </div>
-                <a class="btn btn-gold btn-champagne" href="/coffee-cart#book">Book the Coffee Cart</a>
+                <a class="btn btn-gold btn-champagne" href="/coffee-cart#book" data-cms-link="about.cta.button">Book the Coffee Cart</a>
             </div>
         </section>
     </main>
@@ -188,7 +190,7 @@
 
     <script src="/assets/js/site.js?v=20261030i" defer></script>
     <script src="/assets/js/config.js?v=20261030i" defer></script>
-    <script src="/assets/js/cms.js?v=20261031r" defer></script>
+    <script src="/assets/js/cms.js?v=20261031s" defer></script>
     <script src="/assets/js/inquiry.js?v=20261030i" defer></script>
     <script src="/assets/js/forms.js?v=20261030i" defer></script>
 </body>

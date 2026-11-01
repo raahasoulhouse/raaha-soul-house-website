@@ -24,9 +24,29 @@
       return wrap;
     }
     if (def.type === 'check') {
-      input = A.input('checkbox'); input.checked = v !== false;
+      input = A.input('checkbox'); input.checked = def.isOn ? def.isOn(value) : v !== false;
       input.addEventListener('change', function () { value[def.k] = input.checked; onDirty(); });
       wrap = el('label', null, 'check inline'); wrap.appendChild(input); wrap.appendChild(document.createTextNode(' ' + def.label));
+      return wrap;
+    }
+    if (def.type === 'cartsection') {
+      // headings already used on the Coffee Cart menu, plus "New heading…"
+      input = el('select');
+      var names = A.cartSections(), cur = v || '';
+      if (cur && names.indexOf(cur) === -1) names.push(cur);
+      [['', '— choose a heading —']].concat(names.map(function (n) { return [n, n]; })).concat([['__new', 'New heading…']])
+        .forEach(function (o) { var op = el('option', o[1]); op.value = o[0]; input.appendChild(op); });
+      input.value = cur;
+      input.addEventListener('change', function () {
+        if (input.value === '__new') {
+          var name = (prompt('Name of the new Coffee Cart menu heading (for example “Seasonal Drinks”):') || '').trim().slice(0, 60);
+          if (!name) { input.value = value[def.k] || ''; return; }
+          var op = el('option', name); op.value = name; input.insertBefore(op, input.lastChild); input.value = name;
+        }
+        value[def.k] = input.value; onDirty();
+      });
+      wrap = A.field(def.label, input);
+      if (def.help) wrap.appendChild(el('span', def.help, 'muted small'));
       return wrap;
     }
     if (def.type === 'select') {
@@ -69,6 +89,7 @@
   A.listEditor = function (box, opts) {
     box.textContent = '';
     var rows = C.list(opts.collection).filter(function (r) { return !opts.filter || opts.filter(r.draft || {}); });
+    if (!rows.length && opts.seed && opts.seed.length) return seedView(box, opts);
     var ul = el('div', null, 'list-editor');
     rows.forEach(function (r, i) { ul.appendChild(item(r, i, rows)); });
     if (!rows.length) ul.appendChild(el('p', 'Nothing here yet.', 'muted'));
@@ -88,6 +109,7 @@
       sum.appendChild(el('span', opts.title(value) || '(untitled)', 'item-title'));
       sum.appendChild(A.draftBadge(r));
       if (opts.note) { var n = opts.note(value); if (n) sum.appendChild(el('span', n, 'badge')); }
+      if (opts.quick) sum.appendChild(quickSwitches(r, value));
       d.appendChild(sum);
       var grid = el('div', null, 'grid');
       var save = el('button', 'Save', 'primary'); save.type = 'button'; save.disabled = true;
@@ -132,7 +154,57 @@
       d.appendChild(acts);
       return d;
     }
+
+    // One-click switches (e.g. Show / Available / On Coffee Cart): each click saves and goes live
+    function quickSwitches(r, value) {
+      var wrapQ = el('span', null, 'quick');
+      opts.quick.forEach(function (q) {
+        var on = q.isOn(value);
+        var b = el('button', q.label, 'switch' + (on ? ' is-on' : '')); b.type = 'button';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.title = (on ? 'On' : 'Off') + ' — click to turn ' + (on ? 'off' : 'on') + ' (updates the live website)';
+        b.addEventListener('click', function (e) {
+          e.preventDefault(); e.stopPropagation();
+          var nv = Object.assign({}, r.draft || {});
+          q.apply(nv, !on);
+          b.disabled = true;
+          A.saveLive([r], function () { return C.saveDraft(r, nv); }).then(function (res) {
+            if (res && res.cancelled) { b.disabled = false; return; }
+            A.toast(q.label + (on ? ' off' : ' on') + ' — live on the website.'); A.listEditor(box, opts);
+            if (opts.onChange) opts.onChange();
+          }).catch(function (e2) { b.disabled = false; A.toast('Not live: ' + e2.message, true); A.listEditor(box, opts); });
+        });
+        wrapQ.appendChild(b);
+      });
+      return wrapQ;
+    }
   };
+
+  // A list that has never been edited still shows the items built into the page.
+  // "Start editing" copies those exact items here and publishes them unchanged, so the page looks the same.
+  function seedView(box, opts) {
+    var wrapS = el('div', null, 'seed');
+    wrapS.appendChild(el('p', 'Shown on the website now (built into the page):', 'muted small'));
+    var ul = el('ul', null, 'seed-list');
+    opts.seed.forEach(function (v) { ul.appendChild(el('li', opts.title(v) || '(untitled)')); });
+    wrapS.appendChild(ul);
+    var go = el('button', 'Start editing this list'); go.type = 'button';
+    go.addEventListener('click', function () {
+      go.disabled = true; go.textContent = 'Preparing…';
+      var made = [];
+      opts.seed.reduce(function (p, v) {
+        return p.then(function () { return C.add(opts.collection, Object.assign({}, opts.defaults || {}, v)).then(function (row) { made.push(row); }); });
+      }, Promise.resolve()).then(function () {
+        return A.saveLive(made, null);
+      }).then(function (res) {
+        if (res && res.cancelled) { A.toast('Not started.', true); }
+        else A.toast('Ready — the items are now editable here. The website is unchanged.');
+        A.listEditor(box, opts);
+      }).catch(function (e) { A.toast('Could not start: ' + e.message, true); A.listEditor(box, opts); });
+    });
+    wrapS.appendChild(go);
+    box.appendChild(wrapS);
+  }
 
   // ---------- single named fields ----------
   function T(key, label, type, extra) { return Object.assign({ collection: 'text', key: key, k: 'value', label: label, type: type || 'text' }, extra); }
@@ -143,60 +215,107 @@
   var titleText = [{ k: 'title', label: 'Title', required: true }, { k: 'text', label: 'Text', type: 'textarea', rows: 2 }];
 
   var GROUPS = [
-    { name: 'Announcement bar (all pages)', items: [
+    { page: 'site', name: 'Announcement bar (all pages)', items: [
       SHOW('show.site.announcement', 'Show the announcement bar'),
       T('site.announcement.text', 'Announcement text', 'text', { max: 160 }),
       LINK('site.announcement.link', 'Announcement button'),
       LINK('site.header.cta', 'Header button (all pages)')] },
-    { name: 'Homepage — hero', items: [
+    { page: 'home', name: 'Homepage — hero', items: [
       IMG('home.hero.image', 'Hero photo', 'homepage'),
       T('home.hero.line1', 'Headline line 1'), T('home.hero.line2', 'Headline line 2'), T('home.hero.line3', 'Headline line 3'),
       T('home.hero.lede', 'Hero description', 'textarea'),
       LINK('home.hero.cta_primary', 'Main button'), LINK('home.hero.cta_secondary', 'Second button')] },
-    { name: 'Homepage — the idea behind RAAHA', items: [
+    { page: 'home', name: 'Homepage — the idea behind RAAHA', items: [
       SHOW('show.home.idea', 'Show this section'),
       T('home.idea.title', 'Heading'), T('home.idea.lead', 'Lead sentence'),
       T('home.idea.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 8 })] },
-    { name: 'Homepage — what you’ll find', items: [
+    { page: 'home', name: 'Homepage — what you’ll find', items: [
       SHOW('show.home.find', 'Show this section'), T('home.find.title', 'Heading'), T('home.find.intro', 'Intro'),
       IMG('home.find.image', 'Background photo (shown under a burgundy overlay)', 'homepage', '/assets/images/web/raaha-matcha-chai-band.webp'),
       LIST('offering', 'Offerings', titleText, function (v) { return v.title; })] },
-    { name: 'Homepage — featured drinks', items: [
+    { page: 'home', name: 'Homepage — featured drinks', items: [
       SHOW('show.home.drinks', 'Show this section'), T('home.drinks.title', 'Heading'),
       LIST('feature_card', 'Featured cards', titleText.concat([{ k: 'media_id', type: 'photo', label: 'Photo', folder: 'menu' }, { k: 'visible', type: 'check', label: 'Show on website' }]),
         function (v) { return v.title; }, { title: '', text: '', visible: true })] },
-    { name: 'Homepage — the space', items: [
+    { page: 'home', name: 'Homepage — the space', items: [
       SHOW('show.home.space', 'Show this section'), IMG('home.space.image', 'Photo', 'homepage'),
       T('home.space.title', 'Heading'), T('home.space.body', 'Paragraphs', 'textarea', { rows: 6 }),
       LIST('space_highlight', 'Highlights', [{ k: 'text', label: 'Highlight', required: true }], function (v) { return v.text; })] },
-    { name: 'Homepage — Coffee Cart', items: [
+    { page: 'home', name: 'Homepage — Coffee Cart', items: [
       SHOW('show.home.cart', 'Show this section'), IMG('home.cart.image', 'Photo', 'coffee-cart'),
       IMG('home.cart.inset', 'Small overlapping photo', 'coffee-cart', '/assets/images/web/raaha-chai.webp'),
       T('home.cart.title', 'Heading'), T('home.cart.body', 'Description', 'textarea'),
       LIST('cart_fact', 'Key facts', [{ k: 'text', label: 'Fact', required: true }], function (v) { return v.text; }),
       LINK('home.cart.cta', 'Button')] },
-    { name: 'Homepage — community', items: [
+    { page: 'home', name: 'Homepage — community', items: [
       SHOW('show.home.community', 'Show this section'), IMG('home.community.image', 'Photo', 'homepage'),
       T('home.community.quote', 'Quote'), T('home.community.title', 'Heading'), T('home.community.body', 'Paragraphs', 'textarea', { rows: 6 })] },
-    { name: 'Homepage — photo gallery', help: 'Appears only once at least one photo is published here.', items: [
+    { page: 'home', name: 'Homepage — photo gallery', help: 'Appears only once at least one photo is published here.', items: [
       SHOW('show.home.gallery', 'Show this section'), T('home.gallery.title', 'Heading'),
       LIST('gallery', 'Gallery photos', [{ k: 'media_id', type: 'photo', label: 'Photo', folder: 'gallery' }, { k: 'caption', label: 'Caption (optional)', max: 160 }, { k: 'visible', type: 'check', label: 'Show on website' }],
         function (v) { return v.caption || 'Photo'; }, { caption: '', visible: true })] },
-    { name: 'Homepage — events & experiences', help: 'Dated events are managed in the Events tab; they appear here first, followed by these experience types.', items: [
+    { page: 'home', name: 'Homepage — events & experiences', help: 'Dated events are managed in the Events tab; they appear here first, followed by these experience types.', items: [
       SHOW('show.home.events', 'Show this section'), T('home.events.title', 'Heading'), T('home.events.intro', 'Intro', 'textarea'),
       LIST('experience', 'Experience types', titleText.concat([{ k: 'visible', type: 'check', label: 'Show on website' }]), function (v) { return v.title; }, { title: '', text: '', visible: true })] },
-    { name: 'Homepage — team & newsletter', items: [
+    { page: 'home', name: 'Homepage — team & newsletter', items: [
       T('home.team.title', 'Team heading'), T('home.team.body', 'Team text', 'textarea'),
       T('home.newsletter.title', 'Newsletter heading'), T('home.newsletter.body', 'Newsletter text', 'textarea')] },
-    { name: 'About page', help: 'Photos on the About page. The text on this page is fixed for now.', items: [
+    { page: 'about', name: 'About — header', items: [
       IMG('about.hero.image', 'Header photo', 'general', '/assets/images/web/raaha-community-table.webp'),
-      IMG('about.space.image', '“A Space for People” photo', 'general', '/assets/images/web/raaha-interior.webp'),
-      IMG('about.experience.image', '“A Modern Community Café” photo', 'general', '/assets/images/web/raaha-chai.webp')] },
-    { name: 'Menu, Events & Contact — header photos', items: [
-      IMG('menu.hero.image', 'Menu header photo (under a burgundy overlay)', 'menu', '/assets/images/web/menu-head-chai.webp'),
-      IMG('events.hero.image', 'Events header photo (under a soft dark overlay)', 'events', '/assets/images/web/events-head-gathering.webp'),
-      IMG('contact.hero.image', 'Contact header photo (dark text sits directly on the photo; choose a light, calm photo)', 'general', '/assets/images/web/raaha-interior.webp')] },
-    { name: 'Coffee Cart page', items: [
+      T('about.hero.eyebrow', 'Small heading'), T('about.hero.title', 'Page heading')] },
+    { page: 'about', name: 'About — introduction', items: [
+      T('about.intro.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 7 })] },
+    { page: 'about', name: 'About — “A Space for People”', items: [
+      IMG('about.space.image', 'Photo', 'general', '/assets/images/web/raaha-interior.webp'),
+      T('about.space.title', 'Heading'), T('about.space.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 8 }),
+      T('about.space.quote', 'Quote')] },
+    { page: 'about', name: 'About — mission', items: [
+      T('about.mission.eyebrow', 'Small heading'), T('about.mission.title', 'Heading'),
+      T('about.mission.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 6 }),
+      LIST('about_pillar', 'Pause · Connect · Belong', titleText, function (v) { return v.title; })] },
+    { page: 'about', name: 'About — the experience', items: [
+      IMG('about.experience.image', 'Photo', 'general', '/assets/images/web/raaha-chai.webp'),
+      T('about.experience.eyebrow', 'Small heading'), T('about.experience.title', 'Heading'),
+      T('about.experience.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 8 })] },
+    { page: 'about', name: 'About — values', items: [
+      T('about.values.title', 'Heading'),
+      LIST('about_value', 'Values', titleText, function (v) { return v.title; })] },
+    { page: 'about', name: 'About — Coffee Cart band', items: [
+      T('about.cta.title', 'Heading'), T('about.cta.body', 'Text', 'textarea', { rows: 2 }), LINK('about.cta.button', 'Button')] },
+    { page: 'menu', name: 'Menu page — header', help: 'Items, prices and category photos are under Website → Menu.', items: [
+      IMG('menu.hero.image', 'Header photo (under a burgundy overlay)', 'menu', '/assets/images/web/menu-head-chai.webp'),
+      T('menu.hero.eyebrow', 'Small heading'), T('menu.hero.title', 'Page heading'), T('menu.hero.intro', 'Introduction', 'textarea', { rows: 3 })] },
+    { page: 'menu', name: 'Menu page — Coffee Cart band', items: [
+      T('menu.cta.title', 'Heading'), T('menu.cta.body', 'Text', 'textarea', { rows: 2 }), LINK('menu.cta.button', 'Button')] },
+    { page: 'events', name: 'Events — header', help: 'The events themselves are under Website → Events.', items: [
+      IMG('events.hero.image', 'Header photo (under a soft dark overlay)', 'events', '/assets/images/web/events-head-gathering.webp'),
+      T('events.hero.eyebrow', 'Small heading'), T('events.hero.title', 'Page heading'), T('events.hero.intro', 'Introduction', 'textarea', { rows: 3 })] },
+    { page: 'events', name: 'Events — upcoming', items: [
+      T('events.upcoming.eyebrow', 'Small heading'), T('events.upcoming.title', 'Heading')] },
+    { page: 'events', name: 'Events — host a gathering', help: 'The form and the line linking to the Coffee Cart are fixed.', items: [
+      T('events.host.eyebrow', 'Small heading'), T('events.host.title', 'Heading'),
+      T('events.host.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 4 })] },
+    { page: 'careers', name: 'Careers — header', items: [
+      T('careers.hero.eyebrow', 'Small heading'), T('careers.hero.title', 'Page heading'), T('careers.hero.intro', 'Introduction', 'textarea', { rows: 4 })] },
+    { page: 'careers', name: 'Careers — culture', items: [
+      T('careers.culture.eyebrow', 'Small heading'), T('careers.culture.title', 'Heading'),
+      T('careers.culture.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 4 }),
+      LIST('career_value', 'What we value', titleText, function (v) { return v.title; })] },
+    { page: 'careers', name: 'Careers — openings', help: 'The application form’s “Position of interest” list follows these roles.', items: [
+      T('careers.openings.eyebrow', 'Small heading'), T('careers.openings.title', 'Heading'),
+      LIST('career_role', 'Roles', [{ k: 'title', label: 'Role', required: true, max: 80 }, { k: 'type', label: 'Type (e.g. Part-time)', max: 60 },
+        { k: 'text', label: 'Description', type: 'textarea', rows: 3 }, { k: 'visible', label: 'Show on website', type: 'check' }],
+        function (v) { return (v.title || '') + (v.type ? ' · ' + v.type : '') + (v.visible === false ? ' · hidden' : ''); }, { visible: true })] },
+    { page: 'careers', name: 'Careers — apply', help: 'The application form itself is fixed.', items: [
+      T('careers.apply.eyebrow', 'Small heading'), T('careers.apply.title', 'Heading'),
+      T('careers.apply.body', 'Paragraphs (blank line between paragraphs)', 'textarea', { rows: 3 })] },
+    { page: 'contact', name: 'Contact — header', items: [
+      IMG('contact.hero.image', 'Header photo (dark text sits directly on the photo; choose a light, calm photo)', 'general', '/assets/images/web/raaha-interior.webp'),
+      T('contact.hero.eyebrow', 'Small heading'), T('contact.hero.title', 'Page heading'), T('contact.hero.intro', 'Introduction', 'textarea', { rows: 3 })] },
+    { page: 'contact', name: 'Contact — details and form', help: 'Email, phone, social links and the form are fixed in the page.', items: [
+      T('contact.info.title', 'Contact details heading'), T('contact.follow.note', 'Note under the details', 'textarea', { rows: 2 }),
+      T('contact.form.title', 'Form heading')] },
+    { page: 'cart', name: 'Coffee Cart page', items: [
       IMG('cart.hero.image', 'Header photo', 'coffee-cart', '/assets/images/web/coffee-cart-gathering.webp'),
       IMG('cart.intro.image', 'Introduction photo (gold arch)', 'coffee-cart', '/assets/images/web/raaha-coffee.webp'),
       T('cart.hero.title', 'Page heading'), T('cart.hero.lede', 'Intro', 'textarea'),
@@ -227,9 +346,84 @@
     return base + (t ? ' → ' + String(t).slice(0, 60) : '');
   };
 
-  function render() {
-    var box = $('content-groups'); box.textContent = '';
-    GROUPS.forEach(function (g) {
+  // ---------- pages: choose a page, edit its text, photos and lists together ----------
+  var PAGES = [
+    { id: 'home', label: 'Home', file: '/' },
+    { id: 'about', label: 'About', file: '/about' },
+    { id: 'menu', label: 'Menu', file: '/menu' },
+    { id: 'cart', label: 'Coffee Cart', file: '/coffee-cart' },
+    { id: 'events', label: 'Events', file: '/events' },
+    { id: 'careers', label: 'Careers', file: '/careers' },
+    { id: 'contact', label: 'Contact', file: '/contact' },
+    { id: 'site', label: 'All pages (banner & header button)', file: '/' }
+  ];
+  var currentPage = 'home';
+  try { currentPage = sessionStorage.getItem('raaha-admin-page') || 'home'; } catch (e) {}
+
+  // What a page shows when nothing has been saved here yet: read from the page itself,
+  // so fields start with the wording visitors see (never blank).
+  var builtInCache = {};
+  function clean(t) { return String(t || '').replace(/\s+/g, ' ').trim(); }
+  function extract(html) {
+    var out = { text: {}, link: {}, lists: {} };
+    if (!html) return out;
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    doc.querySelectorAll('[data-cms]').forEach(function (e) { out.text[e.getAttribute('data-cms')] = clean(e.textContent); });
+    doc.querySelectorAll('[data-cms-paras]').forEach(function (e) {
+      out.text[e.getAttribute('data-cms-paras')] = Array.prototype.map.call(e.querySelectorAll('p'), function (p) { return clean(p.textContent); }).join('\n\n');
+    });
+    doc.querySelectorAll('[data-cms-link]').forEach(function (a) { out.link[a.getAttribute('data-cms-link')] = { label: clean(a.textContent), href: a.getAttribute('href') }; });
+    doc.querySelectorAll('[data-cms-list]').forEach(function (box) {
+      var items = [];
+      Array.prototype.forEach.call(box.children, function (c) {
+        if (c.tagName === 'TEMPLATE') return;
+        var v = {};
+        c.querySelectorAll('[data-f]').forEach(function (f) { v[f.getAttribute('data-f')] = clean(f.textContent); });
+        if (Object.keys(v).length) items.push(v);
+      });
+      out.lists[box.getAttribute('data-cms-list')] = items;
+    });
+    return out;
+  }
+  function builtIns(pageId) {
+    var pg = PAGES.filter(function (p) { return p.id === pageId; })[0] || PAGES[0];
+    if (!builtInCache[pg.file]) {
+      var alt = pg.file === '/' ? '/index.html' : pg.file + '.html';
+      builtInCache[pg.file] = fetch(pg.file, { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r : fetch(alt, { cache: 'no-store' }); })
+        .then(function (r) { return r.ok ? r.text() : ''; })
+        .then(extract)
+        .catch(function () { return extract(''); });
+    }
+    return builtInCache[pg.file];
+  }
+
+  function renderPicker() {
+    var box = $('page-picker'); box.textContent = '';
+    PAGES.forEach(function (pg) {
+      var b = el('button', pg.label, pg.id === currentPage ? 'is-active' : ''); b.type = 'button';
+      b.setAttribute('aria-pressed', pg.id === currentPage ? 'true' : 'false');
+      b.addEventListener('click', function () { showPage(pg.id); });
+      box.appendChild(b);
+    });
+  }
+  function showPage(id, reopenNames) {
+    currentPage = PAGES.some(function (p) { return p.id === id; }) ? id : 'home';
+    try { sessionStorage.setItem('raaha-admin-page', currentPage); } catch (e) {}
+    renderPicker();
+    var box = $('content-groups');
+    if (!box.children.length || box.dataset.page !== currentPage) { box.textContent = ''; box.appendChild(el('p', 'Loading the page…', 'muted')); }
+    builtIns(currentPage).then(function (defaults) {
+      render(defaults);
+      if (reopenNames && reopenNames.length) reopenNames.forEach(reopen);
+      else { var first = box.querySelector('details.group'); if (first) first.open = true; }
+    });
+  }
+  A.showContentPage = showPage;
+
+  function render(defaults) {
+    var box = $('content-groups'); box.textContent = ''; box.dataset.page = currentPage;
+    GROUPS.filter(function (g) { return g.page === currentPage; }).forEach(function (g) {
       var sec = el('details', null, 'group');
       sec.appendChild(el('summary', g.name));
       if (g.help) sec.appendChild(el('p', g.help, 'muted'));
@@ -241,7 +435,11 @@
       singles.forEach(function (def) {
         var row = C.byKey(def.collection, def.key);
         var value = Object.assign({}, row && row.draft || {});
-        if (!row && def.builtIn) value.static_src = def.builtIn; // show the photo built into the page
+        if (!row) {
+          if (def.builtIn) value.static_src = def.builtIn; // show the photo built into the page
+          if (def.collection === 'text' && defaults.text[def.key] != null) value.value = defaults.text[def.key];
+          if (def.collection === 'link' && defaults.link[def.key]) { value.label = defaults.link[def.key].label; value.href = defaults.link[def.key].href; }
+        }
         var holder = el('div', null, def.type === 'textarea' || def.type === 'photo' || def.type === 'link' ? 'wide' : '');
         var head = el('div', null, 'field-head'); head.appendChild(A.draftBadge(row)); holder.appendChild(head);
         var dirty = function () { save.disabled = false; if (pending.indexOf(entry) === -1) pending.push(entry); };
@@ -276,15 +474,16 @@
           }).then(function (res) {
             save.textContent = 'Save';
             if (res && res.cancelled) { save.disabled = false; return; }
-            A.toast('Saved — live on the website.'); render(); reopen(g.name);
-          }).catch(function (e) { save.textContent = 'Save'; save.disabled = false; A.toast('Saved, but not live yet: ' + e.message, true); render(); reopen(g.name); });
+            A.toast('Saved — live on the website.'); showPage(currentPage, [g.name]);
+          }).catch(function (e) { save.textContent = 'Save'; save.disabled = false; A.toast('Saved, but not live yet: ' + e.message, true); showPage(currentPage, [g.name]); });
         });
         var acts = el('div', null, 'row-actions'); acts.appendChild(save); sec.appendChild(acts);
       }
       g.items.filter(function (x) { return x.list; }).forEach(function (l) {
         sec.appendChild(el('h3', l.label));
         var lb = el('div'); sec.appendChild(lb);
-        A.listEditor(lb, { collection: l.collection, fields: l.fields, title: l.title, defaults: l.defaults, addLabel: 'Add to ' + l.label.toLowerCase() });
+        A.listEditor(lb, { collection: l.collection, fields: l.fields, title: l.title, defaults: l.defaults,
+          addLabel: 'Add to ' + l.label.toLowerCase(), seed: defaults.lists[l.collection] });
       });
       box.appendChild(sec);
     });
@@ -298,6 +497,6 @@
   A.modules.push({ tab: 'content', onShow: function () {
     var open = Array.prototype.filter.call(document.querySelectorAll('#content-groups > details[open]'), function () { return true; })
       .map(function (d) { return d.querySelector('summary').textContent; });
-    render(); open.forEach(reopen);
+    showPage(currentPage, open);
   } });
 })();

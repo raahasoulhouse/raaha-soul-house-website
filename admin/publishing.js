@@ -92,7 +92,7 @@
   });
   // re-render whichever tab is open after data changes
   A.refreshView = function () {
-    var active = document.querySelector('.tabs .is-active');
+    var active = document.querySelector('.side-nav .is-active');
     if (active) A.showTab(active.getAttribute('data-tab'));
   };
 

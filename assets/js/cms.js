@@ -168,6 +168,8 @@
     });
     document.querySelectorAll('[data-cms-list]').forEach(function (box) {
       var col = box.getAttribute('data-cms-list');
+      // a list never saved in Admin keeps the items built into the page
+      if (!lists[col] && col !== 'event') return;
       var items = (lists[col] || []).filter(function (v) { return v.visible !== false; });
       if (col === 'event') items = homeEvents(lists.event || [], lists.experience || []);
       renderList(box, items);
@@ -177,6 +179,15 @@
       var toggle = single['toggle:' + sec.getAttribute('data-cms-show')];
       var has = (lists[col] || []).some(function (v) { return v.visible !== false && imageUrl(v); });
       sec.hidden = !has || (toggle && toggle.visible === false);
+    });
+    document.querySelectorAll('select[data-cms-roles]').forEach(function (sel) {
+      var roles = (lists[sel.getAttribute('data-cms-roles')] || []).filter(function (v) { return v.visible !== false && v.title; });
+      if (!roles.length) return;
+      Array.prototype.slice.call(sel.options).forEach(function (o) { if (o.value) o.remove(); });
+      roles.forEach(function (v) {
+        var o = document.createElement('option'); o.value = v.title;
+        o.textContent = v.title + (v.type ? ' (' + v.type + ')' : ''); sel.appendChild(o);
+      });
     });
     var menuBox = document.querySelector('[data-cms-menu]');
     if (menuBox && lists.menu_category) renderMenu(menuBox, lists.menu_category, lists.menu_item || []);
@@ -318,14 +329,16 @@
       });
     }
   }
+  function onCart(i) { return i.cart === true || (i.cart == null && !!i.cart_section); }
   function renderCartMenu(box, items, cats) {
     var prefixFor = {};
     cats.forEach(function (c) { prefixFor[c.slug] = c.price_prefix || ''; });
     var groups = [];
     items.forEach(function (i) {
-      if (!i.cart_section || i.visible === false) return;
-      var g = groups.filter(function (x) { return x.name === i.cart_section; })[0];
-      if (!g) { g = { name: i.cart_section, items: [] }; groups.push(g); }
+      if (!onCart(i) || i.visible === false) return;
+      var sec = i.cart_section || 'Coffee Cart';
+      var g = groups.filter(function (x) { return x.name === sec; })[0];
+      if (!g) { g = { name: sec, items: [] }; groups.push(g); }
       g.items.push(i);
     });
     if (!groups.length) return;
