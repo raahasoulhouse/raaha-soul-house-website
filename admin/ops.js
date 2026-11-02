@@ -5,24 +5,30 @@
 (function () {
   'use strict';
   var A = window.RAAHA_ADMIN, $ = A.$, el = A.el, db = A.db;
-  var O = A.ops = { ready: false, quotes: [], blocks: [] };
+  var O = A.ops = { ready: false, quotes: [], blocks: [], emails: [], emailReady: false };
 
   // ---------- readiness: is the booking database update in place? ----------
   O.load = function () {
     return Promise.all([
       db.from('booking_quotes').select('*').order('created_at', { ascending: false }),
-      db.from('calendar_blocks').select('*').order('starts_on')
+      db.from('calendar_blocks').select('*').order('starts_on'),
+      db.from('email_log').select('id,inquiry_id,quote_id,kind,to_email,subject,status,error,attempts,provider_id,created_at,updated_at,last_event_at').order('created_at', { ascending: false })
     ]).then(function (res) {
       O.ready = !res[0].error && !res[1].error;
       O.quotes = O.ready ? res[0].data || [] : [];
       O.blocks = O.ready ? res[1].data || [] : [];
+      O.emailReady = !res[2].error;
+      O.emails = O.emailReady ? res[2].data || [] : [];
       document.body.classList.toggle('ops-ready', O.ready);
       document.querySelectorAll('.ops-wait').forEach(function (p) { p.hidden = O.ready; });
       document.querySelectorAll('.ops-only').forEach(function (p) { p.hidden = !O.ready; });
     });
   };
   O.refresh = function () {
-    return Promise.all([A.bookings.load(), O.load()]).then(function () { O.changed(); });
+    return Promise.all([A.bookings.load(), O.load()]).then(function () {
+      if (A.bookings.currentId() && !$('detail').hidden) A.bookings.reopen(true);   // re-render with fresh quotes and emails
+      O.changed();
+    });
   };
   // screens re-render when bookings or quotes change
   var listeners = [];
@@ -33,7 +39,7 @@
   // Calendar meaning of each booking status. Declined / lost are not shown.
   O.calStatus = function (r) {
     if (r.status === 'confirmed' || r.status === 'completed') return 'confirmed';
-    if (r.status === 'quoted') return 'tentative';
+    if (r.status === 'quoted' || r.status === 'quote_accepted' || r.status === 'deposit_verified') return 'tentative';
     if (r.status === 'new' || r.status === 'contacted') return 'inquiry';
     return null;
   };
@@ -46,6 +52,31 @@
   };
   O.acceptedQuote = function (inquiryId) { return O.quotesFor(inquiryId).filter(function (q) { return q.status === 'accepted'; })[0] || null; };
   O.pastValid = function (q) { return q.status === 'sent' && q.valid_until && q.valid_until < A.today(); };
+
+  // ---------- email (sent through the raaha-email function; the Resend key never reaches the browser) ----------
+  O.EMAIL_LABEL = { pending: 'Sending / outcome unknown', accepted: 'Sent (accepted by provider)', delivered: 'Delivered', delayed: 'Delayed',
+    bounced: 'Bounced', failed: 'Failed', complained: 'Marked as spam' };
+  O.EMAIL_KIND = { ack: 'Inquiry acknowledgment', reply: 'Reply', quote: 'Quote', confirmation: 'Booking confirmation' };
+  O.emailBad = function (e) { return e.status === 'failed' || e.status === 'bounced' || e.status === 'complained' ||
+    (e.status === 'pending' && Date.now() - new Date(e.updated_at || e.created_at).getTime() > 5 * 60 * 1000); };
+  O.emailsFor = function (inquiryId) { return O.emails.filter(function (e) { return e.inquiry_id === inquiryId; }); };
+  O.invoke = function (action, payload) {
+    return db.functions.invoke('raaha-email/admin', { body: Object.assign({ action: action }, payload || {}) }).then(function (res) {
+      if (!res.error) return res.data || {};
+      var ctx = res.error.context;
+      if (ctx && typeof ctx.json === 'function') return ctx.json().catch(function () { return { ok: false, error: res.error.message }; });
+      return { ok: false, error: res.error.message || 'The email service did not answer.' };
+    }, function (e) { return { ok: false, error: e.message || String(e) }; });
+  };
+  O.reloadEmails = function () {
+    return db.from('email_log').select('id,inquiry_id,quote_id,kind,to_email,subject,status,error,attempts,provider_id,created_at,updated_at,last_event_at')
+      .order('created_at', { ascending: false }).then(function (res) { if (!res.error) { O.emails = res.data || []; O.emailReady = true; } });
+  };
+  O.newKey = function () {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
+  };
+  O.depositComplete = function (r) { return Number(r.deposit_amount) > 0 && !!r.deposit_received_on && !!String(r.payment_reference || '').trim(); };
 
   // ---------- payments (manual) ----------
   function n(v) { return v == null || v === '' ? null : Number(v); }
@@ -137,6 +168,7 @@
     });
     var conf = O.conflicts(A.bookings.rows.filter(function (x) { return !x.is_test || r.is_test; }))[r.id];
     if (conf) box.parentNode.insertBefore(el('p', '⚠ ' + conf.join(' · '), 'conflict-note'), box);
+    if (A.comms) A.comms.render(r);
   };
   $('d-new-quote').addEventListener('click', function () {
     var id = A.bookings.currentId();

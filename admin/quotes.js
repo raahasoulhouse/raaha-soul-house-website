@@ -55,31 +55,25 @@
   var cur = null; // the quote being edited (a copy)
   var dlg = $('quote-dialog');
 
+  function nextVersion(inquiryId) { var ex = O.quotesFor(inquiryId); return ex.length ? ex[0].version + 1 : 1; }
+  // A new quote is NOT saved (and gets no number) until you click Save, Approve & Send, or Mark accepted.
   Q.create = function (inquiryId) {
     var r = inquiry(inquiryId);
     if (!r) return;
-    var existing = O.quotesFor(inquiryId);
-    var version = existing.length ? existing[0].version + 1 : 1;
-    // a new quote starts empty: details come from the inquiry, prices are typed by you
-    db.from('booking_quotes').insert({
-      inquiry_id: inquiryId, version: version, guest_count: r.guest_count || null,
-      service_duration: r.service_duration || null, beverages: [], line_items: []
-    }).select().then(function (res) {
-      if (res.error) { A.toast('Quote not created: ' + res.error.message, true); return; }
-      O.quotes.unshift(res.data[0]);
-      O.changed();
-      Q.open(res.data[0].id);
-    });
+    show({ id: null, inquiry_id: inquiryId, version: nextVersion(inquiryId), status: 'draft', quote_number: null,
+      guest_count: r.guest_count || null, service_duration: r.service_duration || null, beverages: [], line_items: [],
+      travel_fee: 0, discount: 0, subtotal: 0, total: 0, valid_until: null, client_notes: null, internal_notes: null });
   };
-
   Q.open = function (id) {
     var q = O.quotes.filter(function (x) { return x.id === id; })[0];
-    if (!q) return;
+    if (q) show(q);
+  };
+  function show(q) {
     cur = JSON.parse(JSON.stringify(q));
     var r = inquiry(q.inquiry_id) || {};
-    $('qd-title').textContent = 'Quote ' + O.quoteNo(q);
+    $('qd-title').textContent = q.id ? 'Quote ' + O.quoteNo(q) : (q.version > 1 ? 'New version (rev. ' + q.version + ')' : 'New quote') + ' — number assigned when you first save';
     $('qd-meta').textContent = (r.name || '') + (r.is_test ? ' (test inquiry)' : '') + (r.email ? ' · ' + r.email : '');
-    var stp = $('qd-status'); stp.textContent = O.QUOTE_LABEL[q.status] + (O.pastValid(q) ? ' · past valid date' : ''); stp.className = 'pill q-' + q.status;
+    var stp = $('qd-status'); stp.textContent = q.id ? O.QUOTE_LABEL[q.status] + (O.pastValid(q) ? ' · past valid date' : '') : 'Not saved yet'; stp.className = 'pill q-' + q.status;
     var ev = $('qd-event'); ev.textContent = '';
     [['Event', r.event_type], ['Date', r.event_date && A.fmtDate(r.event_date)], ['Time', O.timeRange(r)], ['Location', O.place(r)]]
       .forEach(function (p) { if (!p[1]) return; ev.appendChild(el('dt', p[0])); ev.appendChild(el('dd', p[1])); });
@@ -95,14 +89,20 @@
     var editable = q.status === 'draft';
     $('qd-fields').disabled = !editable;
     $('qd-save').hidden = !editable;
+    $('qd-send').hidden = !editable;
     $('qd-sent').hidden = !editable;
     $('qd-delete').hidden = !editable;
+    $('qd-delete').textContent = q.id ? 'Delete draft' : 'Discard';
     $('qd-accept').hidden = !(q.status === 'draft' || q.status === 'sent');
     $('qd-decline').hidden = q.status !== 'sent';
     $('qd-expire').hidden = q.status !== 'sent';
-    $('qd-msg').textContent = editable ? '' : 'This quote is ' + O.QUOTE_LABEL[q.status].toLowerCase() + ' and can no longer be edited. Use New version to change it.';
+    $('qd-version').hidden = !q.id;
+    $('qd-print').hidden = !q.id;
+    var mail = q.id ? O.emails.filter(function (e) { return e.quote_id === q.id && e.kind === 'quote'; })[0] : null;
+    $('qd-msg').textContent = mail ? 'Emailed to ' + mail.to_email + ' · ' + O.EMAIL_LABEL[mail.status] + (O.emailBad(mail) ? ' — retry from the booking’s Communication history.' : '.')
+      : (editable ? '' : 'This quote is ' + O.QUOTE_LABEL[q.status].toLowerCase() + ' and can no longer be edited. Use New version to change it.');
     if (!dlg.open) dlg.showModal();
-  };
+  }
   $('qd-close').addEventListener('click', function () { dlg.close(); });
 
   // beverage selection: names from the RAAHA menu (no menu prices are used)
@@ -195,16 +195,28 @@
     if (forSending && !(calc().total > 0)) return 'The quote total is $0. Enter the amounts before sending.';
     return null;
   }
-  function patch(fields, okMsg) {
-    $('qd-msg').textContent = 'Saving…';
-    return db.from('booking_quotes').update(fields).eq('id', cur.id).select().then(function (res) {
-      if (res.error || !res.data || !res.data.length) { $('qd-msg').textContent = 'Not saved: ' + (res.error ? res.error.message : 'no permission'); throw res.error || new Error('not saved'); }
+  // Save: the first save creates the quote (and its number); later saves update it
+  function persist(fields) {
+    var op = cur.id ? db.from('booking_quotes').update(fields).eq('id', cur.id).select()
+      : db.from('booking_quotes').insert(Object.assign({ inquiry_id: cur.inquiry_id, version: cur.version }, fields)).select();
+    return op.then(function (res) {
+      if (res.error || !res.data || !res.data.length) throw new Error(res.error ? res.error.message : 'no permission');
       var q = res.data[0];
-      O.quotes = O.quotes.map(function (x) { return x.id === q.id ? q : x; });
-      O.changed(); Q.open(q.id);
-      $('qd-msg').textContent = okMsg + ' Total ' + A.money(q.total) + ' (calculated by the database).';
+      if (O.quotes.some(function (x) { return x.id === q.id; })) O.quotes = O.quotes.map(function (x) { return x.id === q.id ? q : x; });
+      else O.quotes.unshift(q);
+      cur = JSON.parse(JSON.stringify(q));
+      O.changed();
       return q;
     });
+  }
+  function patch(fields, okMsg) {
+    $('qd-msg').textContent = 'Saving…';
+    return persist(fields).then(function (q) {
+      show(q);
+      var m = okMsg + ' ' + O.quoteNo(q) + ' · total ' + A.money(q.total) + ' (calculated by the database).';
+      $('qd-msg').textContent = m; A.toast(m);
+      return q;
+    }, function (e) { $('qd-msg').textContent = 'Not saved: ' + e.message; A.toast('Not saved: ' + e.message, true); throw e; });
   }
 
   $('qd-form').addEventListener('submit', function (e) {
@@ -213,25 +225,64 @@
     if (err) { $('qd-msg').textContent = err; return; }
     patch(p, 'Draft saved.').catch(function () {});
   });
+
+  // Approve & Send: save, review the email, then the server builds the PDF and sends it.
+  $('qd-send').addEventListener('click', function () {
+    var p = collect(), err = check(p, true);
+    if (err) { $('qd-msg').textContent = err; return; }
+    var r = inquiry(cur.inquiry_id) || {};
+    if (!r.email) { $('qd-msg').textContent = 'This booking has no customer email address.'; return; }
+    patch(p, 'Saved.').then(function (q) {
+      var first = String(r.name || '').trim().split(/\s+/)[0] || 'there';
+      A.comms.compose({
+        title: 'Approve & send ' + O.quoteNo(q), to: r.email, sendLabel: 'Approve & Send',
+        subject: 'Your RAAHA quote ' + q.quote_number + (q.version > 1 ? ' (revision ' + q.version + ')' : ''), subjectLocked: true,
+        bodyLabel: 'Message above the quote details',
+        body: 'Hi ' + first + ',\n\nThank you for considering RAAHA Soul House for your ' + (r.event_type ? r.event_type.toLowerCase() : 'event') + '. Your custom quote is attached as a PDF.',
+        attach: 'Attached automatically: ' + q.quote_number + (q.version > 1 ? '-rev' + q.version : '') + '.pdf · total ' + A.money(q.total) +
+          (q.valid_until ? ' · valid until ' + A.fmtDate(q.valid_until) : '') + '. The email also says the date is reserved only after acceptance and deposit.',
+        onSend: function (subject, body) {
+          return O.invoke('send_quote', { quote_id: q.id, note: body }).then(function (res) {
+            return O.refresh().then(function () { Q.open(q.id); return res; });
+          });
+        }
+      });
+    }).catch(function () {});
+  });
   $('qd-sent').addEventListener('click', function () {
     var p = collect(), err = check(p, true);
     if (err) { $('qd-msg').textContent = err; return; }
-    if (!confirm('Mark this quote as sent today?\n\nThis only records that you sent it (for example by email from hello@raahasoulhouse.com). Nothing is emailed from here, and the quote can no longer be edited.')) return;
+    if (!confirm('Record this quote as sent outside RAAHA Admin (for example from Gmail)?\n\nNothing is emailed from here. Use “Approve & Send to customer” to email it with the PDF attached.')) return;
     p.status = 'sent'; p.sent_on = A.today();
-    patch(p, 'Marked as sent.').then(function () {
+    patch(p, 'Recorded as sent.').then(function () {
       var r = inquiry(cur.inquiry_id);
-      if (r && (r.status === 'new' || r.status === 'contacted')) A.toast('Tip: set the booking status to “Quote provided” when you are ready.');
+      if (r && (r.status === 'new' || r.status === 'contacted')) return db.from('inquiries').update({ status: 'quoted' }).eq('id', r.id).then(function () { return O.refresh(); });
     }).catch(function () {});
   });
+
+  // Mark accepted: needs the date and how the customer accepted. Never confirms the booking.
+  var ad = $('accept-dialog');
   $('qd-accept').addEventListener('click', function () {
-    if (cur.status === 'draft') { var err = check(collect(), true); if (err) { $('qd-msg').textContent = err; return; } }
-    if (!confirm('Mark ' + O.quoteNo(cur) + ' (' + A.money(cur.total) + ') as accepted by the client?\n\n• Other versions for this booking are marked replaced.\n• The booking records this total and shows “Quote provided”.\n• The booking is NOT confirmed: record the deposit on the booking first.')) return;
-    var go = cur.status === 'draft' ? patch(collect(), 'Saved.') : Promise.resolve();
-    go.then(function () { return db.rpc('accept_quote', { p_quote_id: cur.id }); }).then(function (res) {
-      if (res.error) { $('qd-msg').textContent = 'Not accepted: ' + res.error.message; return; }
-      A.toast('Quote accepted. Record the deposit on the booking before confirming it.');
-      return O.refresh().then(function () { Q.open(cur.id); });
-    }).catch(function () {});
+    var p = collect();
+    if (cur.status === 'draft') { var err = check(p, true); if (err) { $('qd-msg').textContent = err; return; } }
+    $('ad-quote').textContent = (cur.id ? O.quoteNo(cur) : 'This new quote') + ' · ' + A.money(calc().total);
+    $('ad-date').value = A.today(); $('ad-ref').value = ''; $('ad-msg').textContent = '';
+    ad.showModal();
+  });
+  $('ad-cancel').addEventListener('click', function () { ad.close(); });
+  $('ad-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var ref = $('ad-ref').value.trim(), date = $('ad-date').value || A.today();
+    if (!ref) { $('ad-msg').textContent = 'Write how the customer accepted (for example the email they sent).'; return; }
+    $('ad-msg').textContent = 'Saving…';
+    var go = cur.status === 'draft' ? persist(collect()) : Promise.resolve(cur);
+    go.then(function (q) { return db.rpc('accept_quote', { p_quote_id: q.id, p_reference: ref, p_accepted_on: date }).then(function (res) { return { res: res, q: q }; }); })
+      .then(function (o) {
+        if (o.res.error) { $('ad-msg').textContent = 'Not accepted: ' + o.res.error.message; return; }
+        ad.close();
+        A.toast('Acceptance recorded. Next: record the verified deposit on the booking, then Confirm & Send.');
+        return O.refresh().then(function () { Q.open(o.q.id); });
+      }).catch(function (err) { $('ad-msg').textContent = 'Not saved: ' + err.message; });
   });
   $('qd-decline').addEventListener('click', function () {
     if (!confirm('Mark this quote as declined by the client?')) return;
@@ -241,20 +292,17 @@
     if (!confirm('Mark this quote as expired?')) return;
     patch({ status: 'expired' }, 'Marked expired.').catch(function () {});
   });
+  // New version: a copy (including Valid until) that is saved only when you click Save
   $('qd-version').addEventListener('click', function () {
-    var base = cur, all = O.quotesFor(base.inquiry_id);
-    var version = (all.length ? all[0].version : base.version) + 1;
-    db.from('booking_quotes').insert({
-      inquiry_id: base.inquiry_id, version: version, guest_count: base.guest_count, service_duration: base.service_duration,
-      beverages: base.beverages || [], line_items: base.line_items || [], travel_fee: base.travel_fee, discount: base.discount,
-      client_notes: base.client_notes, internal_notes: base.internal_notes
-    }).select().then(function (res) {
-      if (res.error) { $('qd-msg').textContent = 'New version not created: ' + res.error.message; return; }
-      O.quotes.unshift(res.data[0]); O.changed(); Q.open(res.data[0].id);
-      $('qd-msg').textContent = 'New draft version created from ' + O.quoteNo(base) + '. The earlier version is unchanged.';
-    });
+    var b = cur;
+    show({ id: null, inquiry_id: b.inquiry_id, version: nextVersion(b.inquiry_id), status: 'draft', quote_number: b.quote_number,
+      guest_count: b.guest_count, service_duration: b.service_duration, beverages: (b.beverages || []).slice(), line_items: JSON.parse(JSON.stringify(b.line_items || [])),
+      travel_fee: b.travel_fee, discount: b.discount, subtotal: b.subtotal, total: b.total, valid_until: b.valid_until,
+      client_notes: b.client_notes, internal_notes: b.internal_notes });
+    $('qd-msg').textContent = 'New version copied from ' + O.quoteNo(b) + '. Change what you need, then Save or Approve & Send. The earlier version is kept.';
   });
   $('qd-delete').addEventListener('click', function () {
+    if (!cur.id) { dlg.close(); return; }
     if (cur.status !== 'draft' || !confirm('Delete this draft quote? Sent and answered quotes are always kept.')) return;
     db.from('booking_quotes').delete().eq('id', cur.id).eq('status', 'draft').then(function (res) {
       if (res.error) { $('qd-msg').textContent = 'Not deleted: ' + res.error.message; return; }
@@ -303,6 +351,7 @@
       '</body></html>';
   };
   $('qd-print').addEventListener('click', function () {
+    if (!cur.id) { $('qd-msg').textContent = 'Save the quote first.'; return; }
     var q = O.quotes.filter(function (x) { return x.id === cur.id; })[0] || cur, r = inquiry(q.inquiry_id) || {};
     if (q.status === 'draft' && JSON.stringify(collect().line_items) !== JSON.stringify(q.line_items || [])) {
       $('qd-msg').textContent = 'Save the draft first so the printed quote matches.'; return;

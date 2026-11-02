@@ -88,7 +88,7 @@
         <main class="tab-panel" id="tab-bookings">
             <section class="summary" aria-label="Summary">
                 <div class="stat"><span id="s-new">0</span>Inquiries received</div>
-                <div class="stat"><span id="s-open">0</span>Contacted / quote provided</div>
+                <div class="stat"><span id="s-open">0</span>In progress (contacted → deposit)</div>
                 <div class="stat"><span id="s-confirmed">0</span>Bookings confirmed</div>
                 <div class="stat"><span id="s-overdue">0</span>Follow-ups due</div>
                 <div class="stat"><span id="s-rate">–</span>Inquiry → booking</div>
@@ -100,11 +100,13 @@
                 </label>
                 <label>Status
                     <select id="f-status">
-                        <option value="active">Active (received → confirmed)</option>
+                        <option value="active">Active (new → confirmed)</option>
                         <option value="all">All</option>
-                        <option value="new">Inquiry received</option>
+                        <option value="new">New inquiry</option>
                         <option value="contacted">Contacted</option>
-                        <option value="quoted">Quote provided</option>
+                        <option value="quoted">Quote sent</option>
+                        <option value="quote_accepted">Quote accepted</option>
+                        <option value="deposit_verified">Deposit verified</option>
                         <option value="confirmed">Booking confirmed</option>
                         <option value="completed">Event completed</option>
                         <option value="declined">Declined</option>
@@ -136,16 +138,25 @@
                     <button class="link close" type="button" id="close-detail">Close</button>
                     <h2 id="d-name"></h2>
                     <p class="muted" id="d-meta"></p>
+                    <div class="d-actions ops-only" id="d-actions">
+                        <button type="button" class="primary" id="d-reply">Reply to customer</button>
+                        <button type="button" id="d-response">Record customer response</button>
+                        <button type="button" id="d-confirm">Confirm &amp; Send</button>
+                        <label class="check d-test"><input type="checkbox" id="d-is-test"> Test record</label>
+                    </div>
+                    <p class="d-next" id="d-next"></p>
                     <dl id="d-fields"></dl>
 
                     <form id="d-form">
                         <div class="grid">
                             <label>Status
                                 <select name="status">
-                                    <option value="new">Inquiry received</option>
+                                    <option value="new">New inquiry</option>
                                     <option value="contacted">Contacted</option>
-                                    <option value="quoted">Quote provided</option>
-                                    <option value="confirmed">Booking confirmed (deposit verified)</option>
+                                    <option value="quoted">Quote sent</option>
+                                    <option value="quote_accepted">Quote accepted (use Mark accepted on the quote)</option>
+                                    <option value="deposit_verified">Deposit verified</option>
+                                    <option value="confirmed">Booking confirmed (use Confirm &amp; Send)</option>
                                     <option value="completed">Event completed</option>
                                     <option value="declined">Declined</option>
                                     <option value="lost">Lost</option>
@@ -188,6 +199,12 @@
                         <h3>Quotes</h3>
                         <div id="d-quotes"></div>
                         <button type="button" id="d-new-quote">Create a quote for this inquiry</button>
+                    </section>
+
+                    <section class="ops-only" id="d-comms-box">
+                        <h3>Communication history</h3>
+                        <p class="muted small">Emails sent from RAAHA Admin. Customer replies arrive in Gmail (hello@raahasoulhouse.com); record them with “Record customer response”.</p>
+                        <ul class="comms" id="d-comms"></ul>
                     </section>
 
                     <h3>Private notes</h3>
@@ -362,6 +379,18 @@
                     <p class="msg" id="pw-msg" role="status"></p>
                 </form>
             </section>
+            <section class="panel" id="email-settings">
+                <h2>Customer email</h2>
+                <p id="em-status" class="muted">Checking email setup…</p>
+                <label class="check em-toggle"><input type="checkbox" id="em-auto-ack"> Automatically acknowledge new genuine inquiries (TEST inquiries are never emailed)</label>
+                <p class="muted small">Every email goes from hello@raahasoulhouse.com, and customer replies arrive in your Gmail. Preview the wording below.</p>
+                <div class="row-actions">
+                    <button type="button" data-preview="ack">Preview: inquiry acknowledgment</button>
+                    <button type="button" data-preview="quote">Preview: quote email</button>
+                    <button type="button" data-preview="confirmation">Preview: booking confirmation</button>
+                </div>
+                <div class="em-preview" id="em-preview" hidden></div>
+            </section>
             <section class="panel">
                 <h2>Backup</h2>
                 <p class="muted">Downloads one file with all website content, photo details, history, bookings and private notes. It contains customer details: keep it in a private folder (for example Google Drive), never in GitHub. Photos themselves are not included; keep your original photo files.</p>
@@ -450,10 +479,11 @@
                 <label class="field wide"><span class="label">Notes for the client (printed on the quote)</span><textarea id="qd-client-notes" rows="3" maxlength="4000"></textarea></label>
                 <label class="field wide"><span class="label">Internal notes (never printed)</span><textarea id="qd-internal-notes" rows="2" maxlength="4000"></textarea></label>
             </fieldset>
-            <p class="msg" id="qd-msg" role="status"></p>
             <div class="qd-actions">
-                <button type="submit" class="primary" id="qd-save">Save draft</button>
-                <button type="button" id="qd-sent">Mark sent</button>
+                <p class="msg qd-msg" id="qd-msg" role="status"></p>
+                <button type="submit" id="qd-save">Save draft</button>
+                <button type="button" class="primary" id="qd-send">Approve &amp; Send to customer</button>
+                <button type="button" class="link" id="qd-sent">Record as sent outside Admin</button>
                 <button type="button" id="qd-accept">Mark accepted</button>
                 <button type="button" id="qd-decline">Mark declined</button>
                 <button type="button" id="qd-expire">Mark expired</button>
@@ -462,6 +492,60 @@
                 <button type="button" class="link" id="qd-delete">Delete draft</button>
                 <span class="bar-spacer"></span>
                 <button type="button" id="qd-close">Close</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="compose-dialog" class="wide-dialog" aria-labelledby="cd-title">
+        <h2 id="cd-title">Email the customer</h2>
+        <form id="cd-form" novalidate>
+            <p class="cd-to"><span class="muted">To</span> <strong id="cd-to"></strong> <span class="muted">· From hello@raahasoulhouse.com · Replies go to your Gmail</span></p>
+            <label class="field wide"><span class="label">Subject</span><input type="text" id="cd-subject" maxlength="300"></label>
+            <label class="field wide"><span class="label" id="cd-body-label">Message</span><textarea id="cd-body" rows="12" maxlength="20000"></textarea></label>
+            <p class="muted small" id="cd-attach"></p>
+            <p class="msg" id="cd-msg" role="status"></p>
+            <div class="row-actions">
+                <button type="submit" class="primary" id="cd-send">Send email</button>
+                <button type="button" id="cd-cancel">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="accept-dialog" aria-labelledby="ad-title">
+        <h2 id="ad-title">Record customer acceptance</h2>
+        <form id="ad-form" novalidate>
+            <p id="ad-quote"></p>
+            <label class="field"><span class="label">Date the customer accepted</span><input type="date" id="ad-date"></label>
+            <label class="field wide"><span class="label">How they accepted (required)</span><input type="text" id="ad-ref" maxlength="300" placeholder="e.g. Email reply from customer, “Yes, we accept quote RAAHA-2026-003”"></label>
+            <p class="muted small">This records acceptance only. It does not confirm the booking: record the verified deposit next.</p>
+            <p class="msg" id="ad-msg" role="status"></p>
+            <div class="row-actions">
+                <button type="submit" class="primary">Mark accepted</button>
+                <button type="button" id="ad-cancel">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="response-dialog" aria-labelledby="rd-title">
+        <h2 id="rd-title">Record customer response</h2>
+        <form id="rd-form" novalidate>
+            <div class="grid">
+                <label class="field"><span class="label">Date</span><input type="date" id="rd-date"></label>
+                <label class="field"><span class="label">How</span>
+                    <select id="rd-channel"><option>Email</option><option>Phone</option><option>Text message</option><option>In person</option><option>Other</option></select></label>
+            </div>
+            <label class="field wide"><span class="label">What they said</span><textarea id="rd-summary" rows="4" maxlength="2000" placeholder="e.g. Happy with the quote, asked to add oat milk"></textarea></label>
+            <label class="field wide"><span class="label">Outcome</span>
+                <select id="rd-outcome">
+                    <option value="">Just record it (no status change)</option>
+                    <option value="contacted">We are in touch (status: Contacted)</option>
+                    <option value="accept">Customer accepted the latest sent quote</option>
+                    <option value="declined">Customer declined</option>
+                </select></label>
+            <p class="msg" id="rd-msg" role="status"></p>
+            <div class="row-actions">
+                <button type="submit" class="primary">Save response</button>
+                <button type="button" id="rd-cancel">Cancel</button>
             </div>
         </form>
     </dialog>
@@ -476,6 +560,7 @@
     <script src="/admin/quotes.js"></script>
     <script src="/admin/calendar.js"></script>
     <script src="/admin/dashboard.js"></script>
+    <script src="/admin/comms.js"></script>
     <script src="/admin/reports.js"></script>
     <script src="/admin/media.js"></script>
     <script src="/admin/content.js"></script>

@@ -7,10 +7,10 @@
   var A = window.RAAHA_ADMIN, $ = A.$, el = A.el;
 
   var STATUS_LABEL = A.STATUS_LABEL = {
-    new: 'Inquiry received', contacted: 'Contacted', quoted: 'Quote provided', confirmed: 'Booking confirmed',
-    completed: 'Event completed', declined: 'Declined', lost: 'Lost'
+    new: 'New inquiry', contacted: 'Contacted', quoted: 'Quote sent', quote_accepted: 'Quote accepted', deposit_verified: 'Deposit verified',
+    confirmed: 'Booking confirmed', completed: 'Event completed', declined: 'Declined', lost: 'Lost'
   };
-  var ACTIVE = ['new', 'contacted', 'quoted', 'confirmed'];
+  var ACTIVE = A.ACTIVE = ['new', 'contacted', 'quoted', 'quote_accepted', 'deposit_verified', 'confirmed'];
   var BOOKED = A.BOOKED = ['confirmed', 'completed'];
   var BASE_FIELDS = ['status', 'follow_up_on', 'quote_amount', 'deposit_amount', 'deposit_received_on',
                 'payment_reference', 'confirmation_exception', 'closed_reason', 'event_date', 'guest_count', 'venue_address'];
@@ -35,7 +35,7 @@
       B.rows = res.data || [];
       fillSources();
       render();
-      if (current) B.reopen();
+      if (current) B.reopen(true);
       if (A.reports) A.reports.render();
       if (A.ops) A.ops.changed();
     });
@@ -75,7 +75,7 @@
     var base = B.rows.filter(function (r) { return tests || !r.is_test; });
     var t = A.today();
     $('s-new').textContent = base.filter(function (r) { return r.status === 'new'; }).length;
-    $('s-open').textContent = base.filter(function (r) { return r.status === 'contacted' || r.status === 'quoted'; }).length;
+    $('s-open').textContent = base.filter(function (r) { return ['contacted', 'quoted', 'quote_accepted', 'deposit_verified'].indexOf(r.status) !== -1; }).length;
     $('s-confirmed').textContent = base.filter(function (r) { return r.status === 'confirmed'; }).length;
     $('s-overdue').textContent = base.filter(function (r) { return r.follow_up_on && r.follow_up_on <= t && ACTIVE.indexOf(r.status) !== -1; }).length;
     var booked = base.filter(function (r) { return BOOKED.indexOf(r.status) !== -1; }).length;
@@ -102,7 +102,7 @@
     });
   }
 
-  function open(id) {
+  function open(id, quiet) {
     current = B.rows.filter(function (r) { return r.id === id; })[0];
     if (!current) return;
     var r = current;
@@ -133,15 +133,15 @@
       f.elements[k].value = v;
     });
     if (A.bookingDetailExtras) A.bookingDetailExtras(r);
-    $('d-msg').textContent = '';
+    if (!quiet) $('d-msg').textContent = '';
     loadNotes();
     render();
-    $('detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (!quiet) $('detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   B.open = open;
   B.currentId = function () { return current && current.id; };
-  B.reopen = function () { if (current) open(current.id); };
+  B.reopen = function (quiet) { if (current) open(current.id, quiet); };
 
   $('close-detail').addEventListener('click', function () { current = null; $('detail').hidden = true; render(); });
 
@@ -150,6 +150,19 @@
     if (!current) return;
     var f = e.target, patch = {};
     fields().forEach(function (k) { var v = f.elements[k].value.trim(); patch[k] = v === '' ? null : v; });
+    var prev = current.status;
+    if (patch.status === 'confirmed' && prev !== 'confirmed') {
+      $('d-msg').textContent = 'To confirm, use “Confirm & Send” at the top of this booking: it checks the accepted quote, the verified deposit and the calendar, then emails the customer.';
+      return;
+    }
+    if (patch.status === 'quote_accepted' && prev !== 'quote_accepted') {
+      $('d-msg').textContent = 'Record acceptance with “Mark accepted” on the quote (or “Record customer response”), so the date and how they accepted are kept.';
+      return;
+    }
+    if (patch.status === 'deposit_verified' && !(Number(patch.deposit_amount) > 0 && patch.deposit_received_on && patch.payment_reference)) {
+      $('d-msg').textContent = 'Deposit verified needs the deposit amount, the date received and the payment reference — check your bank or payment app first.';
+      return;
+    }
     if (BOOKED.indexOf(patch.status) !== -1 && !patch.confirmation_exception &&
         !(Number(patch.deposit_amount) > 0 && patch.deposit_received_on && patch.payment_reference)) {
       $('d-msg').textContent = 'To confirm, record the deposit amount, date received and payment reference — or write an approved exception.';
@@ -173,9 +186,12 @@
     });
   });
 
+  var notesSeq = 0;
   function loadNotes() {
-    var ol = $('d-notes'); ol.textContent = '';
+    var ol = $('d-notes'), mine = ++notesSeq;
     A.db.from('inquiry_notes').select('*').eq('inquiry_id', current.id).order('created_at').then(function (res) {
+      if (mine !== notesSeq) return;   // a newer refresh is already showing the notes
+      ol.textContent = '';
       if (res.error) { ol.appendChild(el('li', 'Could not load notes.')); return; }
       if (!res.data.length) ol.appendChild(el('li', 'No notes yet.', 'muted'));
       res.data.forEach(function (n) {
